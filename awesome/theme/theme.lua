@@ -83,7 +83,7 @@ theme.widget_cal   = theme.icons .. "/panel/widgets/widget_cal.png"
 
 -- theme.widget_tmp = theme.icons .. "/panel/widgets/widget_tmp.png"
 theme.widget_battery_full    = theme.icons .. "/panel/widgets/battery/full.png"
-theme.widget_battery_90    = theme.icons .. "/panel/widgets/battery/80.png"
+theme.widget_battery_80    = theme.icons .. "/panel/widgets/battery/80.png"
 theme.widget_battery_60    = theme.icons .. "/panel/widgets/battery/60.png"
 theme.widget_battery_40    = theme.icons .. "/panel/widgets/battery/40.png"
 theme.widget_battery_20    = theme.icons .. "/panel/widgets/battery/20.png"
