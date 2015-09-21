@@ -10,6 +10,7 @@ local clock         = require("panel.widgets.clock")
 local cpu           = require("panel.widgets.cpu")
 local mem           = require("panel.widgets.mem")
 local battery       = require("panel.widgets.battery")
+local hubstaff      = require("panel.widgets.hubstaff")
 local mytasklist    = require("panel.task-list")
 local mytaglist     = require("panel.tag-list")
 -- }}}
@@ -24,21 +25,29 @@ clockgf = beautiful.clockgf
 -- }}}
 -- Panel inits {{{
 
-spr = wibox.widget.imagebox()
-spr:set_image(beautiful.spr)
-spr4px = wibox.widget.imagebox()
-spr4px:set_image(beautiful.spr4px)
-spr5px = wibox.widget.imagebox()
-spr5px:set_image(beautiful.spr5px)
+local taglist_separator_text = wibox.widget.textbox()
+taglist_separator_text:set_markup("<span color='" .. beautiful.bg_focus .. "'> </span>")
+taglist_separator_text:set_font("Liberation Mono 25")
+local taglist_separator = wibox.widget.background()
+taglist_separator:set_widget(taglist_separator_text)
 
-widget_display = wibox.widget.imagebox()
-widget_display:set_image(beautiful.widget_display)
-widget_display_r = wibox.widget.imagebox()
-widget_display_r:set_image(beautiful.widget_display_r)
-widget_display_l = wibox.widget.imagebox()
-widget_display_l:set_image(beautiful.widget_display_l)
-widget_display_c = wibox.widget.imagebox()
-widget_display_c:set_image(beautiful.widget_display_c)
+local taglist_space = wibox.widget.textbox()
+taglist_space:set_text(" ")
+
+local tasklist_separator_text = wibox.widget.textbox()
+tasklist_separator_text:set_markup("<span color='" .. beautiful.bg_normal .. "'> </span>")
+tasklist_separator_text:set_font("Liberation Mono 25")
+local tasklist_separator = wibox.widget.background()
+tasklist_separator:set_widget(tasklist_separator_text)
+tasklist_separator:set_bg(beautiful.bg_focus)
+
+local systray_separator_text = wibox.widget.textbox()
+systray_separator_text:set_markup("<span color='" .. beautiful.bg_focus .. "'></span>")
+systray_separator_text:set_font("Liberation Mono 25")
+local systray_separator = wibox.widget.background()
+systray_separator:set_widget(systray_separator_text)
+
+local widget_separator = systray_separator
 
 -- }}}
 -- Widgets {{{
@@ -49,6 +58,7 @@ widget_battery:set_image(beautiful.widget_battery_full)
 
 clockwidget = clock(markup)
 batterywidget = battery(markup)
+hubstaffwidget = hubstaff(markup)
 
 widget_cpu = wibox.widget.imagebox()
 widget_cpu:set_image(beautiful.widget_cpu)
@@ -80,55 +90,31 @@ for s = 1, screen.count() do
 
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
-    mywibox[s] = awful.wibox({ position = "top", screen = s, height = "22" })
+    mywibox[s] = awful.wibox({ position = "top", screen = s, height = "32" })
 
     local left_layout = wibox.layout.fixed.horizontal()
-    left_layout:add(spr5px)
+    left_layout:add(taglist_space)
     left_layout:add(mytaglist[s])
-    left_layout:add(spr5px)
+    left_layout:add(taglist_separator)
 
     local right_layout = wibox.layout.fixed.horizontal()
+    right_layout:add(tasklist_separator)
     if s == 1 then
-        right_layout:add(spr)
-        right_layout:add(spr5px)
         right_layout:add(mypromptbox[s])
         right_layout:add(wibox.widget.systray())
-        right_layout:add(spr5px)
+        right_layout:add(systray_separator)
     end
 
-    right_layout:add(spr)
 
     right_layout:add(widget_battery)
-    right_layout:add(widget_display_l)
     right_layout:add(batterywidget)
-    right_layout:add(widget_display_r)
-    right_layout:add(spr5px)
+    right_layout:add(widget_separator)
 
-    right_layout:add(spr)
-
-    right_layout:add(widget_cpu)
-    right_layout:add(widget_display_l)
-    right_layout:add(cpuwidget)
-    right_layout:add(widget_display_r)
-    right_layout:add(spr5px)
-
-    right_layout:add(spr)
-
-    right_layout:add(widget_mem)
-    right_layout:add(widget_display_l)
-    right_layout:add(memwidget)
-    right_layout:add(widget_display_r)
-    right_layout:add(spr5px)
-
-    right_layout:add(spr)
+    right_layout:add(hubstaffwidget)
+    right_layout:add(widget_separator)
 
     right_layout:add(widget_clock)
-    right_layout:add(widget_display_l)
     right_layout:add(clockwidget)
-    right_layout:add(widget_display_r)
-    right_layout:add(spr5px)
-
-    right_layout:add(spr)
 
     right_layout:add(mylayoutbox[s])
 

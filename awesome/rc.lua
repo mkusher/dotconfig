@@ -11,6 +11,7 @@ local lain          = require("lain")
 local cyclefocus    = require('cyclefocus')
 local menubar       = require("menubar")
 local bashets       = require("bashets")
+                      require("conky")
 -- }}}
 -- Theme {{{
 beautiful.init(os.getenv("HOME") .. "/.config/awesome/theme/theme.lua")
@@ -31,10 +32,24 @@ local panel = require("panel")
 -- }}}
 -- Wallpaper {{{
 
-if beautiful.wallpaper then
-    for s = 1, screen.count() do
-        gears.wallpaper.maximized(beautiful.wallpaper, s, true)
+if beautiful.wallpapers then
+    local current_wallpaper = 0
+    local wallpapers = 4
+    local function update_wallpaper()
+        local wallpaper = beautiful.wallpapers .. tostring(current_wallpaper + 1) .. ".jpg"
+        current_wallpaper = (current_wallpaper + 1) % wallpapers
+        for s = 1, screen.count() do
+            gears.wallpaper.maximized(wallpaper, s, true)
+        end
     end
+    local ticker = timer({ timeout = 120 })
+    ticker:connect_signal("timeout",
+    function()
+        update_wallpaper()
+    end
+    )
+    update_wallpaper()
+    ticker:start()
 end
 
 -- }}}
@@ -60,13 +75,13 @@ naughty.config.defaults.bg               = beautiful.bg_focus or '#535d6c'
 
 tags = {}
 for s = 1, screen.count() do
-    tags[s] = awful.tag({ "  ", "  ", "  ", "  ", "  ", "  " }, s, layouts[1])
+    tags[s] = awful.tag({ " α ", " β ", " γ ", " δ ", " ε ", " ζ ", " η ", " θ " }, s, layouts[1])
 end
 
 -- }}}
 -- Variables {{{
 browser = os.getenv("BROWSER") or "chromium"
-term = os.getenv("TERM") or "xterm"
+term = "termite"
 -- }}}
 -- Menu {{{
 
@@ -122,6 +137,22 @@ awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
 -- {{{ Key bindings
+function minimize_all()
+    local clients = awful.tag.selected():clients()
+    local i = 0
+    local shouldMinimize = false
+    for i=1, #clients do
+        if clients[i].minimized == false then
+            shouldMinimize = true
+        end
+    end
+    for i=1, #clients do
+        pcall(function()
+            clients[i].minimized = shouldMinimize
+            clients[i]:redraw()
+        end)
+    end
+end
 modkey = "Mod1"
 globalkeys = awful.util.table.join(
 awful.key({ modkey,           }, "Left",          awful.tag.viewprev                  ),
@@ -177,8 +208,11 @@ end),
 -- }}}
 -- Applications {{{
 awful.key({ modkey,            }, "w", function () awful.util.spawn("gvim") end),
+awful.key({ modkey,            }, "e", function () awful.util.spawn("pcmanfm") end),
 awful.key({ modkey,            }, "Return", function () awful.util.spawn(term) end),
 awful.key({                    }, "Print", function () awful.util.spawn("ksnapshot") end),
+awful.key({                    }, "F10", function() raise_conky() end, function() lower_conky() end),
+awful.key({ modkey,            }, "d", function() minimize_all() end),
 -- }}}
 -- Menubar {{{
 awful.key({ modkey }, "p", function() menubar.show() end)
@@ -198,7 +232,7 @@ function (c)
     -- minimized, since minimized clients can't have the focus.
     c.minimized = true
 end),
-awful.key({ modkey,           }, "m",
+awful.key({ modkey,           }, "a",
 function (c)
     c.maximized_horizontal = not c.maximized_horizontal
     c.maximized_vertical   = not c.maximized_vertical
@@ -209,7 +243,7 @@ end)
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, 6 do
+for i = 1, 8 do
     globalkeys = awful.util.table.join(globalkeys,
     -- View tag only.
     awful.key({ modkey }, "#" .. i + 9,
@@ -275,7 +309,15 @@ awful.rules.rules = {
     { rule = { class = "hubstaff" },
     properties = { tag = tags[1][6] } },
     { rule = { class = "Thunderbird" },
-      properties = { tag = tags[1][5] } }
+    properties = { tag = tags[1][5] } },
+    { rule = { class = "Conky" },
+    properties = {
+        floating = true,
+        sticky = true,
+        ontop = false,
+        focusable = false,
+        size_hints = {"program_position", "program_size"}
+    } }
 }
 -- }}}
 -- {{{ Signals
@@ -369,9 +411,8 @@ end
 
 run_once("thunderbird", nil, nil)
 run_once("clementine")
-run_once("plaidchat", nil, "Slack")
 run_once("nm-applet")
-
+start_conky()
 -- }}}
 bashets.start()
 -- vim:foldmethod=marker:foldlevel=0

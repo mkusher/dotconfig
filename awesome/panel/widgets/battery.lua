@@ -18,11 +18,11 @@ return function(markup)
     function()
         fh = assert(io.popen("acpi | cut -d, -f 2 -", "r"))
         local value = tonumber(string.match(fh:read("*l"), "%d+"))
-        if value > 90 then
+        if value > 80 then
             widget_battery:set_image(beautiful.widget_battery_full)
-        elseif value > 70 then
-            widget_battery:set_image(beautiful.widget_battery_90)
-        elseif value > 50 then
+        elseif value > 60 then
+            widget_battery:set_image(beautiful.widget_battery_80)
+        elseif value > 40 then
             widget_battery:set_image(beautiful.widget_battery_60)
         elseif value > 20 then
             widget_battery:set_image(beautiful.widget_battery_40)
