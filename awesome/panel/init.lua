@@ -55,19 +55,12 @@ widget_clock = wibox.widget.imagebox()
 widget_clock:set_image(beautiful.widget_clock)
 widget_battery = wibox.widget.imagebox()
 widget_battery:set_image(beautiful.widget_battery_full)
+hubstaff_icon = wibox.widget.imagebox()
+hubstaff_icon:set_image(beautiful.widget_hubstaff)
 
 clockwidget = clock(markup)
 batterywidget = battery(markup)
 hubstaffwidget = hubstaff(markup)
-
-widget_cpu = wibox.widget.imagebox()
-widget_cpu:set_image(beautiful.widget_cpu)
-cpuwidget = cpu(markup)
-
-widget_mem = wibox.widget.imagebox()
-widget_mem:set_image(beautiful.widget_mem)
-memwidget = mem(markup)
-
 -- }}}
 -- PANEL {{{
 
@@ -110,6 +103,7 @@ for s = 1, screen.count() do
     right_layout:add(batterywidget)
     right_layout:add(widget_separator)
 
+    right_layout:add(hubstaff_icon)
     right_layout:add(hubstaffwidget)
     right_layout:add(widget_separator)
 

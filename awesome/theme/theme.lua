@@ -75,14 +75,12 @@ theme.tasklist_ontop                = ""
 theme.tasklist_maximized_horizontal = ""
 theme.tasklist_maximized_vertical   = ""
 
+theme.widget_hubstaff               = theme.icons .. "/panel/widgets/widget_hubstaff.png"
 -- | Clock / Calendar | --
 
 theme.widget_clock = theme.icons .. "/panel/widgets/widget_clock.png"
 theme.widget_cal   = theme.icons .. "/panel/widgets/widget_cal.png"
 
--- | CPU / TMP | --
-
-theme.widget_cpu            = theme.icons .. "/panel/widgets/widget_cpu.png"
 -- theme.widget_tmp = theme.icons .. "/panel/widgets/widget_tmp.png"
 theme.widget_battery_full    = theme.icons .. "/panel/widgets/battery/full.png"
 theme.widget_battery_90    = theme.icons .. "/panel/widgets/battery/80.png"
@@ -90,11 +88,6 @@ theme.widget_battery_60    = theme.icons .. "/panel/widgets/battery/60.png"
 theme.widget_battery_40    = theme.icons .. "/panel/widgets/battery/40.png"
 theme.widget_battery_20    = theme.icons .. "/panel/widgets/battery/20.png"
 theme.widget_battery_critical    = theme.icons .. "/panel/widgets/battery/critical.png"
-
-
--- | MEM | --
-
-theme.widget_mem = theme.icons .. "/panel/widgets/widget_ram.png"
 
 -- | Misc | --
 
