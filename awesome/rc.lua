@@ -207,7 +207,7 @@ function ()
 end),
 -- }}}
 -- Applications {{{
-awful.key({ modkey,            }, "w", function () awful.util.spawn("gvim") end),
+awful.key({ modkey,            }, "w", function () awful.util.spawn("/home/mkusher/Projects/neovim-qt/cmake/bin/nvim-qt") end),
 awful.key({ modkey,            }, "e", function () awful.util.spawn("pcmanfm") end),
 awful.key({ modkey,            }, "Return", function () awful.util.spawn(term) end),
 awful.key({                    }, "Print", function () awful.util.spawn("ksnapshot") end),
