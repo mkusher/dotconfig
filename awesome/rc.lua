@@ -207,10 +207,10 @@ function ()
 end),
 -- }}}
 -- Applications {{{
-awful.key({ modkey,            }, "w", function () awful.util.spawn("/home/mkusher/Projects/neovim-qt/cmake/bin/nvim-qt") end),
+awful.key({ modkey,            }, "w", function () awful.util.spawn("/home/mkusher/Projects/vim/neovim-qt/cmake/bin/nvim-qt") end),
 awful.key({ modkey,            }, "e", function () awful.util.spawn("pcmanfm") end),
 awful.key({ modkey,            }, "Return", function () awful.util.spawn(term) end),
-awful.key({                    }, "Print", function () awful.util.spawn("ksnapshot") end),
+awful.key({                    }, "Print", function () awful.util.spawn("deepin-screenshot") end),
 awful.key({                    }, "F10", function() raise_conky() end, function() lower_conky() end),
 awful.key({ modkey,            }, "d", function() minimize_all() end),
 -- }}}
