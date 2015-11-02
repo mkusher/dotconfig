@@ -11,7 +11,7 @@ return function(markup)
     remaining = wibox.widget.textbox()
     remaining:set_markup(space3 .. "Battery" .. markup.font("Liberation Mono 5", " "))
     batterywidget:set_widget(percent)
-    batterywidgettimer = timer({ timeout = 5 })
+    batterywidgettimer = timer({ timeout = 25 })
     local index = 1
     local loop_widgets = { percent, remaining }
     batterywidgettimer:connect_signal("timeout",
@@ -22,7 +22,7 @@ return function(markup)
             widget_battery:set_image(beautiful.widget_battery_full)
         elseif value > 80 then
             widget_battery:set_image(beautiful.widget_battery_80)
-        elseif value > 60 then
+        elseif value > 50 then
             widget_battery:set_image(beautiful.widget_battery_60)
         elseif value > 40 then
             widget_battery:set_image(beautiful.widget_battery_40)
