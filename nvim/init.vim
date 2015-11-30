@@ -405,13 +405,7 @@ if has("gui_running")
     winsize 140 45
     "winpos 10 35
 elseif has("nvim")
-    highlight LineNr guibg=#3c3836
-    highlight LineNr guifg=#a89984
-"    command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
-"    Guifont Liberation\ Mono\ for\ Powerline:h12
-else
-    " Set colors number
-    set t_Co=256
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 " }}}
 " }}}
