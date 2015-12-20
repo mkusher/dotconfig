@@ -1,10 +1,9 @@
 " Defaults {{{
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
-set nocompatible
-set encoding=utf-8
+"set nocompatible
+"set encoding=utf-8
 set autoread
-
 
 " Enable file type detection.
 " Use the default filetype settings, so that mail gets 'tw' set to 72,
@@ -87,15 +86,16 @@ Plug 'duff/vim-bufonly'
 
 " Colors and icons {{{
 "" Configuring theme
-Plug 'tomasr/molokai'
+"Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
-Plug 'jonathanfilip/vim-lucius'
-Plug 'Lokaltog/vim-distinguished'
-Plug 'nanotech/jellybeans.vim'
-Plug 'zeis/vim-kolor'
-Plug 'chriskempson/vim-tomorrow-theme'
-Plug 'shawncplus/skittles_berry'
-Plug 'daylerees/colour-schemes', { 'rtp': 'vim/' }
+Plug 'geoffharcourt/one-dark.vim'
+"Plug 'jonathanfilip/vim-lucius'
+"Plug 'Lokaltog/vim-distinguished'
+"Plug 'nanotech/jellybeans.vim'
+"Plug 'zeis/vim-kolor'
+"Plug 'chriskempson/vim-tomorrow-theme'
+"Plug 'shawncplus/skittles_berry'
+"Plug 'daylerees/colour-schemes', { 'rtp': 'vim/' }
 
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'bling/vim-airline'
@@ -115,6 +115,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/unite.vim'
 Plug 'kien/ctrlp.vim'
+Plug 'rking/ag.vim'
 
 Plug 'Shougo/neomru.vim'
 
@@ -122,7 +123,7 @@ Plug 'majutsushi/tagbar'
 " }}}
 " Syntax checker {{{
 "Plug 'scrooloose/syntastic'
-"Plug 'benekastah/neomake'
+Plug 'benekastah/neomake'
 " }}}
 " Configuring tabulation and codestyle {{{
 Plug 'tpope/vim-repeat' " repeating .
@@ -278,25 +279,51 @@ autocmd! BufWritePre * Neomake
 " }}}
 " }}}
 
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 " JS {{{
 let g:use_emmet_complete_tag = 1
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+autocmd BufNewFile,BufReadPost *.es6 set filetype=javascript
 let javascript_enable_domhtmlcss = 1
 let g:html_indent_inctags        = "html,body,head,tbody"
 let g:html_indent_script1        = "inc"
 let g:html_indent_style1         = "inc"
 let g:syntastic_javascript_checkers = ['jshint', 'jscs']
-let g:neomake_javascript_enabled_makers = ['jshint', 'jscs']
+let g:neomake_javascript_enabled_makers = ['eslint', 'jscs']
 let g:ycm_semantic_triggers.javascript =
             \ ['.', 'from "', "from '"]
-
+let g:tagbar_type_javascript = {
+    \ 'ctagsbin' : 'jsctags'
+\ }
 " }}}
 " TypeScript {{{
 autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript
 let g:syntastic_typescript_checkers = ['tsc', 'tslint']
 let g:syntastic_typescript_tsc_args = '-t ES6'
 let g:neomake_typescript_enabled_makers = ['tsc', 'tslint']
+let g:neomake_typescript_tsc_maker = {
+        \ 'args': [
+            \ '-m', 'commonjs', '--noEmit', '--jsx', '-t ES6'
+        \ ],
+        \ 'errorformat':
+            \ '%E%f %#(%l\,%c): error %m,' .
+            \ '%E%f %#(%l\,%c): %m,' .
+            \ '%Eerror %m,' .
+            \ '%C%\s%\+%m'
+        \ }
 let g:tsuquyomi_disable_quickfix = 1
+let g:tagbar_type_typescript = {
+  \ 'ctagstype': 'typescript',
+  \ 'kinds': [
+    \ 'c:classes',
+    \ 'n:modules',
+    \ 'f:functions',
+    \ 'v:variables',
+    \ 'v:varlambdas',
+    \ 'm:members',
+    \ 'i:interfaces',
+    \ 'e:enums',
+  \ ]
+\ }
 " }}}
 " PHP {{{
 "let g:syntastic_php_phpcs_args='--tab-width=0 --standard=PSR1,PSR2'
@@ -335,7 +362,8 @@ let $RUST_SRC_PATH="/home/mkusher/public_html/rust/src/src/"
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-set nobackup		" do not keep a backup file, use versions instead
+"set nobackup		" do not keep a backup file, use versions instead
+set backupcopy=yes
 set history=50		" keep 50 lines of command line history
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
@@ -346,6 +374,8 @@ set scrolloff=5
 set wildmenu
 set laststatus=2
 set noshowmode " Disabling default mode indicator
+"set foldmethod=syntax
+"set foldlevel=1
 
 " Lines numbers
 " Shows ruler when leaving insert mode
@@ -390,6 +420,9 @@ let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
+" set the CN (column number) symbol:
+let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
+
 set background=dark
 colors gruvbox
 
@@ -501,8 +534,8 @@ noremap <Leader>f :NERDTreeFind<CR>
 noremap <Leader>u :Unite<CR>
 "noremap <C-p> :Unite file_rec/async -start-insert<CR> CtrlP
 noremap <Leader>p :Unite file_rec/git -start-insert<CR>
-nnoremap <C-e> :Unite neomru/file<CR>
-nnoremap <Leader>e :Unite neomru/file<CR>
+nnoremap <C-e> :Unite neomru/file<CR>j
+nnoremap <Leader>e :Unite neomru/file<CR>j
 " }}}
 " Goodbye arrows ;( {{{
 noremap   <Up>     <NOP>
