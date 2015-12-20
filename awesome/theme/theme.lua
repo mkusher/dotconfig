@@ -10,19 +10,19 @@
 
 theme                   = {}
 theme.icons             = os.getenv("HOME") .. "/.config/awesome/theme/icons/"
-theme.wallpapers        = "/home/mkusher/Pictures/wallpapers/curent/desktop/"
+theme.wallpapers        = "/home/mkusher/Pictures/wallpapers/desktop/"
 theme.font              = "Ubuntu 14"
 
-theme.fg_normal         = "#ffffff"
-theme.fg_focus          = "#ffffff"
-theme.fg_urgent         = "#ffffff"
+theme.fg_normal         = "#fdf4c1"
+theme.fg_focus          = "#ebdbb2"
+theme.fg_urgent         = "#d5c4a1"
 
-theme.bg_normal         = "#3f3f4c"
-theme.bg_focus          = "#525263"
-theme.bg_urgent         = "#3F3F3F"
-theme.bg_systray        = "#3f3f4c"
+theme.bg_normal         = "#282828"
+theme.bg_focus          = "#665c54"
+theme.bg_urgent         = "#3c3836"
+theme.bg_systray        = "#282828"
 
-theme.clockgf           = "#eeeeee"
+theme.clockgf           = "#ebdbb2"
 
 --theme.panel      = "png:" .. theme.icons .. "/panel/panel.png"
 theme.panel             = theme.bg_normal
@@ -52,21 +52,19 @@ theme.layout_tiletop    = theme.icons .. "/panel/layouts/tiletop.png"
 theme.taglist_bg_empty      = theme.bg_focus
 theme.taglist_bg_occupied   = theme.bg_focus
 theme.taglist_bg_urgent     = theme.bg_focus
---theme.taglist_bg_occupied = "png:" .. theme.icons .. "/panel/taglist/occupied.png"
---theme.taglist_bg_urgent   = "png:" .. theme.icons .. "/panel/taglist/urgent.png"
-theme.taglist_bg_focus      = "#90a366"
-theme.taglist_fb_occupied   = "#cccccc"
-theme.taglist_fb_urgent   = "#cccccc"
+theme.taglist_bg_focus      = "#98971a"
+theme.taglist_fb_occupied   = "#fabd2f"
+theme.taglist_fb_urgent     = "#fabd2f"
 theme.taglist_font          = "Liberation Sans 15"
 
 -- | Tasklist | --
 
 theme.tasklist_font                 = "Liberation Serif 15"
 theme.tasklist_disable_icon         = false
-theme.tasklist_bg_normal            = "png:" .. theme.icons .. "panel/tasklist/normal.png"
-theme.tasklist_bg_focus             = "png:" .. theme.icons .. "panel/tasklist/focus.png"
+theme.tasklist_bg_normal            = "#3c3836"
+theme.tasklist_bg_focus             = theme.bg_focus
 theme.tasklist_bg_urgent            = "png:" .. theme.icons .. "panel/tasklist/urgent.png"
-theme.tasklist_fg_focus             = theme.fg_focus
+theme.tasklist_fg_focus             = theme.fg_normal
 theme.tasklist_fg_urgent            = theme.fg_urgent
 theme.tasklist_fg_normal            = theme.fg_normal
 theme.tasklist_floating             = ""

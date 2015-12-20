@@ -27,7 +27,7 @@ clockgf = beautiful.clockgf
 
 local taglist_separator_text = wibox.widget.textbox()
 taglist_separator_text:set_markup("<span color='" .. beautiful.bg_focus .. "'> </span>")
-taglist_separator_text:set_font("Liberation Mono 25")
+taglist_separator_text:set_font("Liberation Mono for Powerline 25")
 local taglist_separator = wibox.widget.background()
 taglist_separator:set_widget(taglist_separator_text)
 
@@ -36,14 +36,14 @@ taglist_space:set_text(" ")
 
 local tasklist_separator_text = wibox.widget.textbox()
 tasklist_separator_text:set_markup("<span color='" .. beautiful.bg_normal .. "'> </span>")
-tasklist_separator_text:set_font("Liberation Mono 25")
+tasklist_separator_text:set_font("Liberation Mono for Powerline 25")
 local tasklist_separator = wibox.widget.background()
 tasklist_separator:set_widget(tasklist_separator_text)
 tasklist_separator:set_bg(beautiful.bg_focus)
 
 local systray_separator_text = wibox.widget.textbox()
 systray_separator_text:set_markup("<span color='" .. beautiful.bg_focus .. "'></span>")
-systray_separator_text:set_font("Liberation Mono 25")
+systray_separator_text:set_font("Liberation Mono for Powerline 25")
 local systray_separator = wibox.widget.background()
 systray_separator:set_widget(systray_separator_text)
 

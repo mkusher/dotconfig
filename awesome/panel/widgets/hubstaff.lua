@@ -4,7 +4,7 @@ local beautiful     = require("beautiful")
 local asyncshell    = require("asyncshell")
 
 function update_time(widget)
-    asyncshell.request("python3 /home/mkusher/public_html/hubstaff.py", function(output)
+    asyncshell.request("python3 /home/mkusher/Projects/public/hubstaff.py", function(output)
         local fh = assert(output)
         local value = fh:read("*l")
         pcall(function()

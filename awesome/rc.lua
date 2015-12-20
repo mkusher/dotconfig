@@ -42,7 +42,7 @@ if beautiful.wallpapers then
             gears.wallpaper.maximized(wallpaper, s, true)
         end
     end
-    local ticker = timer({ timeout = 120 })
+    local ticker = timer({ timeout = 240 })
     ticker:connect_signal("timeout",
     function()
         update_wallpaper()
@@ -181,7 +181,7 @@ function ()
         client.focus:raise()
     end
 end),
-awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
+--awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
 awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
 awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
 awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
@@ -207,7 +207,8 @@ function ()
 end),
 -- }}}
 -- Applications {{{
-awful.key({ modkey,            }, "w", function () awful.util.spawn("termite -e nvim") end),
+awful.key({ modkey,            }, "w", function () awful.util.spawn("neovim-gui") end),
+awful.key({ modkey,            }, "l", function () awful.util.spawn("xscreensaver-command --lock") end),
 awful.key({ modkey,            }, "e", function () awful.util.spawn("pcmanfm") end),
 awful.key({ modkey,            }, "Return", function () awful.util.spawn(term) end),
 awful.key({                    }, "Print", function () awful.util.spawn("deepin-screenshot") end),
@@ -304,20 +305,14 @@ awful.rules.rules = {
     raise = true,
     keys = clientkeys,
     buttons = clientbuttons } },
-    { rule = { class = "Slack" },
+    { rule = { class = "plaidchat" },
     properties = { tag = tags[1][6] } },
     { rule = { class = "hubstaff" },
     properties = { tag = tags[1][6] } },
     { rule = { class = "Thunderbird" },
     properties = { tag = tags[1][5] } },
-    { rule = { class = "Conky" },
-    properties = {
-        floating = true,
-        sticky = true,
-        ontop = false,
-        focusable = false,
-        size_hints = {"program_position", "program_size"}
-    } }
+    { rule = { class = "Telegram" },
+    properties = { tag = tags[1][7] } }
 }
 -- }}}
 -- {{{ Signals
@@ -409,9 +404,13 @@ function run_once(prg,arg_string,pname,screen)
     end
 end
 
+run_once("xscreensaver --no-splash")
 run_once("thunderbird", nil, nil)
 run_once("clementine")
 run_once("nm-applet")
+run_once("plaidchat")
+run_once("hubstaff")
+run_once("telegram")
 -- }}}
 bashets.start()
 -- vim:foldmethod=marker:foldlevel=0
