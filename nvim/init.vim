@@ -34,7 +34,6 @@ augroup vimrcEx
 augroup END
 
 
-
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
 " Only define it when not defined already.
@@ -136,6 +135,9 @@ Plug 'tpope/vim-surround'       " It's all about surrounding(quotes, brackets an
 Plug 'matze/vim-move'           " Moving lines fast and easy
 Plug 'scrooloose/nerdcommenter' " Commenting/uncommenting code
 " }}}
+" Api Blueprint {{{
+Plug 'kylef/apiblueprint.vim'
+" }}}
 " Snippets {{{
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -146,6 +148,7 @@ Plug 'int3/vim-extradite'
 Plug 'idanarye/vim-merginal'
 Plug 'gregsexton/gitv'
 Plug 'airblade/vim-gitgutter'
+Plug 'junegunn/gv.vim'
 
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim' " Github's gist
@@ -163,6 +166,7 @@ Plug 'wavded/vim-stylus'
 "Plug 'skammer/vim-css-color'
 Plug 'tpope/vim-markdown',   { 'for': ['markdown']   }
 Plug 'suan/vim-instant-markdown'
+Plug 'tpope/vim-haml'
 " }}}
 " javascript {{{
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript' }
@@ -219,24 +223,26 @@ call plug#end()
 " }}}
 
 " Autocompletion {{{
+" Neocomplete {{{
  ""<TAB>: completion.
 "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#enable_auto_delimiter = 1
-let g:neocomplete#use_vimproc = 1
-let g:neocomplete#force_omni_input_patterns = {}
+"let g:acp_enableAtStartup = 0
+"" Use neocomplete.
+"let g:neocomplete#enable_at_startup = 1
+"" Use smartcase.
+"let g:neocomplete#enable_smart_case = 1
+"" Set minimum syntax keyword length.
+"let g:neocomplete#sources#syntax#min_keyword_length = 3
+"let g:neocomplete#enable_auto_delimiter = 1
+"let g:neocomplete#use_vimproc = 1
+"let g:neocomplete#force_omni_input_patterns = {}
+" }}}
+
 let g:ycm_autoclose_preview_window_after_completion = 1
 "let g:ycm_complete_in_strings = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_key_list_select_completion = ['<Tab>', '<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:ycm_semantic_triggers = {}
 let g:ycm_semantic_triggers =  {
             \   'c' : ['->', '.'],
             \   'objc' : ['->', '.'],
@@ -252,6 +258,9 @@ let g:ycm_semantic_triggers =  {
             \   'erlang' : [':'],
             \   'haskell' : ['.', 're!.']
             \ }
+let g:ycm_filetype_specific_completion_to_disable = {
+            \ 'gitcommit': 1
+            \}
 " }}}
 " GIT {{{
 let g:gist_post_private = 1
@@ -287,43 +296,47 @@ let javascript_enable_domhtmlcss = 1
 let g:html_indent_inctags        = "html,body,head,tbody"
 let g:html_indent_script1        = "inc"
 let g:html_indent_style1         = "inc"
-let g:syntastic_javascript_checkers = ['jshint', 'jscs']
-let g:neomake_javascript_enabled_makers = ['eslint', 'jscs']
+"let g:syntastic_javascript_checkers = ['jshint', 'jscs']
+let g:neomake_javascript_enabled_makers = ['eslint']
 let g:ycm_semantic_triggers.javascript =
             \ ['.', 'from "', "from '"]
 let g:tagbar_type_javascript = {
     \ 'ctagsbin' : 'jsctags'
 \ }
+autocmd BufNewFile,BufReadPost *.jade set filetype=haml
 " }}}
 " TypeScript {{{
 autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript
+
+let g:ycm_filetype_specific_completion_to_disable.typescript = 1
 let g:syntastic_typescript_checkers = ['tsc', 'tslint']
 let g:syntastic_typescript_tsc_args = '-t ES6'
 let g:neomake_typescript_enabled_makers = ['tsc', 'tslint']
 let g:neomake_typescript_tsc_maker = {
-        \ 'args': [
-            \ '-m', 'commonjs', '--noEmit', '--jsx', '-t ES6'
-        \ ],
-        \ 'errorformat':
+            \ 'args': [
+            \ '-m', 'system', '--noEmit', '--jsx', 'preserve', '-t', 'ES6',
+            \ '--moduleResolution', 'classic'
+            \ ],
+            \ 'errorformat':
             \ '%E%f %#(%l\,%c): error %m,' .
             \ '%E%f %#(%l\,%c): %m,' .
             \ '%Eerror %m,' .
             \ '%C%\s%\+%m'
-        \ }
+            \ }
 let g:tsuquyomi_disable_quickfix = 1
 let g:tagbar_type_typescript = {
-  \ 'ctagstype': 'typescript',
-  \ 'kinds': [
-    \ 'c:classes',
-    \ 'n:modules',
-    \ 'f:functions',
-    \ 'v:variables',
-    \ 'v:varlambdas',
-    \ 'm:members',
-    \ 'i:interfaces',
-    \ 'e:enums',
-  \ ]
-\ }
+            \ 'ctagstype': 'typescript',
+            \ 'kinds': [
+            \ 'c:classes',
+            \ 'n:modules',
+            \ 'f:functions',
+            \ 'v:variables',
+            \ 'v:varlambdas',
+            \ 'm:members',
+            \ 'i:interfaces',
+            \ 'e:enums',
+            \ ]
+            \ }
 " }}}
 " PHP {{{
 "let g:syntastic_php_phpcs_args='--tab-width=0 --standard=PSR1,PSR2'
@@ -336,8 +349,8 @@ let g:padawan#composer_command = '/home/mkusher/.scripts/composer'
 let g:padawan#timeout = "0.75"
 let g:ycm_semantic_triggers.php =
             \ ['->', '::', '(', 'new ', 'use ', 'namespace ', '\', '$', ' ']
-let g:neocomplete#force_omni_input_patterns.php =
-            \ '\h\w*\|[^- \t]->\w*'
+"let g:neocomplete#force_omni_input_patterns.php =
+            "\ '\h\w*\|[^- \t]->\w*'
 " }}}
 " Python {{{
 "let g:neocomplete#force_omni_input_patterns.python =
@@ -346,6 +359,7 @@ let g:neocomplete#force_omni_input_patterns.php =
 let g:ycm_semantic_triggers.python = ['.', 'import ']
 " }}}
 " Haskel {{{
+let g:necoghc_enable_detailed_browse = 1 " detailed description
 let g:haskell_enable_quantification = 1 " to enable highlighting of forall
 let g:haskell_enable_recursivedo = 1 " to enable highlighting of mdo and rec
 let g:haskell_enable_arrowsyntax = 1 " to enable highlighting of proc
@@ -374,7 +388,7 @@ set scrolloff=5
 set wildmenu
 set laststatus=2
 set noshowmode " Disabling default mode indicator
-"set foldmethod=syntax
+set foldmethod=syntax
 "set foldlevel=1
 
 " Lines numbers
@@ -410,6 +424,7 @@ syntax enable
 set fillchars=|
 " }}}
 " GUI {{{
+set mouse=r
 let g:hybrid_use_Xresources = 1
 let g:webdevicons_enable_nerdtree = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 0
