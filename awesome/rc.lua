@@ -311,6 +311,8 @@ awful.rules.rules = {
     properties = { tag = tags[1][6] } },
     { rule = { class = "Thunderbird" },
     properties = { tag = tags[1][5] } },
+    { rule = { class = "Gitter" },
+    properties = { tag = tags[1][7] } },
     { rule = { class = "Telegram" },
     properties = { tag = tags[1][7] } }
 }
@@ -406,11 +408,11 @@ end
 
 run_once("xscreensaver --no-splash")
 run_once("thunderbird", nil, nil)
-run_once("clementine")
 run_once("nm-applet")
-run_once("plaidchat")
-run_once("hubstaff")
+run_once("slack")
 run_once("telegram")
+run_once("gitter")
+run_once("dropbox")
 -- }}}
 bashets.start()
 -- vim:foldmethod=marker:foldlevel=0
