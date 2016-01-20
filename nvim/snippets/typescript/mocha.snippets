@@ -1,12 +1,20 @@
 snippet describe
-	describe("${1}", () => {
+	describe("${1}", function () {
 		${2}
 	});
 snippet it
-	it("${1}", () => {
+	it("${1}", function () {
 		${2}
 	});
 snippet beforeEach
-	beforeEach(() => {
+	beforeEach(function () {
 		${1}
+	});
+snippet describe-class
+	import ${1} from "./$1";
+
+	describe("$1", function () {
+		describe(".${2}", function () {
+			${3}
+		});
 	});
