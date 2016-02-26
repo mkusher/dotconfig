@@ -409,7 +409,6 @@ end
 run_once("xscreensaver --no-splash")
 run_once("thunderbird", nil, nil)
 run_once("nm-applet")
-run_once("slack")
 run_once("telegram")
 run_once("gitter")
 run_once("dropbox")
