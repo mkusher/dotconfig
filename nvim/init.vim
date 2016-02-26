@@ -2,8 +2,14 @@
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 "set nocompatible
-"set encoding=utf-8
+"set encoding=cp1251
 set autoread
+set fileencodings=utf-8,cp1251,koi8-r,cp866
+set wildignore+=node_modules/*
+set wildignore+=bower_components/*
+set wildignore+=typings/*
+set wildignore+=cache/*
+set wildignore+=vendor/*
 
 " Enable file type detection.
 " Use the default filetype settings, so that mail gets 'tw' set to 72,
@@ -95,7 +101,7 @@ Plug 'geoffharcourt/one-dark.vim'
 "Plug 'chriskempson/vim-tomorrow-theme'
 "Plug 'shawncplus/skittles_berry'
 "Plug 'daylerees/colour-schemes', { 'rtp': 'vim/' }
-
+Plug 'ninja/sky'
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'bling/vim-airline'
 Plug 'jszakmeister/vim-togglecursor'
@@ -103,6 +109,7 @@ Plug 'jszakmeister/vim-togglecursor'
 " Autocompletion {{{
 "Plug 'Shougo/neocomplete.vim'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
+"Plug 'Shougo/deoplete.nvim'
 "Plug 'ervandew/supertab'
 " }}}
 " Project navigation {{{
@@ -113,7 +120,6 @@ let g:local_vimrc='.vimrc'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/unite.vim'
-Plug 'kien/ctrlp.vim'
 Plug 'rking/ag.vim'
 
 Plug 'Shougo/neomru.vim'
@@ -284,8 +290,11 @@ let g:gist_post_private = 1
 " Neomake {{{
 let g:neomake_airline = 0
 let g:neomake_open_list = 2
-autocmd! BufWritePre * Neomake
+"autocmd! BufWritePre * Neomake
 " }}}
+" }}}
+" Project Navigation {{{
+call unite#custom#source('file_rec/neovim2', 'ignore_pattern', 'bower_components\|node_modules\|dist\|tmp\|public\|vendor')
 " }}}
 
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
@@ -315,7 +324,8 @@ let g:neomake_typescript_enabled_makers = ['tsc', 'tslint']
 let g:neomake_typescript_tsc_maker = {
             \ 'args': [
             \ '-m', 'system', '--noEmit', '--jsx', 'preserve', '-t', 'ES6',
-            \ '--moduleResolution', 'classic'
+            \ '--moduleResolution', 'classic', '--isolatedModules',
+            \ '--experimentalDecorators'
             \ ],
             \ 'errorformat':
             \ '%E%f %#(%l\,%c): error %m,' .
@@ -489,6 +499,12 @@ if has('neovim')
     set timeout ttimeoutlen=1
 end
 " }}}
+" {{{ Autcompletion
+inoremap <C-Space> <C-x><C-o>
+inoremap <C-@> <C-x><C-o>
+imap <buffer> <Nul> <C-Space>
+smap <buffer> <Nul> <C-Space>
+" }}}
 " Relative number toggle {{{
 function! NumberToggle()
     if(&relativenumber == 1)
@@ -548,8 +564,7 @@ noremap <Leader>n :NERDTreeToggle<CR>
 noremap <Leader>f :NERDTreeFind<CR>
 noremap <Leader>u :Unite<CR>
 "noremap <C-p> :Unite file_rec/async -start-insert<CR> CtrlP
-noremap <Leader>p :Unite file_rec/git -start-insert<CR>
-nnoremap <C-e> :Unite neomru/file<CR>j
+noremap <Leader>p :Unite file_rec/neovim2 -start-insert<CR>
 nnoremap <Leader>e :Unite neomru/file<CR>j
 " }}}
 " Goodbye arrows ;( {{{
