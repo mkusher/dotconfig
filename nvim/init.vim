@@ -4,11 +4,12 @@
 "set nocompatible
 "set encoding=cp1251
 set autoread
+set hidden
 set fileencodings=utf-8,cp1251,koi8-r,cp866
 set wildignore+=node_modules/*
 set wildignore+=bower_components/*
 set wildignore+=typings/*
-set wildignore+=cache/*
+set wildignore+=app/cache/*
 set wildignore+=vendor/*
 
 " Enable file type detection.
@@ -84,10 +85,11 @@ let g:startify_custom_header = [
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'xolox/vim-misc'
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'powerman/vim-plugin-AnsiEsc'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 "Autosave settings
 Plug 'duff/vim-bufonly'
+Plug 'Konfekt/FastFold'
 
 " Colors and icons {{{
 "" Configuring theme
@@ -103,13 +105,14 @@ Plug 'geoffharcourt/one-dark.vim'
 "Plug 'daylerees/colour-schemes', { 'rtp': 'vim/' }
 Plug 'ninja/sky'
 Plug 'ryanoasis/vim-webdevicons'
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'jszakmeister/vim-togglecursor'
 " }}}
 " Autocompletion {{{
 "Plug 'Shougo/neocomplete.vim'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
-"Plug 'Shougo/deoplete.nvim'
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
+Plug 'Shougo/deoplete.nvim'
 "Plug 'ervandew/supertab'
 " }}}
 " Project navigation {{{
@@ -120,6 +123,7 @@ let g:local_vimrc='.vimrc'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/unite.vim'
+Plug 'vim-ctrlspace/vim-ctrlspace'
 Plug 'rking/ag.vim'
 
 Plug 'Shougo/neomru.vim'
@@ -188,6 +192,7 @@ Plug 'othree/javascript-libraries-syntax.vim',      { 'for': 'javascript' }
 " TypeScript {{{
 Plug 'leafgarland/typescript-vim'
 Plug 'Quramy/tsuquyomi'
+Plug 'ianks/vim-tsx'
 " }}}
 " Gherkin {{{
 "Plug 'tpope/vim-cucumber'
@@ -244,11 +249,18 @@ call plug#end()
 "let g:neocomplete#force_omni_input_patterns = {}
 " }}}
 
-let g:ycm_autoclose_preview_window_after_completion = 1
-"let g:ycm_complete_in_strings = 1
-let g:ycm_complete_in_comments = 1
-let g:ycm_key_list_select_completion = ['<Tab>', '<C-n>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#file#enable_buffer_path = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns.java = '[^. *\t]\.\w*'
+let g:deoplete#omni_patterns.php =
+            \ '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+"let g:ycm_autoclose_preview_window_after_completion = 1
+""let g:ycm_complete_in_strings = 1
+"let g:ycm_complete_in_comments = 1
+"let g:ycm_key_list_select_completion = ['<Tab>', '<C-n>', '<Down>']
+"let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:ycm_semantic_triggers =  {
             \   'c' : ['->', '.'],
             \   'objc' : ['->', '.'],
@@ -294,7 +306,15 @@ let g:neomake_open_list = 2
 " }}}
 " }}}
 " Project Navigation {{{
-call unite#custom#source('file_rec/neovim2', 'ignore_pattern', 'bower_components\|node_modules\|dist\|tmp\|public\|vendor')
+"call unite#custom#source('file_rec/neovim2')
+let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
+"let g:unite_source_file_rec_max_cache_files = 20
+let g:unite_source_rec_async_command =
+            \ ['ag', '--follow', '--nocolor', '--nogroup',
+            \  '--hidden', '-g', '']
+call unite#custom#source('file_rec,file_rec/async,file_rec/neovim',
+            \ 'max_candidates', 20)
+
 " }}}
 
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
@@ -310,12 +330,12 @@ let g:neomake_javascript_enabled_makers = ['eslint']
 let g:ycm_semantic_triggers.javascript =
             \ ['.', 'from "', "from '"]
 let g:tagbar_type_javascript = {
-    \ 'ctagsbin' : 'jsctags'
-\ }
+            \ 'ctagsbin' : 'jsctags'
+            \ }
 autocmd BufNewFile,BufReadPost *.jade set filetype=haml
 " }}}
 " TypeScript {{{
-autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript
+"autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript
 
 let g:ycm_filetype_specific_completion_to_disable.typescript = 1
 let g:syntastic_typescript_checkers = ['tsc', 'tslint']
@@ -360,7 +380,7 @@ let g:padawan#timeout = "0.75"
 let g:ycm_semantic_triggers.php =
             \ ['->', '::', '(', 'new ', 'use ', 'namespace ', '\', '$', ' ']
 "let g:neocomplete#force_omni_input_patterns.php =
-            "\ '\h\w*\|[^- \t]->\w*'
+"\ '\h\w*\|[^- \t]->\w*'
 " }}}
 " Python {{{
 "let g:neocomplete#force_omni_input_patterns.python =
@@ -445,16 +465,17 @@ let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#fnamemod = '%:t'
 " set the CN (column number) symbol:
-let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
-
+"let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
 set background=dark
 colors gruvbox
 
 if has("gui_running")
     highlight LineNr guibg=#3c3836
     highlight LineNr guifg=#a89984
-    set guifont=Liberation\ Mono\ for\ Powerline\ 12
+    set guifont=Liberation\ Mono\ for\ Powerline\ 11
 
     set guioptions-=T  " no toolbar
     set guioptions-=m  " no menu
@@ -464,6 +485,10 @@ if has("gui_running")
     "winpos 10 35
 elseif has("nvim")
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+    " Neovim-qt Guifont command
+    "command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
+    "" Set the font to DejaVu Sans Mono:h13
+    "Guifont Liberation Mono for Powerline:h11
 endif
 " }}}
 " }}}
@@ -500,8 +525,10 @@ if has('neovim')
 end
 " }}}
 " {{{ Autcompletion
+" C-Space is needed only when without YCM
 inoremap <C-Space> <C-x><C-o>
 inoremap <C-@> <C-x><C-o>
+inoremap <Tab> <C-n>
 imap <buffer> <Nul> <C-Space>
 smap <buffer> <Nul> <C-Space>
 " }}}
@@ -564,7 +591,7 @@ noremap <Leader>n :NERDTreeToggle<CR>
 noremap <Leader>f :NERDTreeFind<CR>
 noremap <Leader>u :Unite<CR>
 "noremap <C-p> :Unite file_rec/async -start-insert<CR> CtrlP
-noremap <Leader>p :Unite file_rec/neovim2 -start-insert<CR>
+noremap <Leader>p :Unite file_rec/neovim -start-insert<CR>
 nnoremap <Leader>e :Unite neomru/file<CR>j
 " }}}
 " Goodbye arrows ;( {{{
