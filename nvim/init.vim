@@ -49,6 +49,7 @@ if !exists(":DiffOrig")
                 \ | wincmd p | diffthis
 endif
 
+let g:auto_save = 1
 " }}}
 " Startify cows {{{
 autocmd User Startified setlocal buftype=
@@ -90,6 +91,7 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 "Autosave settings
 Plug 'duff/vim-bufonly'
 Plug 'Konfekt/FastFold'
+Plug 'vim-scripts/vim-auto-save'
 
 " Colors and icons {{{
 "" Configuring theme
@@ -300,15 +302,14 @@ let g:gist_post_private = 1
 "let g:syntastic_auto_loc_list = 1
 " }}}
 " Neomake {{{
-let g:neomake_airline = 0
 let g:neomake_open_list = 2
-"autocmd! BufWritePre * Neomake
+autocmd! BufWritePost * Neomake
 " }}}
 " }}}
 " Project Navigation {{{
 "call unite#custom#source('file_rec/neovim2')
 let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
-"let g:unite_source_file_rec_max_cache_files = 20
+let g:unite_source_file_rec_max_cache_files = -1
 let g:unite_source_rec_async_command =
             \ ['ag', '--follow', '--nocolor', '--nogroup',
             \  '--hidden', '-g', '']
@@ -317,22 +318,18 @@ call unite#custom#source('file_rec,file_rec/async,file_rec/neovim',
 
 " }}}
 
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 " JS {{{
-let g:use_emmet_complete_tag = 1
 autocmd BufNewFile,BufReadPost *.es6 set filetype=javascript
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+autocmd BufNewFile,BufReadPost *.jade set filetype=haml
+
+let g:use_emmet_complete_tag = 1
 let javascript_enable_domhtmlcss = 1
 let g:html_indent_inctags        = "html,body,head,tbody"
 let g:html_indent_script1        = "inc"
 let g:html_indent_style1         = "inc"
 "let g:syntastic_javascript_checkers = ['jshint', 'jscs']
 let g:neomake_javascript_enabled_makers = ['eslint']
-let g:ycm_semantic_triggers.javascript =
-            \ ['.', 'from "', "from '"]
-let g:tagbar_type_javascript = {
-            \ 'ctagsbin' : 'jsctags'
-            \ }
-autocmd BufNewFile,BufReadPost *.jade set filetype=haml
 " }}}
 " TypeScript {{{
 "autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript
@@ -345,7 +342,7 @@ let g:neomake_typescript_tsc_maker = {
             \ 'args': [
             \ '-m', 'system', '--noEmit', '--jsx', 'preserve', '-t', 'ES6',
             \ '--moduleResolution', 'classic', '--isolatedModules',
-            \ '--experimentalDecorators'
+            \ '--experimentalDecorators', '--noImplicitAny'
             \ ],
             \ 'errorformat':
             \ '%E%f %#(%l\,%c): error %m,' .
@@ -475,7 +472,7 @@ colors gruvbox
 if has("gui_running")
     highlight LineNr guibg=#3c3836
     highlight LineNr guifg=#a89984
-    set guifont=Liberation\ Mono\ for\ Powerline\ 11
+    set guifont=Literation\ Mono\ Powerline\ 15
 
     set guioptions-=T  " no toolbar
     set guioptions-=m  " no menu
@@ -486,9 +483,9 @@ if has("gui_running")
 elseif has("nvim")
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
     " Neovim-qt Guifont command
-    "command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
-    "" Set the font to DejaVu Sans Mono:h13
-    "Guifont Liberation Mono for Powerline:h11
+    command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
+    "" Set the font to
+    Guifont Literation Mono Powerline:h19
 endif
 " }}}
 " }}}
