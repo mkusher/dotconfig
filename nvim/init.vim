@@ -49,7 +49,7 @@ if !exists(":DiffOrig")
                 \ | wincmd p | diffthis
 endif
 
-let g:auto_save = 1
+let g:auto_save = 0
 " }}}
 " Startify cows {{{
 autocmd User Startified setlocal buftype=
@@ -115,7 +115,7 @@ Plug 'jszakmeister/vim-togglecursor'
 "Plug 'Shougo/neocomplete.vim'
 "Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
 Plug 'Shougo/deoplete.nvim'
-"Plug 'ervandew/supertab'
+Plug 'ervandew/supertab'
 " }}}
 " Project navigation {{{
 Plug 'mhinz/vim-startify'
@@ -203,6 +203,7 @@ Plug 'veloce/vim-behat'
 " php {{{
 Plug 'vim-php/vim-php-refactoring'
 Plug 'mkusher/padawan.vim'
+Plug 'arnaud-lb/vim-php-namespace'
 
 Plug 'tobyS/vmustache'
 Plug 'tobyS/pdv'
@@ -303,7 +304,7 @@ let g:gist_post_private = 1
 " }}}
 " Neomake {{{
 let g:neomake_open_list = 2
-autocmd! BufWritePost * Neomake
+"autocmd! BufWritePost * Neomake
 " }}}
 " }}}
 " Project Navigation {{{
@@ -386,6 +387,8 @@ let g:ycm_semantic_triggers.php =
 let g:ycm_semantic_triggers.python = ['.', 'import ']
 " }}}
 " Haskel {{{
+
+autocmd BufNewFile,BufReadPost xmobarrc set filetype=haskell
 let g:necoghc_enable_detailed_browse = 1 " detailed description
 let g:haskell_enable_quantification = 1 " to enable highlighting of forall
 let g:haskell_enable_recursivedo = 1 " to enable highlighting of mdo and rec
@@ -483,9 +486,9 @@ if has("gui_running")
 elseif has("nvim")
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
     " Neovim-qt Guifont command
-    command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
-    "" Set the font to
-    Guifont Literation Mono Powerline:h19
+    "command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
+    """ Set the font to
+    "Guifont Literation Mono Powerline:h19
 endif
 " }}}
 " }}}
@@ -525,7 +528,7 @@ end
 " C-Space is needed only when without YCM
 inoremap <C-Space> <C-x><C-o>
 inoremap <C-@> <C-x><C-o>
-inoremap <Tab> <C-n>
+"inoremap <Tab> <C-n>
 imap <buffer> <Nul> <C-Space>
 smap <buffer> <Nul> <C-Space>
 " }}}
