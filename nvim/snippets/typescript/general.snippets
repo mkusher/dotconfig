@@ -1,14 +1,31 @@
-snippet classdefault
-	export default class ${1} {
-		${2}
-	}
-snippet interfacedefault
-	interface ${1} {
-		${2}
-	}
-	export default $1
+# import
 snippet import
 	import ${1} from "${2}";
+# reference
 snippet reference
 	///<reference path="${1}" />
 	${2}
+# Snippets for classes
+snippet d_class
+	export default class ${1:`vim_snippets#Filename()`} {
+		${2}
+	}
+snippet e_class
+	export class ${1:`vim_snippets#Filename()`} {
+		${2}
+	}
+snippet c
+	class ${1:`vim_snippets#Filename()`} {
+		${2}
+	}
+
+# default interface
+snippet d_interface
+	interface ${1:`vim_snippets#Filename()`} {
+		${2}
+	}
+	export default $1;
+snippet i
+	interface ${1:`vim_snippets#Filename()`} {
+		${2}
+	}
