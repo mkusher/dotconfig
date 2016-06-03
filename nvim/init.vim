@@ -92,6 +92,7 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'duff/vim-bufonly'
 Plug 'Konfekt/FastFold'
 Plug 'vim-scripts/vim-auto-save'
+Plug 'terryma/vim-smooth-scroll'
 
 " Colors and icons {{{
 "" Configuring theme
@@ -109,7 +110,6 @@ Plug 'ninja/sky'
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'jszakmeister/vim-togglecursor'
 " }}}
 " Autocompletion {{{
 "Plug 'Shougo/neocomplete.vim'
@@ -165,6 +165,9 @@ Plug 'junegunn/gv.vim'
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim' " Github's gist
 " }}}
+" Tex {{{
+Plug 'lervag/vimtex'
+" }}}
 " HTML5/CSS3/LESS {{{
 Plug 'mattn/emmet-vim', {'for': ['html', 'xhtml', 'css', 'less']}
 
@@ -182,12 +185,12 @@ Plug 'tpope/vim-haml'
 " }}}
 " javascript {{{
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript' }
-Plug 'jussi-kalliokoski/harmony.vim', { 'for': 'javascript' }
-Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript' }
+"Plug 'jussi-kalliokoski/harmony.vim', { 'for': 'javascript' }
+Plug 'pangloss/vim-javascript'
+"Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript' }
 Plug 'mxw/vim-jsx'
-Plug 'moll/vim-node'
-Plug 'claco/jasmine.vim',                           { 'for': 'javascript' }
+"Plug 'moll/vim-node'
+"Plug 'claco/jasmine.vim',                           { 'for': 'javascript' }
 Plug 'othree/javascript-libraries-syntax.vim',      { 'for': 'javascript' }
 "Plug 'jason0x43/vim-js-indent'
 " }}}
@@ -209,7 +212,7 @@ Plug 'tobyS/vmustache'
 Plug 'tobyS/pdv'
 " Debugger {{{
 Plug 'joonty/vdebug'
-let g:vdebug_options = {"port":9101} " Value from xdebug.ini: xdebug.remote_port
+let g:vdebug_options = {"port":9000} " Value from xdebug.ini: xdebug.remote_port
 " }}}
 " }}}
 " Python plugins {{{
@@ -224,7 +227,7 @@ Plug 'phildawes/racer', { 'do': 'cargo build --release' }
 " Haskell {{{
 Plug 'eagletmt/neco-ghc' " Great autocomplete plugin
 Plug 'eagletmt/ghcmod-vim' " Types, locations and other cool stuff
-Plug 'raichoo/haskell-vim' " Syntax colors
+Plug 'neovimhaskell/haskell-vim'
 " }}}
 " Lua {{{
 Plug 'xolox/vim-lua-ftplugin'
@@ -290,17 +293,19 @@ let g:gist_post_private = 1
 " Syntax linter {{{
 
 " Syntastic {{{
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"let g:syntastic_auto_jump               = 0
-"let g:syntastic_error_symbol            = '✖'
-"let g:syntastic_warning_symbol          = '►'
-"let g:syntastic_style_error_symbol      = '~'
-"let g:syntastic_style_warning_symbol    = '⚠'
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_auto_jump               = 0
+let g:syntastic_error_symbol            = '✖'
+let g:syntastic_warning_symbol          = '►'
+let g:syntastic_style_error_symbol      = '~'
+let g:syntastic_style_warning_symbol    = '⚠'
 
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
 " }}}
 " Neomake {{{
 let g:neomake_open_list = 2
@@ -335,36 +340,6 @@ let g:neomake_javascript_enabled_makers = ['eslint']
 " TypeScript {{{
 "autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript
 
-let g:ycm_filetype_specific_completion_to_disable.typescript = 1
-let g:syntastic_typescript_checkers = ['tsc', 'tslint']
-let g:syntastic_typescript_tsc_args = '-t ES6'
-let g:neomake_typescript_enabled_makers = ['tsc', 'tslint']
-let g:neomake_typescript_tsc_maker = {
-            \ 'args': [
-            \ '-m', 'system', '--noEmit', '--jsx', 'preserve', '-t', 'ES6',
-            \ '--moduleResolution', 'classic', '--isolatedModules',
-            \ '--experimentalDecorators', '--noImplicitAny'
-            \ ],
-            \ 'errorformat':
-            \ '%E%f %#(%l\,%c): error %m,' .
-            \ '%E%f %#(%l\,%c): %m,' .
-            \ '%Eerror %m,' .
-            \ '%C%\s%\+%m'
-            \ }
-let g:tsuquyomi_disable_quickfix = 1
-let g:tagbar_type_typescript = {
-            \ 'ctagstype': 'typescript',
-            \ 'kinds': [
-            \ 'c:classes',
-            \ 'n:modules',
-            \ 'f:functions',
-            \ 'v:variables',
-            \ 'v:varlambdas',
-            \ 'm:members',
-            \ 'i:interfaces',
-            \ 'e:enums',
-            \ ]
-            \ }
 " }}}
 " PHP {{{
 "let g:syntastic_php_phpcs_args='--tab-width=0 --standard=PSR1,PSR2'
@@ -374,7 +349,6 @@ let g:neomake_php_phpcs_maker = {
             \ 'args': ['--tab-width=0', '--standard=PSR1,PSR2']
             \ }
 let g:padawan#composer_command = '/home/mkusher/.scripts/composer'
-let g:padawan#timeout = "0.75"
 let g:ycm_semantic_triggers.php =
             \ ['->', '::', '(', 'new ', 'use ', 'namespace ', '\', '$', ' ']
 "let g:neocomplete#force_omni_input_patterns.php =
@@ -400,6 +374,10 @@ let g:haskell_enable_typeroles = 1 " to enable highlighting of type roles
 let g:racer_cmd = "/home/mkusher/.vim/plugged/racer/target/release/racer"
 let $RUST_SRC_PATH="/home/mkusher/public_html/rust/src/src/"
 " }}}
+" Tex {{{
+let g:tex_fast="r"
+let g:tex_no_error=1
+" }}}
 
 " UI {{{
 " Editor {{{
@@ -412,7 +390,7 @@ set history=50		" keep 50 lines of command line history
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set incsearch		" do incremental searching
-let &colorcolumn=join(range(80,999),",")
+let &colorcolumn=80
 set cursorline
 set scrolloff=5
 set wildmenu
@@ -454,6 +432,7 @@ syntax enable
 set fillchars=|
 " }}}
 " GUI {{{
+
 set mouse=r
 let g:hybrid_use_Xresources = 1
 let g:webdevicons_enable_nerdtree = 1
@@ -461,7 +440,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 
 " Airline
-let g:airline_theme='gruvbox'
+"let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
@@ -471,11 +450,14 @@ let g:airline#extensions#tabline#fnamemod = '%:t'
 "let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
 set background=dark
 colors gruvbox
+hi clear SpellBad
+hi SpellBad cterm=undercurl,bold guifg=#bb0000 gui=undercurl,bold
+
+highlight LineNr guibg=#3c3836
+highlight LineNr guifg=#a89984
 
 if has("gui_running")
-    highlight LineNr guibg=#3c3836
-    highlight LineNr guifg=#a89984
-    set guifont=Literation\ Mono\ Powerline\ 15
+    set guifont=Literation\ Mono\ Powerline\ 13
 
     set guioptions-=T  " no toolbar
     set guioptions-=m  " no menu
@@ -484,17 +466,18 @@ if has("gui_running")
     winsize 140 45
     "winpos 10 35
 elseif has("nvim")
+    set termguicolors
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-    " Neovim-qt Guifont command
-    "command -nargs=? Guifont call rpcnotify(0, 'Gui', 'SetFont', "<args>") | let g:Guifont="<args>"
-    """ Set the font to
-    "Guifont Literation Mono Powerline:h19
+    let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+    " Use background of termite:
+    highlight Normal guibg=none
 endif
 " }}}
 " }}}
 " Shortcuts {{{
 
 let mapleader=","
+let g:maplocalleader=","
 
 " {{{ Snippets
 let g:UltiSnipsExpandTrigger="<c-j>"
