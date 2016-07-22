@@ -5,14 +5,6 @@ set autoindent		"always set autoindenting on
 set smarttab
 set smartindent
 
-function! RunShellCommandInNewBuffer(commandStr)
-    bo new
-    setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap nonumber syntax=bash
-    silent exe a:commandStr
-    AnsiEsc
-    setlocal nomodifiable
-endfunction
-
 function! RunNpmUnitTests()
     let commandStr = 'r ! npm run unit-tests'
     echo "Started unit tests"
@@ -36,10 +28,3 @@ function! RunNpmTests()
     echo "Started npm tests"
     call RunShellCommandInNewBuffer(commandStr)
 endfunction
-
-map <F9> :call RunNpmUnitTest()<CR>
-map <F10> :call RunNpmUnitTests()<CR>
-map <F6> :call RunNpmUITests()<CR>
-map <F5> :call RunNpmTests()<CR>
-
-setlocal omnifunc=tsuquyomi#complete

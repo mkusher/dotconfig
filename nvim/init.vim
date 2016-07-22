@@ -11,6 +11,7 @@ set wildignore+=bower_components/*
 set wildignore+=typings/*
 set wildignore+=app/cache/*
 set wildignore+=vendor/*
+set wildignore+=*.map
 
 " Enable file type detection.
 " Use the default filetype settings, so that mail gets 'tw' set to 72,
@@ -88,17 +89,20 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'xolox/vim-misc'
 Plug 'powerman/vim-plugin-AnsiEsc'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'editorconfig/editorconfig-vim'
 "Autosave settings
 Plug 'duff/vim-bufonly'
 Plug 'Konfekt/FastFold'
 Plug 'vim-scripts/vim-auto-save'
 Plug 'terryma/vim-smooth-scroll'
+Plug 'christoomey/vim-tmux-navigator'
 
 " Colors and icons {{{
 "" Configuring theme
 "Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
 Plug 'geoffharcourt/one-dark.vim'
+Plug 'jdkanani/vim-material-theme'
 "Plug 'jonathanfilip/vim-lucius'
 "Plug 'Lokaltog/vim-distinguished'
 "Plug 'nanotech/jellybeans.vim'
@@ -106,7 +110,7 @@ Plug 'geoffharcourt/one-dark.vim'
 "Plug 'chriskempson/vim-tomorrow-theme'
 "Plug 'shawncplus/skittles_berry'
 "Plug 'daylerees/colour-schemes', { 'rtp': 'vim/' }
-Plug 'ninja/sky'
+"Plug 'ninja/sky'
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -198,6 +202,7 @@ Plug 'othree/javascript-libraries-syntax.vim',      { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'ianks/vim-tsx'
+"Plug 'clausreinke/typescript-tools.vim', { 'do': 'npm install' }
 " }}}
 " Gherkin {{{
 "Plug 'tpope/vim-cucumber'
@@ -259,32 +264,6 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#omni_patterns = {}
-let g:deoplete#omni_patterns.java = '[^. *\t]\.\w*'
-let g:deoplete#omni_patterns.php =
-            \ '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-"let g:ycm_autoclose_preview_window_after_completion = 1
-""let g:ycm_complete_in_strings = 1
-"let g:ycm_complete_in_comments = 1
-"let g:ycm_key_list_select_completion = ['<Tab>', '<C-n>', '<Down>']
-"let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:ycm_semantic_triggers =  {
-            \   'c' : ['->', '.'],
-            \   'objc' : ['->', '.'],
-            \   'ocaml' : ['.', '#'],
-            \   'cpp,objcpp' : ['->', '.', '::'],
-            \   'perl' : ['->'],
-            \   'cs,java,d,perl6,scala,vb,elixir,go' : ['.'],
-            \   'rust' : ['.', '::'],
-            \   'html': ['<', '"', '</', ' '],
-            \   'vim' : ['re![_a-za-z]+[_\w]*\.'],
-            \   'ruby' : ['.', '::'],
-            \   'lua' : ['.', ':'],
-            \   'erlang' : [':'],
-            \   'haskell' : ['.', 're!.']
-            \ }
-let g:ycm_filetype_specific_completion_to_disable = {
-            \ 'gitcommit': 1
-            \}
 " }}}
 " GIT {{{
 let g:gist_post_private = 1
@@ -309,7 +288,6 @@ let g:syntastic_auto_loc_list = 0
 " }}}
 " Neomake {{{
 let g:neomake_open_list = 2
-"autocmd! BufWritePost * Neomake
 " }}}
 " }}}
 " Project Navigation {{{
@@ -349,16 +327,8 @@ let g:neomake_php_phpcs_maker = {
             \ 'args': ['--tab-width=0', '--standard=PSR1,PSR2']
             \ }
 let g:padawan#composer_command = '/home/mkusher/.scripts/composer'
-let g:ycm_semantic_triggers.php =
-            \ ['->', '::', '(', 'new ', 'use ', 'namespace ', '\', '$', ' ']
-"let g:neocomplete#force_omni_input_patterns.php =
-"\ '\h\w*\|[^- \t]->\w*'
 " }}}
 " Python {{{
-"let g:neocomplete#force_omni_input_patterns.python =
-"\ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-"" alternative pattern: '\h\w*\|[^. \t]\.\w*'
-let g:ycm_semantic_triggers.python = ['.', 'import ']
 " }}}
 " Haskel {{{
 
@@ -507,6 +477,9 @@ if has('neovim')
     set timeout ttimeoutlen=1
 end
 " }}}
+" Syntax linter {{{
+nmap <Leader>n :Neomake<CR>
+" }}}
 " {{{ Autcompletion
 " C-Space is needed only when without YCM
 inoremap <C-Space> <C-x><C-o>
@@ -569,9 +542,9 @@ cmap pjson %!python -m json.tool
 " }}}
 " }}}
 " Project navigation {{{
-noremap <C-n> :NERDTreeToggle<CR>
-noremap <Leader>n :NERDTreeToggle<CR>
-noremap <Leader>f :NERDTreeFind<CR>
+"noremap <C-n> :NERDTreeToggle<CR>
+"noremap <Leader>n :NERDTreeToggle<CR>
+"noremap <Leader>f :NERDTreeFind<CR>
 noremap <Leader>u :Unite<CR>
 "noremap <C-p> :Unite file_rec/async -start-insert<CR> CtrlP
 noremap <Leader>p :Unite file_rec/neovim -start-insert<CR>
