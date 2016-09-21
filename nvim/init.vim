@@ -96,28 +96,22 @@ Plug 'Konfekt/FastFold'
 Plug 'vim-scripts/vim-auto-save'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'neovim/node-host', { 'do': 'npm install' }
+Plug 'metakirby5/codi.vim'
+"Plug 'floobits/floobits-neovim'
+Plug 'FredKSchott/CoVim'
 
 " Colors and icons {{{
 "" Configuring theme
 "Plug 'tomasr/molokai'
+Plug 'rakr/vim-two-firewatch'
 Plug 'morhetz/gruvbox'
-Plug 'geoffharcourt/one-dark.vim'
-Plug 'jdkanani/vim-material-theme'
-"Plug 'jonathanfilip/vim-lucius'
-"Plug 'Lokaltog/vim-distinguished'
-"Plug 'nanotech/jellybeans.vim'
-"Plug 'zeis/vim-kolor'
-"Plug 'chriskempson/vim-tomorrow-theme'
-"Plug 'shawncplus/skittles_berry'
-"Plug 'daylerees/colour-schemes', { 'rtp': 'vim/' }
-"Plug 'ninja/sky'
+
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " }}}
 " Autocompletion {{{
-"Plug 'Shougo/neocomplete.vim'
-"Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
 Plug 'Shougo/deoplete.nvim'
 Plug 'ervandew/supertab'
 " }}}
@@ -129,9 +123,7 @@ let g:local_vimrc='.vimrc'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/unite.vim'
-Plug 'vim-ctrlspace/vim-ctrlspace'
 Plug 'rking/ag.vim'
-
 Plug 'Shougo/neomru.vim'
 
 Plug 'majutsushi/tagbar'
@@ -161,7 +153,6 @@ Plug 'honza/vim-snippets'
 " Git {{{
 Plug 'tpope/vim-fugitive'
 Plug 'int3/vim-extradite'
-Plug 'idanarye/vim-merginal'
 Plug 'gregsexton/gitv'
 Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/gv.vim'
@@ -180,9 +171,7 @@ Plug 'rstacruz/sparkup'
 Plug 'othree/html5-syntax.vim',   { 'for': ['html']   }
 Plug 'Valloric/MatchTagAlways',   { 'for': ['html']   }
 Plug 'groenewege/vim-less',       { 'for': ['less']   }
-"Plug 'hail2u/vim-css3-syntax',    { 'for': ['html','css'] }
 Plug 'wavded/vim-stylus'
-"Plug 'skammer/vim-css-color'
 Plug 'tpope/vim-markdown',   { 'for': ['markdown']   }
 Plug 'suan/vim-instant-markdown'
 Plug 'tpope/vim-haml'
@@ -190,28 +179,30 @@ Plug 'tpope/vim-haml'
 " javascript {{{
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript' }
 "Plug 'jussi-kalliokoski/harmony.vim', { 'for': 'javascript' }
-Plug 'pangloss/vim-javascript'
-"Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript' }
-Plug 'mxw/vim-jsx'
-"Plug 'moll/vim-node'
-"Plug 'claco/jasmine.vim',                           { 'for': 'javascript' }
-Plug 'othree/javascript-libraries-syntax.vim',      { 'for': 'javascript' }
+"Plug 'pangloss/vim-javascript'
+""Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript' }
+""Plug 'moll/vim-node'
+""Plug 'claco/jasmine.vim',                           { 'for': 'javascript' }
+"Plug 'othree/javascript-libraries-syntax.vim',      { 'for': 'javascript' }
 "Plug 'jason0x43/vim-js-indent'
+Plug 'billyvg/tigris.nvim', { 'do': './install.sh' }
+"Plug 'mxw/vim-jsx'
 " }}}
 " TypeScript {{{
 Plug 'leafgarland/typescript-vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'ianks/vim-tsx'
-"Plug 'clausreinke/typescript-tools.vim', { 'do': 'npm install' }
+" }}}
+" Coverage {{{
+Plug 'm42e/vim-gcov-marker'
 " }}}
 " Gherkin {{{
 "Plug 'tpope/vim-cucumber'
 Plug 'veloce/vim-behat'
 " }}}
 " php {{{
-Plug 'vim-php/vim-php-refactoring'
-Plug 'mkusher/padawan.vim'
-Plug 'arnaud-lb/vim-php-namespace'
+"Plug 'mkusher/padawan.vim'
+Plug 'pbogut/deoplete-padawan'
 
 Plug 'tobyS/vmustache'
 Plug 'tobyS/pdv'
@@ -226,8 +217,8 @@ Plug 'davidhalter/jedi-vim'
 " }}}
 " Rust {{{
 Plug 'rust-lang/rust.vim'
-Plug 'timonv/vim-cargo'
-Plug 'phildawes/racer', { 'do': 'cargo build --release' }
+"Plug 'timonv/vim-cargo'
+"Plug 'phildawes/racer', { 'do': 'cargo build --release' }
 " }}}
 " Haskell {{{
 Plug 'eagletmt/neco-ghc' " Great autocomplete plugin
@@ -245,21 +236,6 @@ call plug#end()
 " }}}
 
 " Autocompletion {{{
-" Neocomplete {{{
- ""<TAB>: completion.
-"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-"let g:acp_enableAtStartup = 0
-"" Use neocomplete.
-"let g:neocomplete#enable_at_startup = 1
-"" Use smartcase.
-"let g:neocomplete#enable_smart_case = 1
-"" Set minimum syntax keyword length.
-"let g:neocomplete#sources#syntax#min_keyword_length = 3
-"let g:neocomplete#enable_auto_delimiter = 1
-"let g:neocomplete#use_vimproc = 1
-"let g:neocomplete#force_omni_input_patterns = {}
-" }}}
-
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
 let g:deoplete#enable_smart_case = 1
@@ -288,11 +264,11 @@ let g:syntastic_auto_loc_list = 0
 " }}}
 " Neomake {{{
 let g:neomake_open_list = 2
+autocmd! BufWritePost * Neomake
 " }}}
 " }}}
 " Project Navigation {{{
 "call unite#custom#source('file_rec/neovim2')
-let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
 let g:unite_source_file_rec_max_cache_files = -1
 let g:unite_source_rec_async_command =
             \ ['ag', '--follow', '--nocolor', '--nogroup',
@@ -314,19 +290,6 @@ let g:html_indent_script1        = "inc"
 let g:html_indent_style1         = "inc"
 "let g:syntastic_javascript_checkers = ['jshint', 'jscs']
 let g:neomake_javascript_enabled_makers = ['eslint']
-" }}}
-" TypeScript {{{
-"autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript
-
-" }}}
-" PHP {{{
-"let g:syntastic_php_phpcs_args='--tab-width=0 --standard=PSR1,PSR2'
-"let g:syntastic_php_checkers = ['php', 'phpcs']
-let g:neomake_php_enabled_makers = ['php', 'phpcs']
-let g:neomake_php_phpcs_maker = {
-            \ 'args': ['--tab-width=0', '--standard=PSR1,PSR2']
-            \ }
-let g:padawan#composer_command = '/home/mkusher/.scripts/composer'
 " }}}
 " Python {{{
 " }}}
@@ -427,7 +390,7 @@ highlight LineNr guibg=#3c3836
 highlight LineNr guifg=#a89984
 
 if has("gui_running")
-    set guifont=Literation\ Mono\ Powerline\ 13
+    set guifont=Literation\ Mono\ Powerline\ 18
 
     set guioptions-=T  " no toolbar
     set guioptions-=m  " no menu
@@ -507,10 +470,6 @@ map  <Leader>i <Esc>
 nmap <Leader>i <Esc>
 vmap <Leader>i <Esc>
 imap <Leader>i <Esc>
-map <A-i> <Esc>
-nmap <A-i> <Esc>
-vmap <A-i> <Esc>
-imap <A-i> <Esc>
 imap jk <Esc>
 " }}}
 " Git actions {{{
