@@ -1,0 +1,24 @@
+snippet Feature
+import { cucumber } from "support/World";
+
+const steps: cucumber.FeatureContext = function () {
+	${1}
+}
+
+export default steps;
+endsnippet
+snippet WhenStep
+this.When(/^${1:pattern}$/, function (${2}){
+	${3}
+});
+endsnippet
+snippet ThenStep
+this.Then(/^${1:pattern}$/, function (${2}){
+	${3}
+});
+endsnippet
+snippet GivenStep
+this.Given(/^${1:pattern}$/, function (${2}){
+	${3}
+});
+endsnippet

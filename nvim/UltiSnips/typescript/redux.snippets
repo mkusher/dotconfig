@@ -1,0 +1,51 @@
+global !p
+def first_lower(s):
+   if len(s) == 0:
+      return s
+   else:
+      return s[0].lower() + s[1:]
+
+def argumnets_to_action_type(snip, rawArgs, indent=None):
+	args = [ arg.split("=")[0].strip()
+		for arg in rawArgs.split(",")
+	]
+	if len(args) == 0 or args[0] == "":
+		return None
+	snip.rv += ",\n".join([snip.mkline(arg, indent) for arg in args])
+
+def arguments_to_action_return(snip, rawArgs, indent=None):
+	args = [ arg.split(":")[0].strip()
+		for arg in rawArgs.split(",")
+	]
+	if len(args) == 0 or args[0] == "":
+		return None
+	for arg in args:
+		snip.rv += ",\n"
+		snip.rv += snip.mkline(arg, indent)
+endglobal
+
+snippet Action
+export const ${1} = "$1";
+export type $1 = {
+	type: "$1"
+};
+export function `!p snip.rv = first_lower(t[1])` () {
+	return {
+		type: $1
+	};
+}
+endsnippet
+
+snippet TypedAction
+export const ${1} = "$1";
+export type $1 = {
+	type: "$1";
+`!p argumnets_to_action_type(snip, t[4], "  ")`
+};
+export function `!p snip.rv = first_lower(t[1])` (${4}) {
+	return {
+		type: $1`!p arguments_to_action_return(snip, t[4], "    ")`
+	};
+}
+endsnippet
+

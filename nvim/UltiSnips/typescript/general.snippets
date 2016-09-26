@@ -1,0 +1,34 @@
+# reference
+snippet reference
+///<reference path="${1}" />
+${2}
+endsnippet
+# Snippets for classes
+snippet d_class
+export default class ${1:`vim_snippets#Filename()`} {
+	${2}
+}
+endsnippet
+snippet e_class
+export class ${1:`vim_snippets#Filename()`} {
+	${2}
+}
+endsnippet
+snippet c
+class ${1:`vim_snippets#Filename()`} {
+	${2}
+}
+endsnippet
+
+# default interface
+snippet d_interface
+interface ${1:`vim_snippets#Filename()`} {
+	${2}
+}
+export default $1;
+endsnippet
+snippet i
+interface ${1:`vim_snippets#Filename()`} {
+	${2}
+}
+endsnippet

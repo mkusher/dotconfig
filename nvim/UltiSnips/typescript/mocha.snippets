@@ -1,0 +1,29 @@
+snippet describe
+describe("${1}", function () {
+	${2}
+});
+endsnippet
+snippet context
+context("${1}", function () {
+	${2}
+});
+endsnippet
+snippet it
+it("${1}", function () {
+	${2}
+});
+endsnippet
+snippet beforeEach
+beforeEach(function () {
+	${1}
+});
+endsnippet
+snippet describe-class
+import ${1} from "./$1";
+
+describe("$1", function () {
+	describe(".${2}", function () {
+		${3}
+	});
+});
+endsnippet
