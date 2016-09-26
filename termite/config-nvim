@@ -1,6 +1,6 @@
 [options]
 
-font =  Literation Mono Powerline 17
+font =  Hack 17
 icon_name = user-neovim
 [colors]
 # hard contrast: background = #1d2021
