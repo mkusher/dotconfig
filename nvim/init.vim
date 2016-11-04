@@ -93,13 +93,12 @@ Plug 'editorconfig/editorconfig-vim'
 "Autosave settings
 Plug 'duff/vim-bufonly'
 Plug 'Konfekt/FastFold'
-Plug 'vim-scripts/vim-auto-save'
-Plug 'terryma/vim-smooth-scroll'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'neovim/node-host', { 'do': 'npm install' }
 Plug 'metakirby5/codi.vim'
+Plug 'ledger/vim-ledger'
 "Plug 'floobits/floobits-neovim'
-Plug 'FredKSchott/CoVim'
+"Plug 'FredKSchott/CoVim'
 
 " Colors and icons {{{
 "" Configuring theme
@@ -122,7 +121,7 @@ Plug 'LucHermitte/local_vimrc'
 let g:local_vimrc='.vimrc'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'Shougo/unite.vim'
+Plug 'Shougo/denite.nvim'
 Plug 'rking/ag.vim'
 Plug 'Shougo/neomru.vim'
 
@@ -130,7 +129,8 @@ Plug 'majutsushi/tagbar'
 " }}}
 " Syntax checker {{{
 "Plug 'scrooloose/syntastic'
-Plug 'benekastah/neomake'
+"Plug 'benekastah/neomake'
+Plug 'w0rp/ale'
 " }}}
 " Configuring tabulation and codestyle {{{
 Plug 'tpope/vim-repeat' " repeating .
@@ -153,9 +153,8 @@ Plug 'honza/vim-snippets'
 " Git {{{
 Plug 'tpope/vim-fugitive'
 Plug 'int3/vim-extradite'
-Plug 'gregsexton/gitv'
 Plug 'airblade/vim-gitgutter'
-Plug 'junegunn/gv.vim'
+Plug 'rhysd/committia.vim'
 
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim' " Github's gist
@@ -240,13 +239,23 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#omni_patterns = {}
+let g:deoplete#sources = {}
 " }}}
 " GIT {{{
 let g:gist_post_private = 1
-
+let g:deoplete#sources.gitcommit=['github']
 " }}}
 " Syntax linter {{{
 
+" Ale {{{
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\   'typescript': ['tslint', 'tsc']
+\}
+let g:ale_sign_error = '✖'
+let g:ale_sign_warning = '►'
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+" }}}
 " Syntastic {{{
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -263,18 +272,18 @@ let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_auto_loc_list = 0
 " }}}
 " Neomake {{{
-let g:neomake_open_list = 2
-autocmd! BufWritePost * Neomake
+"let g:neomake_open_list = 2
+"autocmd! BufWritePost * Neomake
 " }}}
 " }}}
 " Project Navigation {{{
-"call unite#custom#source('file_rec/neovim2')
-let g:unite_source_file_rec_max_cache_files = -1
-let g:unite_source_rec_async_command =
-            \ ['ag', '--follow', '--nocolor', '--nogroup',
-            \  '--hidden', '-g', '']
-call unite#custom#source('file_rec,file_rec/async,file_rec/neovim',
-            \ 'max_candidates', 20)
+""call unite#custom#source('file_rec/neovim2')
+"let g:unite_source_file_rec_max_cache_files = -1
+"let g:unite_source_rec_async_command =
+            "\ ['ag', '--follow', '--nocolor', '--nogroup',
+            "\  '--hidden', '-g', '']
+"call unite#custom#source('file_rec,file_rec/async,file_rec/neovim',
+            "\ 'max_candidates', 20)
 
 " }}}
 
@@ -375,10 +384,27 @@ let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 " Airline
 "let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts = 1
+let g:airline_mode_map = {
+            \ '__' : '-',
+            \ 'n'  : 'N',
+            \ 'i'  : 'I',
+            \ 'R'  : 'R',
+            \ 'c'  : 'C',
+            \ 'v'  : 'V',
+            \ 'V'  : 'V',
+            \ '' : 'V',
+            \ 's'  : 'S',
+            \ 'S'  : 'S',
+            \ '' : 'S',
+            \ }
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#fnamemod = '%:t'
+let g:airline_section_error = '%{ALEGetStatusLine()}'
+let g:airline_section_z = airline#section#create(
+            \ ["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}']
+            \)
 " set the CN (column number) symbol:
 "let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
 set background=dark
@@ -504,10 +530,10 @@ cmap pjson %!python -m json.tool
 "noremap <C-n> :NERDTreeToggle<CR>
 "noremap <Leader>n :NERDTreeToggle<CR>
 "noremap <Leader>f :NERDTreeFind<CR>
-noremap <Leader>u :Unite<CR>
+noremap <Leader>u :Denite<CR>
 "noremap <C-p> :Unite file_rec/async -start-insert<CR> CtrlP
-noremap <Leader>p :Unite file_rec/neovim -start-insert<CR>
-nnoremap <Leader>e :Unite neomru/file<CR>j
+noremap <Leader>p :Denite file_rec buffer<CR>
+nnoremap <Leader>e :Denite file_mru<CR>
 " }}}
 " Goodbye arrows ;( {{{
 noremap   <Up>     <NOP>

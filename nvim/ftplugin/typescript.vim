@@ -1,3 +1,5 @@
+set tabstop=2
+set shiftwidth=2
 let g:neomake_typescript_enabled_makers = ['tslint']
 "let g:syntastic_typescript_checkers = ['tsuquyomi']
 let g:neomake_typescript_tsc_maker = {
