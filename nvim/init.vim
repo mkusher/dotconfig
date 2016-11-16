@@ -109,6 +109,7 @@ Plug 'morhetz/gruvbox'
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'edkolev/tmuxline.vim'
 " }}}
 " Autocompletion {{{
 Plug 'Shougo/deoplete.nvim'
@@ -129,8 +130,8 @@ Plug 'majutsushi/tagbar'
 " }}}
 " Syntax checker {{{
 "Plug 'scrooloose/syntastic'
-"Plug 'benekastah/neomake'
-Plug 'w0rp/ale'
+Plug 'benekastah/neomake'
+"Plug 'w0rp/ale'
 " }}}
 " Configuring tabulation and codestyle {{{
 Plug 'tpope/vim-repeat' " repeating .
@@ -188,9 +189,11 @@ Plug 'billyvg/tigris.nvim', { 'do': './install.sh' }
 "Plug 'mxw/vim-jsx'
 " }}}
 " TypeScript {{{
-Plug 'leafgarland/typescript-vim'
+"Plug 'leafgarland/typescript-vim'
+Plug 'HerringtonDarkholme/yats.vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'ianks/vim-tsx'
+"Plug 'mhartington/deoplete-typescript'
 " }}}
 " Coverage {{{
 Plug 'm42e/vim-gcov-marker'
@@ -250,7 +253,7 @@ let g:deoplete#sources.gitcommit=['github']
 " Ale {{{
 let g:ale_linters = {
 \   'javascript': ['eslint'],
-\   'typescript': ['tslint', 'tsc']
+\   'typescript': ['tslint', 'typecheck']
 \}
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '►'
@@ -401,7 +404,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#fnamemod = '%:t'
-let g:airline_section_error = '%{ALEGetStatusLine()}'
+"let g:airline_section_error = '%{ALEGetStatusLine()}'
 let g:airline_section_z = airline#section#create(
             \ ["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}']
             \)
@@ -503,17 +506,21 @@ noremap <Leader>gs :Gstatus<CR>
 noremap <Leader>gc :Gcommit<CR>
 " }}}
 " Buffers {{{
-nnoremap <C-h> <C-W><C-H>
-nnoremap <C-l> <C-W><C-L>
-nnoremap <C-k> <C-W><C-K>
-nnoremap <C-j> <C-W><C-J>
+" Neovim hack
+nmap <BS> :<c-u>TmuxNavigateLeft<CR>
+" Now Using tmux navigation
+"nnoremap <C-h> <C-W>h
+"nnoremap <C-l> <C-W>l
+"nnoremap <C-k> <C-W>k
+"nnoremap <C-j> <C-W>j
 " Tabs {{{
 nmap <Leader>. :tabnext<CR>
 nmap <Leader>, :tabprevious<CR>
 " }}}
 " Splits {{{
 nmap <Leader>h :sp<CR>
-nnoremap <Leader>v :vsp<CR>
+nmap <Leader>- :sp<CR>
+nmap <Leader>v :vsp<CR>
 " }}}
 " Exit {{{
 nnoremap Q :wq<CR>
