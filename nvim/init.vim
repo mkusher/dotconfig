@@ -109,7 +109,7 @@ Plug 'morhetz/gruvbox'
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'edkolev/tmuxline.vim'
+"Plug 'edkolev/tmuxline.vim'
 " }}}
 " Autocompletion {{{
 Plug 'Shougo/deoplete.nvim'
@@ -541,6 +541,7 @@ noremap <Leader>u :Denite<CR>
 "noremap <C-p> :Unite file_rec/async -start-insert<CR> CtrlP
 noremap <Leader>p :Denite file_rec buffer<CR>
 nnoremap <Leader>e :Denite file_mru<CR>
+nnoremap <Leader>d :e %:h<CR>
 " }}}
 " Goodbye arrows ;( {{{
 noremap   <Up>     <NOP>

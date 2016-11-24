@@ -1,11 +1,10 @@
 set tabstop=2
 set shiftwidth=2
-let g:neomake_typescript_enabled_makers = ['tslint']
-"let g:syntastic_typescript_checkers = ['tsuquyomi']
+let g:neomake_typescript_enabled_makers = ['tsc', 'tslint']
 let g:neomake_typescript_tsc_maker = {
             \ 'args': [
-            \ '-m', 'system', '--noEmit', '--jsx', 'preserve', '-t', 'ES6',
-            \ '--moduleResolution', 'classic', '--isolatedModules',
+            \ '--noEmit', '--jsx', 'preserve', '-t', 'ES6',
+            \ '--moduleResolution', 'node', '--isolatedModules',
             \ '--experimentalDecorators', '--noImplicitAny'
             \ ],
             \ 'errorformat':
