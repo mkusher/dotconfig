@@ -102,9 +102,9 @@ Plug 'ledger/vim-ledger'
 
 " Colors and icons {{{
 "" Configuring theme
-"Plug 'tomasr/molokai'
-Plug 'rakr/vim-two-firewatch'
-Plug 'morhetz/gruvbox'
+"Plug 'rakr/vim-two-firewatch'
+"Plug 'morhetz/gruvbox'
+Plug 'mhartington/oceanic-next'
 
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
@@ -189,11 +189,11 @@ Plug 'billyvg/tigris.nvim', { 'do': './install.sh' }
 "Plug 'mxw/vim-jsx'
 " }}}
 " TypeScript {{{
-"Plug 'leafgarland/typescript-vim'
-Plug 'HerringtonDarkholme/yats.vim'
+Plug 'leafgarland/typescript-vim'
+"Plug 'HerringtonDarkholme/yats.vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'ianks/vim-tsx'
-"Plug 'mhartington/deoplete-typescript'
+Plug 'mhartington/deoplete-typescript'
 " }}}
 " Coverage {{{
 Plug 'm42e/vim-gcov-marker'
@@ -385,7 +385,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 
 " Airline
-"let g:airline_theme='gruvbox'
+let g:airline_theme='oceanicnext'
 let g:airline_powerline_fonts = 1
 let g:airline_mode_map = {
             \ '__' : '-',
@@ -411,12 +411,12 @@ let g:airline_section_z = airline#section#create(
 " set the CN (column number) symbol:
 "let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
 set background=dark
-colors gruvbox
+colors OceanicNext
 hi clear SpellBad
 hi SpellBad cterm=undercurl,bold guifg=#bb0000 gui=undercurl,bold
 
-highlight LineNr guibg=#3c3836
-highlight LineNr guifg=#a89984
+"highlight LineNr guibg=#3c3836
+"highlight LineNr guifg=#a89984
 
 if has("gui_running")
     set guifont=Literation\ Mono\ Powerline\ 18
@@ -440,6 +440,7 @@ endif
 
 let mapleader=","
 let g:maplocalleader=","
+nmap <Space> ,
 
 " {{{ Snippets
 let g:UltiSnipsExpandTrigger="<c-j>"
