@@ -86,30 +86,30 @@ let g:startify_custom_header = [
 " And plugins
 call plug#begin('~/.config/nvim/plugged')
 
+" Hosts {{{
+Plug 'neovim/node-host', { 'do': 'npm install' }
+"call remote#host#Register('node', '*.js', function('host#Require'))
+" }}}
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+
 Plug 'xolox/vim-misc'
 Plug 'powerman/vim-plugin-AnsiEsc'
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'editorconfig/editorconfig-vim'
 "Autosave settings
 Plug 'duff/vim-bufonly'
 Plug 'Konfekt/FastFold'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'neovim/node-host', { 'do': 'npm install' }
-Plug 'metakirby5/codi.vim'
-Plug 'ledger/vim-ledger'
-"Plug 'floobits/floobits-neovim'
-"Plug 'FredKSchott/CoVim'
+
+Plug 'ledger/vim-ledger' " Accounts & money
 
 " Colors and icons {{{
 "" Configuring theme
-"Plug 'rakr/vim-two-firewatch'
 "Plug 'morhetz/gruvbox'
 Plug 'mhartington/oceanic-next'
 
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-"Plug 'edkolev/tmuxline.vim'
 " }}}
 " Autocompletion {{{
 Plug 'Shougo/deoplete.nvim'
@@ -117,39 +117,27 @@ Plug 'ervandew/supertab'
 " }}}
 " Project navigation {{{
 Plug 'mhinz/vim-startify'
-Plug 'LucHermitte/lh-vim-lib'
-Plug 'LucHermitte/local_vimrc'
-let g:local_vimrc='.vimrc'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/denite.nvim'
 Plug 'rking/ag.vim'
 Plug 'Shougo/neomru.vim'
-
-Plug 'majutsushi/tagbar'
 " }}}
 " Syntax checker {{{
-"Plug 'scrooloose/syntastic'
+Plug 'sbdchd/neoformat'
 Plug 'benekastah/neomake'
-"Plug 'w0rp/ale'
 " }}}
 " Configuring tabulation and codestyle {{{
 Plug 'tpope/vim-repeat' " repeating .
-Plug 'paradigm/TextObjectify'
 Plug 'Raimondi/delimitMate'
 Plug 'Yggdroot/indentLine'
 
 " Working with code
 Plug 'tpope/vim-surround'       " It's all about surrounding(quotes, brackets and etc)
-Plug 'matze/vim-move'           " Moving lines fast and easy
 Plug 'scrooloose/nerdcommenter' " Commenting/uncommenting code
-" }}}
-" Api Blueprint {{{
-Plug 'kylef/apiblueprint.vim'
 " }}}
 " Snippets {{{
 Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 " }}}
 " Git {{{
 Plug 'tpope/vim-fugitive'
@@ -164,13 +152,8 @@ Plug 'mattn/gist-vim' " Github's gist
 Plug 'lervag/vimtex'
 " }}}
 " HTML5/CSS3/LESS {{{
-Plug 'mattn/emmet-vim', {'for': ['html', 'xhtml', 'css', 'less']}
-
-Plug 'rstacruz/sparkup'
-
 Plug 'othree/html5-syntax.vim',   { 'for': ['html']   }
 Plug 'Valloric/MatchTagAlways',   { 'for': ['html']   }
-Plug 'groenewege/vim-less',       { 'for': ['less']   }
 Plug 'wavded/vim-stylus'
 Plug 'tpope/vim-markdown',   { 'for': ['markdown']   }
 Plug 'suan/vim-instant-markdown'
@@ -185,7 +168,7 @@ Plug 'marijnh/tern_for_vim', { 'for': 'javascript' }
 ""Plug 'claco/jasmine.vim',                           { 'for': 'javascript' }
 "Plug 'othree/javascript-libraries-syntax.vim',      { 'for': 'javascript' }
 "Plug 'jason0x43/vim-js-indent'
-Plug 'billyvg/tigris.nvim', { 'do': './install.sh' }
+"Plug 'billyvg/tigris.nvim', { 'do': './install.sh' }
 "Plug 'mxw/vim-jsx'
 " }}}
 " TypeScript {{{
@@ -193,42 +176,32 @@ Plug 'leafgarland/typescript-vim'
 "Plug 'HerringtonDarkholme/yats.vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'ianks/vim-tsx'
-Plug 'mhartington/deoplete-typescript'
+"Plug 'mhartington/deoplete-typescript'
 " }}}
 " Coverage {{{
-Plug 'm42e/vim-gcov-marker'
+Plug 'ruanyl/coverage.vim'
 " }}}
 " Gherkin {{{
 "Plug 'tpope/vim-cucumber'
 Plug 'veloce/vim-behat'
 " }}}
 " php {{{
-"Plug 'mkusher/padawan.vim'
 Plug 'pbogut/deoplete-padawan'
-
-Plug 'tobyS/vmustache'
-Plug 'tobyS/pdv'
 " Debugger {{{
 Plug 'joonty/vdebug'
 let g:vdebug_options = {"port":9000} " Value from xdebug.ini: xdebug.remote_port
 " }}}
 " }}}
 " Python plugins {{{
-Plug 'klen/python-mode'
 Plug 'davidhalter/jedi-vim'
 " }}}
 " Rust {{{
 Plug 'rust-lang/rust.vim'
-"Plug 'timonv/vim-cargo'
-"Plug 'phildawes/racer', { 'do': 'cargo build --release' }
 " }}}
 " Haskell {{{
 Plug 'eagletmt/neco-ghc' " Great autocomplete plugin
 Plug 'eagletmt/ghcmod-vim' " Types, locations and other cool stuff
 Plug 'neovimhaskell/haskell-vim'
-" }}}
-" Lua {{{
-Plug 'xolox/vim-lua-ftplugin'
 " }}}
 " Yaml {{{
 Plug 'stephpy/vim-yaml'
@@ -249,7 +222,6 @@ let g:gist_post_private = 1
 let g:deoplete#sources.gitcommit=['github']
 " }}}
 " Syntax linter {{{
-
 " Ale {{{
 let g:ale_linters = {
 \   'javascript': ['eslint'],
@@ -292,9 +264,14 @@ let g:syntastic_auto_loc_list = 0
 
 " JS {{{
 autocmd BufNewFile,BufReadPost *.es6 set filetype=javascript
+autocmd BufNewFile,BufReadPost .babelrc set filetype=json
+autocmd BufNewFile,BufReadPost .eslintrc set filetype=json
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufReadPost *.jade set filetype=haml
 
+let g:coverage_json_report_path = "coverage/coverage-final.json"
+let g:coverage_show_covered = 1
+let g:coverage_auto_start = 0
 let g:use_emmet_complete_tag = 1
 let javascript_enable_domhtmlcss = 1
 let g:html_indent_inctags        = "html,body,head,tbody"
@@ -472,6 +449,7 @@ end
 " }}}
 " Syntax linter {{{
 nmap <Leader>n :Neomake<CR>
+nmap <Leader>f :Neoformat<CR>
 " }}}
 " {{{ Autcompletion
 " C-Space is needed only when without YCM
