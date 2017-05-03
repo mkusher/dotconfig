@@ -1,29 +1,58 @@
+global !p
+import vim
+import os
+
+def specFile():
+	currentFile = os.path.basename(path)
+	return currentFile.split(".")[0]
+endglobal
+snippet spec
+import ${1} from "./`!p snip.rv = specFile()`"
+
+describe("`!p snip.rv = specFile()`", function() {
+	${2}
+})
+endsnippet
 snippet describe
 describe("${1}", function () {
 	${2}
-});
+})
 endsnippet
 snippet context
 context("${1}", function () {
 	${2}
-});
+})
 endsnippet
 snippet it
 it("${1}", function () {
 	${2}
-});
+})
+endsnippet
+snippet ait
+it("${1}", async function () {
+	${2}
+})
 endsnippet
 snippet beforeEach
 beforeEach(function () {
 	${1}
-});
+})
 endsnippet
 snippet describe-class
-import ${1} from "./$1";
+import ${1} from "./$1"
 
 describe("$1", function () {
+	${3}
 	describe(".${2}", function () {
-		${3}
-	});
-});
+	})
+})
+endsnippet
+snippet describe-function
+import ${1} from "./$1"
+
+describe("$1", function () {
+	${2}
+	describe("()", function () {
+	})
+})
 endsnippet
