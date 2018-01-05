@@ -8,8 +8,6 @@ set hidden
 set fileencodings=utf-8,cp1251,koi8-r,cp866
 set wildignore+=node_modules/*
 set wildignore+=bower_components/*
-set wildignore+=typings/*
-set wildignore+=app/cache/*
 set wildignore+=vendor/*
 set wildignore+=*.map
 
@@ -56,7 +54,6 @@ let g:auto_save = 0
 autocmd User Startified setlocal buftype=
 let g:startify_list_order    = ['sessions', 'bookmarks', 'files']
 let g:startify_bookmarks     = [
-            \"~/Projects/blog/index.html"
             \]
 let g:startify_custom_header = [
             \"                                       \\  |  /         ___________",
@@ -86,26 +83,33 @@ let g:startify_custom_header = [
 " And plugins
 call plug#begin('~/.config/nvim/plugged')
 
+Plug 'wakatime/vim-wakatime'
+
 " Hosts {{{
 Plug 'neovim/node-host', { 'do': 'npm install' }
 "call remote#host#Register('node', '*.js', function('host#Require'))
 " }}}
+" Plugin Utils {{{
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-
 Plug 'xolox/vim-misc'
+" }}}
+
 Plug 'powerman/vim-plugin-AnsiEsc'
 Plug 'editorconfig/editorconfig-vim'
-"Autosave settings
+"Plug 'johngrib/vim-game-code-break'
 Plug 'duff/vim-bufonly'
 Plug 'Konfekt/FastFold'
-Plug 'christoomey/vim-tmux-navigator'
+"Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'ledger/vim-ledger' " Accounts & money
+"Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+Plug 'autozimu/LanguageClient-neovim', {'do': 'make release'}
 
 " Colors and icons {{{
 "" Configuring theme
-"Plug 'morhetz/gruvbox'
+Plug 'morhetz/gruvbox'
 Plug 'mhartington/oceanic-next'
+Plug 'chriskempson/base16-vim'
 
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
@@ -116,7 +120,7 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'ervandew/supertab'
 " }}}
 " Project navigation {{{
-Plug 'mhinz/vim-startify'
+"Plug 'mhinz/vim-startify'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/denite.nvim'
@@ -124,13 +128,15 @@ Plug 'rking/ag.vim'
 Plug 'Shougo/neomru.vim'
 " }}}
 " Syntax checker {{{
-Plug 'sbdchd/neoformat'
 Plug 'benekastah/neomake'
+"Plug 'w0rp/ale'
 " }}}
 " Configuring tabulation and codestyle {{{
 Plug 'tpope/vim-repeat' " repeating .
 Plug 'Raimondi/delimitMate'
 Plug 'Yggdroot/indentLine'
+Plug 'sbdchd/neoformat'
+Plug 'Shougo/echodoc.vim'
 
 " Working with code
 Plug 'tpope/vim-surround'       " It's all about surrounding(quotes, brackets and etc)
@@ -158,18 +164,14 @@ Plug 'wavded/vim-stylus'
 Plug 'tpope/vim-markdown',   { 'for': ['markdown']   }
 Plug 'suan/vim-instant-markdown'
 Plug 'tpope/vim-haml'
+Plug 'hhsnopek/vim-sugarss'
 " }}}
 " javascript {{{
-Plug 'marijnh/tern_for_vim', { 'for': 'javascript' }
-"Plug 'jussi-kalliokoski/harmony.vim', { 'for': 'javascript' }
-"Plug 'pangloss/vim-javascript'
-""Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript' }
-""Plug 'moll/vim-node'
-""Plug 'claco/jasmine.vim',                           { 'for': 'javascript' }
-"Plug 'othree/javascript-libraries-syntax.vim',      { 'for': 'javascript' }
-"Plug 'jason0x43/vim-js-indent'
-"Plug 'billyvg/tigris.nvim', { 'do': './install.sh' }
-"Plug 'mxw/vim-jsx'
+"Plug 'othree/yajs.vim'
+"Plug 'othree/es.next.syntax.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'flowtype/vim-flow'
+"Plug 'marijnh/tern_for_vim', { 'for': 'javascript' }
 " }}}
 " TypeScript {{{
 Plug 'leafgarland/typescript-vim'
@@ -186,7 +188,8 @@ Plug 'ruanyl/coverage.vim'
 Plug 'veloce/vim-behat'
 " }}}
 " php {{{
-Plug 'pbogut/deoplete-padawan'
+"Plug 'pbogut/deoplete-padawan'
+Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
 " Debugger {{{
 Plug 'joonty/vdebug'
 let g:vdebug_options = {"port":9000} " Value from xdebug.ini: xdebug.remote_port
@@ -225,26 +228,27 @@ let g:deoplete#sources.gitcommit=['github']
 " Ale {{{
 let g:ale_linters = {
 \   'javascript': ['eslint'],
-\   'typescript': ['tslint', 'typecheck']
+\   'haskell': []
 \}
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '►'
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+"let g:airline#extensions#ale#enabled = 1
 " }}}
 " Syntastic {{{
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_auto_jump               = 0
-let g:syntastic_error_symbol            = '✖'
-let g:syntastic_warning_symbol          = '►'
-let g:syntastic_style_error_symbol      = '~'
-let g:syntastic_style_warning_symbol    = '⚠'
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"let g:syntastic_auto_jump               = 0
+"let g:syntastic_error_symbol            = '✖'
+"let g:syntastic_warning_symbol          = '►'
+"let g:syntastic_style_error_symbol      = '~'
+"let g:syntastic_style_warning_symbol    = '⚠'
 
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list = 0
+"let g:syntastic_check_on_open = 0
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_always_populate_loc_list = 0
+"let g:syntastic_auto_loc_list = 0
 " }}}
 " Neomake {{{
 "let g:neomake_open_list = 2
@@ -259,9 +263,20 @@ let g:syntastic_auto_loc_list = 0
             "\  '--hidden', '-g', '']
 "call unite#custom#source('file_rec,file_rec/async,file_rec/neovim',
             "\ 'max_candidates', 20)
-
+call denite#custom#var('file_rec', 'command',
+	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 " }}}
+augroup suffixes
+  autocmd!
 
+  let associations = [
+              \["javascript", ".js,.jsx,.flow"]
+              \]
+
+  for ft in associations
+      execute "autocmd FileType " . ft[0] . " setlocal suffixesadd=" . ft[1]
+  endfor
+augroup END
 " JS {{{
 autocmd BufNewFile,BufReadPost *.es6 set filetype=javascript
 autocmd BufNewFile,BufReadPost .babelrc set filetype=json
@@ -269,16 +284,14 @@ autocmd BufNewFile,BufReadPost .eslintrc set filetype=json
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufReadPost *.jade set filetype=haml
 
+let g:flow#enable = 0
+let g:javascript_plugin_flow = 1
 let g:coverage_json_report_path = "coverage/coverage-final.json"
 let g:coverage_show_covered = 1
 let g:coverage_auto_start = 0
-let g:use_emmet_complete_tag = 1
-let javascript_enable_domhtmlcss = 1
 let g:html_indent_inctags        = "html,body,head,tbody"
 let g:html_indent_script1        = "inc"
 let g:html_indent_style1         = "inc"
-"let g:syntastic_javascript_checkers = ['jshint', 'jscs']
-let g:neomake_javascript_enabled_makers = ['eslint']
 " }}}
 " Python {{{
 " }}}
@@ -349,7 +362,7 @@ set autoindent		" always set autoindenting on
 set smarttab
 set smartindent
 let g:indentLine_enabled    = 1
-let g:indentLine_char       = '¦'
+let g:indentLine_char       = ''
 syntax enable
 set fillchars=|
 " }}}
@@ -362,7 +375,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 
 " Airline
-let g:airline_theme='oceanicnext'
+let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts = 1
 let g:airline_mode_map = {
             \ '__' : '-',
@@ -383,12 +396,14 @@ let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#fnamemod = '%:t'
 "let g:airline_section_error = '%{ALEGetStatusLine()}'
 let g:airline_section_z = airline#section#create(
-            \ ["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}']
+            \ []
             \)
 " set the CN (column number) symbol:
 "let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
 set background=dark
-colors OceanicNext
+"colors OceanicNext
+"colors base16-default-dark
+colors gruvbox
 hi clear SpellBad
 hi SpellBad cterm=undercurl,bold guifg=#bb0000 gui=undercurl,bold
 
@@ -405,11 +420,10 @@ if has("gui_running")
     winsize 140 45
     "winpos 10 35
 elseif has("nvim")
-    set termguicolors
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-    let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-    " Use background of termite:
-    highlight Normal guibg=none
+  set termguicolors
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  " Use background of termite:
+  highlight Normal guibg=none
 endif
 " }}}
 " }}}
@@ -426,29 +440,29 @@ let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 " }}}
 " Clipboard {{{
 if has('nvim')
-    set clipboard+=unnamedplus
+  set clipboard+=unnamedplus
 else
-    set clipboard=unnamedplus
+  set clipboard=unnamedplus
 endif
 " }}}
 " ALT {{{
 if !has('gui_running') && !has('nvim')
-    "" fixing Alt key to work in konsole
-    let c='a'
-    while c <= 'z'
-        exec "set <A-".c.">=\e".c
-        exec "imap \e".c." <A-".c.">"
-        let c = nr2char(1+char2nr(c))
-    endw
+  "" fixing Alt key to work in konsole
+  let c='a'
+  while c <= 'z'
+    exec "set <A-".c.">=\e".c
+    exec "imap \e".c." <A-".c.">"
+    let c = nr2char(1+char2nr(c))
+  endw
 
-    set timeout ttimeoutlen=0
+  set timeout ttimeoutlen=0
 endif
-if has('neovim')
-    set timeout ttimeoutlen=1
+if has('nvim')
+  set timeout ttimeoutlen=1
 end
 " }}}
-" Syntax linter {{{
-nmap <Leader>n :Neomake<CR>
+" Syntax check and format {{{
+nmap <Leader>m :Neomake<CR>
 nmap <Leader>f :Neoformat<CR>
 " }}}
 " {{{ Autcompletion
@@ -461,11 +475,11 @@ smap <buffer> <Nul> <C-Space>
 " }}}
 " Relative number toggle {{{
 function! NumberToggle()
-    if(&relativenumber == 1)
-        set relativenumber!
-    else
-        set relativenumber
-    endif
+  if(&relativenumber == 1)
+    set relativenumber!
+  else
+    set relativenumber
+  endif
 endfunction
 
 nnoremap <Leader>r :call NumberToggle()<cr>
@@ -486,12 +500,12 @@ noremap <Leader>gc :Gcommit<CR>
 " }}}
 " Buffers {{{
 " Neovim hack
-nmap <BS> :<c-u>TmuxNavigateLeft<CR>
+"nmap <BS> :<c-u>TmuxNavigateLeft<CR>
 " Now Using tmux navigation
-"nnoremap <C-h> <C-W>h
-"nnoremap <C-l> <C-W>l
-"nnoremap <C-k> <C-W>k
-"nnoremap <C-j> <C-W>j
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
+nnoremap <C-k> <C-W>k
+nnoremap <C-j> <C-W>j
 " Tabs {{{
 nmap <Leader>. :tabnext<CR>
 nmap <Leader>, :tabprevious<CR>

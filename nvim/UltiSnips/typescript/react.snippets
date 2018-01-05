@@ -1,12 +1,27 @@
 snippet component
-import { Component } from "react";
+import { Component } from "react"
 
-type Props = {};
-type State = {};
+type Props = {}
+type State = undefined
 
 export default class ${1} extends Component<Props, State> {
 	render() {
 		${2}
 	}
 }
+endsnippet
+snippet ConnectedComponent
+import { Component } from "react"
+import { connect } from "infrastructure/Store"
+
+type Props = {}
+type State = undefined
+
+export class ${1} extends Component<Props, State> {
+	render() {
+	}
+}
+
+export default connect(
+)($1)
 endsnippet
