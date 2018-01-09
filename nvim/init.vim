@@ -83,7 +83,6 @@ let g:startify_custom_header = [
 " And plugins
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'wakatime/vim-wakatime'
 
 " Hosts {{{
 Plug 'neovim/node-host', { 'do': 'npm install' }
@@ -107,6 +106,7 @@ Plug 'autozimu/LanguageClient-neovim', {'do': 'make release'}
 
 " Colors and icons {{{
 "" Configuring theme
+Plug 'ayu-theme/ayu-vim'
 Plug 'morhetz/gruvbox'
 Plug 'mhartington/oceanic-next'
 Plug 'chriskempson/base16-vim'
@@ -174,11 +174,11 @@ Plug 'flowtype/vim-flow'
 "Plug 'marijnh/tern_for_vim', { 'for': 'javascript' }
 " }}}
 " TypeScript {{{
-Plug 'leafgarland/typescript-vim'
-"Plug 'HerringtonDarkholme/yats.vim'
-Plug 'Quramy/tsuquyomi'
+"Plug 'leafgarland/typescript-vim'
+Plug 'HerringtonDarkholme/yats.vim'
+"Plug 'Quramy/tsuquyomi'
 Plug 'ianks/vim-tsx'
-"Plug 'mhartington/deoplete-typescript'
+Plug 'mhartington/nvim-typescript'
 " }}}
 " Coverage {{{
 Plug 'ruanyl/coverage.vim'
@@ -375,7 +375,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 
 " Airline
-let g:airline_theme='gruvbox'
+" let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts = 1
 let g:airline_mode_map = {
             \ '__' : '-',
@@ -403,7 +403,11 @@ let g:airline_section_z = airline#section#create(
 set background=dark
 "colors OceanicNext
 "colors base16-default-dark
-colors gruvbox
+"colors gruvbox
+  set termguicolors
+let ayucolor="mirage" " for mirage version of theme
+"let ayucolor="dark"   " for dark version of theme
+colorscheme ayu
 hi clear SpellBad
 hi SpellBad cterm=undercurl,bold guifg=#bb0000 gui=undercurl,bold
 
@@ -419,11 +423,6 @@ if has("gui_running")
     set guioptions-=L  " no left scroll
     winsize 140 45
     "winpos 10 35
-elseif has("nvim")
-  set termguicolors
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  " Use background of termite:
-  highlight Normal guibg=none
 endif
 " }}}
 " }}}
