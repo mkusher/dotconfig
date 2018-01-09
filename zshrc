@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/mkusher/.oh-my-zsh
+export ZSH=/home/mkusher/.oh-my-zsh
 
 DISABLE_AUTO_UPDATE="true"
 ZSH_CACHE_DIR=$HOME/.oh-my-zsh-cache
@@ -8,14 +8,13 @@ ZSH_THEME="agnoster"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
-alias chrome='open -a Google\ Chrome'
 alias t='tmux'
 alias tl='tmux list-sessions'
 alias ta='tmux attach -t'
 alias vim=nvim
 alias vi=nvim
 alias pr='hub pull-request'
-alias cdo='cd ~/Projects/workarea/overlai'
+alias cdi='cd ~/Projects/workarea/intouch'
 alias gpcb='gp --set-upstream origin $(current_branch)'
 alias gpf='gp --force-with-lease'
 alias docker-dev='docker-compose -p ehrworks -f docker-development.yml'
@@ -41,4 +40,3 @@ PROMPT='%{%f%b%k%}$(build_prompt) '
 PROMPT="$PROMPT
 $INPUT_SIGN "
 
-export PATH="$HOME/.yarn/bin:$PATH"

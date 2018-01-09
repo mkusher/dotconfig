@@ -1,9 +1,9 @@
 [options]
 
-font = Hack 17
+font = Literation Mono Nerd Font 14
 [colors]
 # hard contrast: background = #1d2021
-background = rgba(40, 40, 40, 0.9)
+background = rgba(40, 40, 40, 0.95)
 # soft contrast: background = #32302f
 foreground = #ebdbb2
 foreground_bold = #ebdbb2
