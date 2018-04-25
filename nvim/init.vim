@@ -98,11 +98,12 @@ Plug 'editorconfig/editorconfig-vim'
 "Plug 'johngrib/vim-game-code-break'
 Plug 'duff/vim-bufonly'
 Plug 'Konfekt/FastFold'
-"Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'ledger/vim-ledger' " Accounts & money
 "Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-Plug 'autozimu/LanguageClient-neovim', {'do': 'make release'}
+Plug 'autozimu/LanguageClient-neovim', {'do': 'bash install.sh', 'branch': 'next'}
+Plug 'kristijanhusak/vim-carbon-now-sh'
 
 " Colors and icons {{{
 "" Configuring theme
@@ -126,6 +127,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/denite.nvim'
 Plug 'rking/ag.vim'
 Plug 'Shougo/neomru.vim'
+Plug 'tpope/vim-vinegar'
 " }}}
 " Syntax checker {{{
 Plug 'benekastah/neomake'
@@ -146,10 +148,11 @@ Plug 'scrooloose/nerdcommenter' " Commenting/uncommenting code
 Plug 'SirVer/ultisnips'
 " }}}
 " Git {{{
-Plug 'tpope/vim-fugitive'
-Plug 'int3/vim-extradite'
+"Plug 'tpope/vim-fugitive'
+"Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
-Plug 'rhysd/committia.vim'
+"Plug 'rhysd/committia.vim'
+Plug 'lambdalisue/gina.vim'
 
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim' " Github's gist
@@ -165,6 +168,9 @@ Plug 'tpope/vim-markdown',   { 'for': ['markdown']   }
 Plug 'suan/vim-instant-markdown'
 Plug 'tpope/vim-haml'
 Plug 'hhsnopek/vim-sugarss'
+" }}}
+" {{{
+Plug 'zchee/deoplete-clang'
 " }}}
 " javascript {{{
 "Plug 'othree/yajs.vim'
@@ -188,7 +194,7 @@ Plug 'ruanyl/coverage.vim'
 Plug 'veloce/vim-behat'
 " }}}
 " php {{{
-"Plug 'pbogut/deoplete-padawan'
+"Plug 'padawan-php/padawan.vim'
 Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
 " Debugger {{{
 Plug 'joonty/vdebug'
@@ -494,17 +500,17 @@ imap <Leader>i <Esc>
 imap jk <Esc>
 " }}}
 " Git actions {{{
-noremap <Leader>gs :Gstatus<CR>
-noremap <Leader>gc :Gcommit<CR>
+noremap <Leader>gs :Gina status<CR>
+noremap <Leader>gc :Gina commit<CR>
 " }}}
 " Buffers {{{
 " Neovim hack
 "nmap <BS> :<c-u>TmuxNavigateLeft<CR>
 " Now Using tmux navigation
-nnoremap <C-h> <C-W>h
-nnoremap <C-l> <C-W>l
-nnoremap <C-k> <C-W>k
-nnoremap <C-j> <C-W>j
+"nnoremap <C-h> <C-W>h
+"nnoremap <C-l> <C-W>l
+"nnoremap <C-k> <C-W>k
+"nnoremap <C-j> <C-W>j
 " Tabs {{{
 nmap <Leader>. :tabnext<CR>
 nmap <Leader>, :tabprevious<CR>
