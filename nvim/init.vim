@@ -148,7 +148,7 @@ Plug 'scrooloose/nerdcommenter' " Commenting/uncommenting code
 Plug 'SirVer/ultisnips'
 " }}}
 " Git {{{
-"Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 "Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
 "Plug 'rhysd/committia.vim'
@@ -406,16 +406,13 @@ let g:airline_section_z = airline#section#create(
             \)
 " set the CN (column number) symbol:
 "let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
-set background=dark
 "colors OceanicNext
 "colors base16-default-dark
 "colors gruvbox
-  set termguicolors
+set background=dark
+set termguicolors
 let ayucolor="mirage" " for mirage version of theme
-"let ayucolor="dark"   " for dark version of theme
 colorscheme ayu
-hi clear SpellBad
-hi SpellBad cterm=undercurl,bold guifg=#bb0000 gui=undercurl,bold
 
 "highlight LineNr guibg=#3c3836
 "highlight LineNr guifg=#a89984

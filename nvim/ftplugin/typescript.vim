@@ -19,5 +19,5 @@ nmap <buffer> <Leader>ss :call specs#go_to_spec()<CR>
 
 augroup fmt
   autocmd!
-  autocmd BufWritePre * Neoformat
+  autocmd FileType typescript BufWritePre * Neoformat
 augroup END
