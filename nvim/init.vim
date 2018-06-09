@@ -130,8 +130,8 @@ Plug 'Shougo/neomru.vim'
 Plug 'tpope/vim-vinegar'
 " }}}
 " Syntax checker {{{
-Plug 'benekastah/neomake'
-"Plug 'w0rp/ale'
+"Plug 'benekastah/neomake'
+Plug 'w0rp/ale'
 " }}}
 " Configuring tabulation and codestyle {{{
 Plug 'tpope/vim-repeat' " repeating .
@@ -184,7 +184,7 @@ Plug 'flowtype/vim-flow'
 Plug 'HerringtonDarkholme/yats.vim'
 "Plug 'Quramy/tsuquyomi'
 Plug 'ianks/vim-tsx'
-Plug 'mhartington/nvim-typescript'
+Plug 'mhartington/nvim-typescript', {'do': 'bash install.sh'}
 " }}}
 " Coverage {{{
 Plug 'ruanyl/coverage.vim'
@@ -206,6 +206,7 @@ Plug 'davidhalter/jedi-vim'
 " }}}
 " Rust {{{
 Plug 'rust-lang/rust.vim'
+Plug 'sebastianmarkow/deoplete-rust'
 " }}}
 " Haskell {{{
 Plug 'eagletmt/neco-ghc' " Great autocomplete plugin
@@ -239,7 +240,7 @@ let g:ale_linters = {
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '►'
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
-"let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#ale#enabled = 1
 " }}}
 " Syntastic {{{
 "set statusline+=%#warningmsg#
@@ -260,15 +261,17 @@ let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 "let g:neomake_open_list = 2
 "autocmd! BufWritePost * Neomake
 " }}}
+"
+
+augroup fmt
+  autocmd!
+  autocmd BufWritePre *.ts Neoformat
+  autocmd BufWritePre *.tsx Neoformat
+  autocmd BufWritePre *.js Neoformat
+  autocmd BufWritePre *.jsx Neoformat
+augroup END
 " }}}
 " Project Navigation {{{
-""call unite#custom#source('file_rec/neovim2')
-"let g:unite_source_file_rec_max_cache_files = -1
-"let g:unite_source_rec_async_command =
-            "\ ['ag', '--follow', '--nocolor', '--nogroup',
-            "\  '--hidden', '-g', '']
-"call unite#custom#source('file_rec,file_rec/async,file_rec/neovim',
-            "\ 'max_candidates', 20)
 call denite#custom#var('file_rec', 'command',
 	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 " }}}
@@ -312,8 +315,10 @@ let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of pattern
 let g:haskell_enable_typeroles = 1 " to enable highlighting of type roles
 " }}}
 " Rust {{{
-let g:racer_cmd = "/home/mkusher/.vim/plugged/racer/target/release/racer"
-let $RUST_SRC_PATH="/home/mkusher/public_html/rust/src/src/"
+"let g:racer_cmd = "/home/mkusher/.vim/plugged/racer/target/release/racer"
+let $RUST_SRC_PATH="/home/mkusher/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
+let g:deoplete#sources#rust#racer_binary='/home/mkusher/.cargo/bin/racer'
+let g:deoplete#sources#rust#rust_source_path='/home/mkusher/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
 " }}}
 " Tex {{{
 let g:tex_fast="r"
@@ -348,6 +353,7 @@ set nuw=4
 autocmd InsertEnter * set nornu
 autocmd InsertLeave * set rnu
 autocmd BufEnter * set nornu
+autocmd TermOpen * setlocal nonumber norelativenumber
 
 " Configuring splits
 set splitright
@@ -396,15 +402,16 @@ let g:airline_mode_map = {
             \ 'S'  : 'S',
             \ '' : 'S',
             \ }
+"let g:airline#extensions#neomake#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#fnamemod = '%:t'
 "let g:airline_section_error = '%{ALEGetStatusLine()}'
-let g:airline_section_z = airline#section#create(
-            \ []
-            \)
-" set the CN (column number) symbol:
+"let g:airline_section_z = airline#section#create(
+            "\ []
+            "\)
+"" set the CN (column number) symbol:
 "let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
 "colors OceanicNext
 "colors base16-default-dark
@@ -495,6 +502,8 @@ nmap <Leader>i <Esc>
 vmap <Leader>i <Esc>
 imap <Leader>i <Esc>
 imap jk <Esc>
+tmap <Esc> <C-\><C-n>
+tmap jk <C-\><C-n>
 " }}}
 " Git actions {{{
 noremap <Leader>gs :Gina status<CR>
