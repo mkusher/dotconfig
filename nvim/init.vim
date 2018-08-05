@@ -374,7 +374,7 @@ set autoindent		" always set autoindenting on
 set smarttab
 set smartindent
 let g:indentLine_enabled    = 1
-let g:indentLine_char       = ''
+let g:indentLine_char       = '>'
 syntax enable
 set fillchars=|
 " }}}
