@@ -100,29 +100,29 @@ Plug 'duff/vim-bufonly'
 Plug 'Konfekt/FastFold'
 Plug 'christoomey/vim-tmux-navigator'
 
-Plug 'ledger/vim-ledger' " Accounts & money
+"Plug 'ledger/vim-ledger' " Accounts & money
 "Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-Plug 'autozimu/LanguageClient-neovim', {'do': 'bash install.sh', 'branch': 'next'}
-Plug 'kristijanhusak/vim-carbon-now-sh'
-
+"Plug 'autozimu/LanguageClient-neovim', {'do': 'bash install.sh', 'branch': 'next'}
 " Colors and icons {{{
 "" Configuring theme
-Plug 'ayu-theme/ayu-vim'
+"Plug 'ayu-theme/ayu-vim'
 Plug 'morhetz/gruvbox'
-Plug 'mhartington/oceanic-next'
-Plug 'chriskempson/base16-vim'
+"Plug 'mhartington/oceanic-next'
+"Plug 'chriskempson/base16-vim'
 
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " }}}
 " Autocompletion {{{
-Plug 'Shougo/deoplete.nvim'
-Plug 'ervandew/supertab'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+"Plug 'Shougo/deoplete.nvim'
+"Plug 'ervandew/supertab'
 " }}}
 " Project navigation {{{
 "Plug 'mhinz/vim-startify'
 Plug 'scrooloose/nerdtree'
+"Plug 'philip-karlsson/bolt.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/denite.nvim'
 Plug 'rking/ag.vim'
@@ -131,7 +131,7 @@ Plug 'tpope/vim-vinegar'
 " }}}
 " Syntax checker {{{
 "Plug 'benekastah/neomake'
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
 " }}}
 " Configuring tabulation and codestyle {{{
 Plug 'tpope/vim-repeat' " repeating .
@@ -168,9 +168,10 @@ Plug 'tpope/vim-markdown',   { 'for': ['markdown']   }
 Plug 'suan/vim-instant-markdown'
 Plug 'tpope/vim-haml'
 Plug 'hhsnopek/vim-sugarss'
+Plug 'mattn/emmet-vim'
 " }}}
 " {{{
-Plug 'zchee/deoplete-clang'
+"Plug 'zchee/deoplete-clang'
 " }}}
 " javascript {{{
 "Plug 'othree/yajs.vim'
@@ -185,6 +186,7 @@ Plug 'HerringtonDarkholme/yats.vim'
 "Plug 'Quramy/tsuquyomi'
 Plug 'ianks/vim-tsx'
 Plug 'mhartington/nvim-typescript', {'do': 'bash install.sh'}
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 " }}}
 " Coverage {{{
 Plug 'ruanyl/coverage.vim'
@@ -206,7 +208,7 @@ Plug 'davidhalter/jedi-vim'
 " }}}
 " Rust {{{
 Plug 'rust-lang/rust.vim'
-Plug 'sebastianmarkow/deoplete-rust'
+"Plug 'sebastianmarkow/deoplete-rust'
 " }}}
 " Haskell {{{
 Plug 'eagletmt/neco-ghc' " Great autocomplete plugin
@@ -221,11 +223,21 @@ call plug#end()
 " }}}
 
 " Autocompletion {{{
-let g:deoplete#enable_at_startup = 1
+"let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#omni_patterns = {}
 let g:deoplete#sources = {}
+" use <tab> for trigger completion and navigate next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
 " }}}
 " GIT {{{
 let g:gist_post_private = 1
@@ -301,6 +313,14 @@ let g:coverage_auto_start = 0
 let g:html_indent_inctags        = "html,body,head,tbody"
 let g:html_indent_script1        = "inc"
 let g:html_indent_style1         = "inc"
+let g:user_emmet_settings = {
+            \ 'typescript' : {
+            \     'extends' : 'jsx',
+            \ },
+            \ 'typescript.tsx' : {
+            \     'extends' : 'jsx',
+            \ },
+            \}
 " }}}
 " Python {{{
 " }}}
@@ -387,7 +407,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 
 " Airline
-" let g:airline_theme='gruvbox'
+ let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts = 1
 let g:airline_mode_map = {
             \ '__' : '-',
@@ -415,11 +435,11 @@ let g:airline#extensions#tabline#fnamemod = '%:t'
 "let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
 "colors OceanicNext
 "colors base16-default-dark
-"colors gruvbox
 set background=dark
 set termguicolors
-let ayucolor="mirage" " for mirage version of theme
-colorscheme ayu
+colors gruvbox
+"let ayucolor="mirage" " for mirage version of theme
+"colorscheme ayu
 
 "highlight LineNr guibg=#3c3836
 "highlight LineNr guifg=#a89984

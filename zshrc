@@ -1,11 +1,11 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/home/mkusher/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 DISABLE_AUTO_UPDATE="true"
 ZSH_CACHE_DIR=$HOME/.oh-my-zsh-cache
 ZSH_THEME="agnoster"
 
-plugins=(git)
+plugins=(git zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 
 alias t='tmux'
@@ -40,3 +40,6 @@ PROMPT='%{%f%b%k%}$(build_prompt) '
 PROMPT="$PROMPT
 $INPUT_SIGN "
 
+peek() { tmux split-window -p 33 $EDITOR $@ || exit; }
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
