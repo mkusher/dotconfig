@@ -4,3 +4,5 @@
 .DS_Store
 codemods
 .cache
+*.key
+*.pem

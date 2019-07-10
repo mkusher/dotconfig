@@ -1,0 +1,16 @@
+{
+  "languageserver": {
+    "phplang": {
+      "command": "php",
+      "args": [
+        "/Users/mkusher/.composer/vendor/felixfbecker/language-server/bin/php-language-server.php"
+      ],
+      "filetypes": ["php"]
+    },
+    "ocaml": {
+      "command": "ocaml-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["ocaml", "reason"]
+    }
+  }
+}

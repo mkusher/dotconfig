@@ -10,6 +10,6 @@ let g:neoformat_enabled_javascript = ['prettier']
 let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
 
 nmap <F5> :! npm run build<CR>
-nmap <buffer> g] :FlowJumpToDef<CR>
-nmap <buffer> gd :FlowJumpToDef<CR>
-nmap <buffer> <Leader>t :FlowType<CR>
+nmap <buffer> <Leader>t :TSType<CR>
+nmap <buffer> <Leader>rn :TSRename<CR>
+nmap <buffer> <Leader>i :TSImport<CR>

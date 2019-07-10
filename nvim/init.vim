@@ -99,6 +99,8 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'duff/vim-bufonly'
 Plug 'Konfekt/FastFold'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'vim-scripts/groovy.vim'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 
 "Plug 'ledger/vim-ledger' " Accounts & money
 "Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
@@ -185,8 +187,11 @@ Plug 'flowtype/vim-flow'
 Plug 'HerringtonDarkholme/yats.vim'
 "Plug 'Quramy/tsuquyomi'
 Plug 'ianks/vim-tsx'
-Plug 'mhartington/nvim-typescript', {'do': 'bash install.sh'}
+"Plug 'mhartington/nvim-typescript', {'do': 'bash install.sh'}
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+" }}}
+" Ocaml\ReasonML {{{
+Plug 'reasonml-editor/vim-reason-plus'
 " }}}
 " Coverage {{{
 Plug 'ruanyl/coverage.vim'
@@ -219,6 +224,7 @@ Plug 'neovimhaskell/haskell-vim'
 Plug 'stephpy/vim-yaml'
 " }}}
 
+Plug 'udalov/kotlin-vim'
 call plug#end()
 " }}}
 
@@ -284,8 +290,12 @@ augroup fmt
 augroup END
 " }}}
 " Project Navigation {{{
-call denite#custom#var('file_rec', 'command',
+call denite#custom#var('file/rec', 'command',
 	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+call denite#custom#source('grep', 'args', ['', '', '!'])
+call denite#custom#kind('file', 'default_action', 'open')
+autocmd FileType denite nnoremap <silent><buffer><expr> <CR>
+\ denite#do_map('do_action')
 " }}}
 augroup suffixes
   autocmd!
@@ -304,6 +314,7 @@ autocmd BufNewFile,BufReadPost .babelrc set filetype=json
 autocmd BufNewFile,BufReadPost .eslintrc set filetype=json
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufReadPost *.jade set filetype=haml
+autocmd BufNewFile,BufReadPost Jenkinsfile set filetype=groovy
 
 let g:flow#enable = 0
 let g:javascript_plugin_flow = 1
@@ -558,14 +569,12 @@ cmap pjson %!python -m json.tool
 " }}}
 " }}}
 " Project navigation {{{
-"noremap <C-n> :NERDTreeToggle<CR>
-"noremap <Leader>n :NERDTreeToggle<CR>
-"noremap <Leader>f :NERDTreeFind<CR>
-noremap <Leader>u :Denite<CR>
-"noremap <C-p> :Unite file_rec/async -start-insert<CR> CtrlP
-noremap <Leader>p :Denite file_rec buffer<CR>
+noremap <Leader>p :Denite -start-filter file/rec buffer<CR>
 nnoremap <Leader>e :Denite file_mru<CR>
 nnoremap <Leader>d :e %:h<CR>
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
 " }}}
 " Goodbye arrows ;( {{{
 noremap   <Up>     <NOP>
