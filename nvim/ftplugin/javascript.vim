@@ -7,9 +7,6 @@ set smartindent
 
 nmap <buffer> <Leader>ss :call specs#go_to_spec()<CR>
 let g:neoformat_enabled_javascript = ['prettier']
-let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
+let g:neomake_javascript_enabled_makers = ['eslint']
 
 nmap <F5> :! npm run build<CR>
-nmap <buffer> <Leader>t :TSType<CR>
-nmap <buffer> <Leader>rn :TSRename<CR>
-nmap <buffer> <Leader>i :TSImport<CR>

@@ -11,6 +11,10 @@ set wildignore+=bower_components/*
 set wildignore+=vendor/*
 set wildignore+=*.map
 
+let mapleader=","
+let g:maplocalleader=","
+nmap <Space> ,
+
 " Enable file type detection.
 " Use the default filetype settings, so that mail gets 'tw' set to 72,
 " 'cindent' is on in C files, etc.
@@ -47,36 +51,6 @@ if !exists(":DiffOrig")
     command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
                 \ | wincmd p | diffthis
 endif
-
-let g:auto_save = 0
-" }}}
-" Startify cows {{{
-autocmd User Startified setlocal buftype=
-let g:startify_list_order    = ['sessions', 'bookmarks', 'files']
-let g:startify_bookmarks     = [
-            \]
-let g:startify_custom_header = [
-            \"                                       \\  |  /         ___________",
-            \"                        ____________  \\ \\_# /         |  ___      |       _________",
-            \"                       |            |  \\  #/          | |   |     |      | = = = = |",
-            \"                       | |   |   |  |   \\\\#           | |`v'|     |      |         |",
-            \"                       |            |    \\#  //       |  --- ___  |      | |  || | |",
-            \"                       | |   |   |  |     #_//        |     |   | |      |         |",
-            \"                       |            |  \\\\ #_/_______  |     |   | |      | |  || | |",
-            \"                       | |   |   |  |   \\\\# /_____/ \\ |      ---  |      |         |",
-            \"                       |            |    \\# |+ ++|  | |  |^^^^^^| |      | |  || | |",
-            \"                       |            |    \\# |+ ++|  | |  |^^^^^^| |      | |  || | |",
-            \"                    ^^^|    (^^^^^) |^^^^^#^| H  |_ |^|  | |||| | |^^^^^^|         |",
-            \"                       |    ( ||| ) |     # ^^^^^^    |  | |||| | |      | ||||||| |",
-            \"                       ^^^^^^^^^^^^^________/  /_____ |  | |||| | |      | ||||||| |",
-            \"                            `v'-                      ^^^^^^^^^^^^^      | ||||||| |",
-            \"                             || |`.      (__)    (__)                          ( )",
-            \"                                         (oo)    (oo)                       /---V",
-            \"                                  /-------\\/      \\/ --------\\             * |  |",
-            \"                                 / |     ||        ||_______| \\",
-            \"                                *  ||W---||        ||      ||  *",
-            \"                                   ^^    ^^        ^^      ^^",
-            \]
 " }}}
 " Plugins {{{
 " Loading plugin manager
@@ -118,7 +92,6 @@ Plug 'vim-airline/vim-airline-themes'
 " }}}
 " Autocompletion {{{
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-"Plug 'Shougo/deoplete.nvim'
 "Plug 'ervandew/supertab'
 " }}}
 " Project navigation {{{
@@ -132,7 +105,7 @@ Plug 'Shougo/neomru.vim'
 Plug 'tpope/vim-vinegar'
 " }}}
 " Syntax checker {{{
-"Plug 'benekastah/neomake'
+Plug 'neomake/neomake'
 "Plug 'w0rp/ale'
 " }}}
 " Configuring tabulation and codestyle {{{
@@ -173,7 +146,6 @@ Plug 'hhsnopek/vim-sugarss'
 Plug 'mattn/emmet-vim'
 " }}}
 " {{{
-"Plug 'zchee/deoplete-clang'
 " }}}
 " javascript {{{
 "Plug 'othree/yajs.vim'
@@ -189,6 +161,7 @@ Plug 'HerringtonDarkholme/yats.vim'
 Plug 'ianks/vim-tsx'
 "Plug 'mhartington/nvim-typescript', {'do': 'bash install.sh'}
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+Plug 'yardnsm/vim-import-cost', { 'do': 'npm install' }
 " }}}
 " Ocaml\ReasonML {{{
 Plug 'reasonml-editor/vim-reason-plus'
@@ -213,7 +186,6 @@ Plug 'davidhalter/jedi-vim'
 " }}}
 " Rust {{{
 Plug 'rust-lang/rust.vim'
-"Plug 'sebastianmarkow/deoplete-rust'
 " }}}
 " Haskell {{{
 Plug 'eagletmt/neco-ghc' " Great autocomplete plugin
@@ -228,12 +200,7 @@ Plug 'udalov/kotlin-vim'
 call plug#end()
 " }}}
 
-" Autocompletion {{{
-"let g:deoplete#enable_at_startup = 1
-let g:deoplete#file#enable_buffer_path = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#omni_patterns = {}
-let g:deoplete#sources = {}
+" Autocompletion COC.nvim {{{
 " use <tab> for trigger completion and navigate next complete item
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -244,10 +211,19 @@ inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
+
+nmap <silent> <Leader>t :call CocAction("doHover")<CR>
+nmap <silent> <Leader>i :CocFix<CR>
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
 " }}}
 " GIT {{{
 let g:gist_post_private = 1
-let g:deoplete#sources.gitcommit=['github']
 " }}}
 " Syntax linter {{{
 " Ale {{{
@@ -278,6 +254,10 @@ let g:airline#extensions#ale#enabled = 1
 " Neomake {{{
 "let g:neomake_open_list = 2
 "autocmd! BufWritePost * Neomake
+call neomake#configure#automake('nrwi', 500)
+let g:neomake_eslint_maker = neomake#makers#ft#javascript#eslint()
+let g:neomake_eslint_maker.exe = 'npx'
+let g:neomake_eslint_maker.args = ['eslint'] + g:neomake_eslint_maker.args
 " }}}
 "
 
@@ -348,8 +328,6 @@ let g:haskell_enable_typeroles = 1 " to enable highlighting of type roles
 " Rust {{{
 "let g:racer_cmd = "/home/mkusher/.vim/plugged/racer/target/release/racer"
 let $RUST_SRC_PATH="/home/mkusher/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
-let g:deoplete#sources#rust#racer_binary='/home/mkusher/.cargo/bin/racer'
-let g:deoplete#sources#rust#rust_source_path='/home/mkusher/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
 " }}}
 " Tex {{{
 let g:tex_fast="r"
@@ -433,7 +411,6 @@ let g:airline_mode_map = {
             \ 'S'  : 'S',
             \ '' : 'S',
             \ }
-"let g:airline#extensions#neomake#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#show_buffers = 0
@@ -468,10 +445,6 @@ endif
 " }}}
 " }}}
 " Shortcuts {{{
-
-let mapleader=","
-let g:maplocalleader=","
-nmap <Space> ,
 
 " {{{ Snippets
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -528,10 +501,6 @@ nnoremap <Leader>r :call NumberToggle()<cr>
 noremap  <F1> <Esc>
 inoremap <F1> <Esc>
 vnoremap <F1> <Esc>
-map  <Leader>i <Esc>
-nmap <Leader>i <Esc>
-vmap <Leader>i <Esc>
-imap <Leader>i <Esc>
 imap jk <Esc>
 tmap <Esc> <C-\><C-n>
 tmap jk <C-\><C-n>
@@ -572,9 +541,6 @@ cmap pjson %!python -m json.tool
 noremap <Leader>p :Denite -start-filter file/rec buffer<CR>
 nnoremap <Leader>e :Denite file_mru<CR>
 nnoremap <Leader>d :e %:h<CR>
-nmap <silent> gr <Plug>(coc-references)
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
 " }}}
 " Goodbye arrows ;( {{{
 noremap   <Up>     <NOP>
