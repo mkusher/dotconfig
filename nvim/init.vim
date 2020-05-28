@@ -76,7 +76,9 @@ Plug 'puremourning/vimspector'
 
 " Colors and icons {{{
 "" Configuring theme
-Plug 'morhetz/gruvbox'
+Plug 'ayu-theme/ayu-vim'
+
+Plug 'glepnir/galaxyline.nvim'
 Plug 'https://github.com/ryanoasis/vim-devicons'
 Plug 'https://github.com/adelarsq/vim-devicons-emoji'
 " }}}
@@ -401,14 +403,9 @@ let g:spaceline_seperate_style = 'curve'
 "colors base16-default-dark
 set background=dark
 set termguicolors
-colors gruvbox
-"colorscheme nord
-"let ayucolor="mirage" " for mirage version of theme
-"colorscheme ayu
-"colors xcodedark
 
-"highlight LineNr guibg=#3c3836
-"highlight LineNr guifg=#a89984
+let ayucolor="dark" " for mirage version of theme
+colorscheme ayu
 
 if has("gui_running")
     set guifont=Literation\ Mono\ Powerline\ 18
