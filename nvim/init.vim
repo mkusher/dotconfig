@@ -82,7 +82,8 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 " Colors and icons {{{
 "" Configuring theme
 "Plug 'ayu-theme/ayu-vim'
-Plug 'morhetz/gruvbox'
+"Plug 'morhetz/gruvbox'
+Plug 'ayu-theme/ayu-vim'
 "Plug 'mhartington/oceanic-next'
 "Plug 'chriskempson/base16-vim'
 
@@ -105,7 +106,7 @@ Plug 'Shougo/neomru.vim'
 Plug 'tpope/vim-vinegar'
 " }}}
 " Syntax checker {{{
-Plug 'neomake/neomake'
+"Plug 'neomake/neomake'
 "Plug 'w0rp/ale'
 " }}}
 " Configuring tabulation and codestyle {{{
@@ -255,10 +256,10 @@ let g:airline#extensions#ale#enabled = 1
 " Neomake {{{
 "let g:neomake_open_list = 2
 "autocmd! BufWritePost * Neomake
-call neomake#configure#automake('nrwi', 500)
-let g:neomake_eslint_maker = neomake#makers#ft#javascript#eslint()
-let g:neomake_eslint_maker.exe = 'npx'
-let g:neomake_eslint_maker.args = ['eslint'] + g:neomake_eslint_maker.args
+"call neomake#configure#automake('nrwi', 500)
+"let g:neomake_eslint_maker = neomake#makers#ft#javascript#eslint()
+"let g:neomake_eslint_maker.exe = 'npx'
+"let g:neomake_eslint_maker.args = ['eslint'] + g:neomake_eslint_maker.args
 " }}}
 "
 
@@ -426,9 +427,10 @@ let g:airline#extensions#tabline#fnamemod = '%:t'
 "colors base16-default-dark
 set background=dark
 set termguicolors
-colors gruvbox
-"let ayucolor="mirage" " for mirage version of theme
-"colorscheme ayu
+
+"colors gruvbox
+let ayucolor="dark" " for mirage version of theme
+colorscheme ayu
 
 "highlight LineNr guibg=#3c3836
 "highlight LineNr guifg=#a89984
