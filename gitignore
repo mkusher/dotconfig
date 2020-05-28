@@ -6,3 +6,7 @@ codemods
 .cache
 *.key
 *.pem
+coc/
+htop/
+configstore/
+plug.vim.old
