@@ -9,57 +9,37 @@ endglobal
 snippet spec
 import ${1} from "./`!p snip.rv = specFile()`"
 
-describe("`!p snip.rv = specFile()`", function() {
+describe("`!p snip.rv = specFile()`", () => {
 	${2}
 })
 endsnippet
 snippet describe
-describe("${1}", function () {
+describe("${1}", () => {
 	${2}
 })
 endsnippet
 snippet context
-context("${1}", function () {
+context("${1}", () => {
 	${2}
 })
 endsnippet
 snippet it
-it("${1}", function () {
+it("${1}", () => {
 	${2}
 })
 endsnippet
-snippet ait
-it("${1}", async function () {
+snippet it_async
+it("${1}", async () => {
 	${2}
 })
 endsnippet
 snippet beforeEach
-beforeEach(function () {
+beforeEach(() => {
 	${1}
 })
 endsnippet
-snippet describe-class
-import ${1} from "./$1"
-
-describe("$1", function () {
-	${3}
-	describe(".${2}", function () {
-	})
-})
-endsnippet
-snippet describe-function
-import ${1} from "./$1"
-
-describe("$1", function () {
-	${2}
-	describe("()", function () {
-	})
-})
-endsnippet
-snippet describe-module
-import ${1} from "./${2}"
-
-describe("$2", function () {
-	${3}
+snippet afterEach
+afterEach(() => {
+	${1}
 })
 endsnippet
