@@ -131,9 +131,10 @@ Plug 'lambdalisue/gina.vim'
 
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim' " Github's gist
+Plug 'APZelos/blamer.nvim'
 " }}}
 " Tex {{{
-Plug 'lervag/vimtex'
+"Plug 'lervag/vimtex'
 " }}}
 " HTML5/CSS3/LESS {{{
 Plug 'othree/html5-syntax.vim',   { 'for': ['html']   }
