@@ -85,13 +85,14 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'morhetz/gruvbox'
 "Plug 'mhartington/oceanic-next'
 "Plug 'chriskempson/base16-vim'
+Plug 'arzg/vim-colors-xcode'
 
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " }}}
 " Autocompletion {{{
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'ervandew/supertab'
 " }}}
 " Project navigation {{{
@@ -429,6 +430,7 @@ set termguicolors
 colors gruvbox
 "let ayucolor="mirage" " for mirage version of theme
 "colorscheme ayu
+"colors xcodedark
 
 "highlight LineNr guibg=#3c3836
 "highlight LineNr guifg=#a89984
