@@ -92,7 +92,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " }}}
 " Autocompletion {{{
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'ervandew/supertab'
 " }}}
 " Project navigation {{{
