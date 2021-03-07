@@ -86,6 +86,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'ayu-theme/ayu-vim'
 "Plug 'mhartington/oceanic-next'
 "Plug 'chriskempson/base16-vim'
+Plug 'arzg/vim-colors-xcode'
 
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'vim-airline/vim-airline'
