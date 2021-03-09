@@ -400,7 +400,7 @@ let g:webdevicons_enable_nerdtree = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 
-let g:spaceline_seperate_style = 'arrow'
+let g:spaceline_seperate_style = 'curve'
 " Airline
 "let g:airline_theme='gruvbox'
 "let g:airline_powerline_fonts = 1
