@@ -545,8 +545,8 @@ cmap pjson %!python -m json.tool
 " }}}
 " }}}
 " Project navigation {{{
-noremap <Leader>p :Denite -start-filter file/rec buffer<CR>
-nnoremap <Leader>e :Denite file_mru<CR>
+noremap <Leader>p :Denite -split=floating -start-filter file/rec buffer<CR>
+nnoremap <Leader>e :Denite -split=floating file_mru<CR>
 nnoremap <Leader>d :e %:h<CR>
 " }}}
 " Goodbye arrows ;( {{{
