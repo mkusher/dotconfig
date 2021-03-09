@@ -85,11 +85,14 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'morhetz/gruvbox'
 "Plug 'mhartington/oceanic-next'
 "Plug 'chriskempson/base16-vim'
-Plug 'arzg/vim-colors-xcode'
+"Plug 'arzg/vim-colors-xcode'
 
-Plug 'ryanoasis/vim-webdevicons'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'glepnir/spaceline.vim'
+Plug 'https://github.com/ryanoasis/vim-devicons'
+Plug 'https://github.com/adelarsq/vim-devicons-emoji'
+"Plug 'ryanoasis/vim-webdevicons'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
 " }}}
 " Autocompletion {{{
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -154,6 +157,7 @@ Plug 'mattn/emmet-vim'
 "Plug 'othree/es.next.syntax.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'flowtype/vim-flow'
+Plug 'evanleck/vim-svelte', {'branch': 'main'}
 "Plug 'marijnh/tern_for_vim', { 'for': 'javascript' }
 " }}}
 " TypeScript {{{
@@ -298,8 +302,7 @@ autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufReadPost *.jade set filetype=haml
 autocmd BufNewFile,BufReadPost Jenkinsfile set filetype=groovy
 
-let g:flow#enable = 0
-let g:javascript_plugin_flow = 1
+let g:svelte_preprocessors = ['typescript']
 let g:coverage_json_report_path = "coverage/coverage-final.json"
 let g:coverage_show_covered = 1
 let g:coverage_auto_start = 0
@@ -397,26 +400,27 @@ let g:webdevicons_enable_nerdtree = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 
+let g:spaceline_seperate_style = 'arrow'
 " Airline
- let g:airline_theme='gruvbox'
-let g:airline_powerline_fonts = 1
-let g:airline_mode_map = {
-            \ '__' : '-',
-            \ 'n'  : 'N',
-            \ 'i'  : 'I',
-            \ 'R'  : 'R',
-            \ 'c'  : 'C',
-            \ 'v'  : 'V',
-            \ 'V'  : 'V',
-            \ '' : 'V',
-            \ 's'  : 'S',
-            \ 'S'  : 'S',
-            \ '' : 'S',
-            \ }
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#show_buffers = 0
-let g:airline#extensions#tabline#show_buffers = 0
-let g:airline#extensions#tabline#fnamemod = '%:t'
+"let g:airline_theme='gruvbox'
+"let g:airline_powerline_fonts = 1
+"let g:airline_mode_map = {
+"            \ '__' : '-',
+"            \ 'n'  : 'N',
+"            \ 'i'  : 'I',
+"            \ 'R'  : 'R',
+"            \ 'c'  : 'C',
+"            \ 'v'  : 'V',
+"            \ 'V'  : 'V',
+"            \ '' : 'V',
+"            \ 's'  : 'S',
+"            \ 'S'  : 'S',
+"            \ '' : 'S',
+"            \ }
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#show_buffers = 0
+"let g:airline#extensions#tabline#show_buffers = 0
+"let g:airline#extensions#tabline#fnamemod = '%:t'
 "let g:airline_section_error = '%{ALEGetStatusLine()}'
 "let g:airline_section_z = airline#section#create(
             "\ []
