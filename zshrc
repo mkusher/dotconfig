@@ -42,4 +42,4 @@ $INPUT_SIGN "
 
 peek() { tmux split-window -p 33 $EDITOR $@ || exit; }
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:/usr/local/sbin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:/usr/local/sbin:$PATH"

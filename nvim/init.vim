@@ -87,7 +87,8 @@ Plug 'morhetz/gruvbox'
 "Plug 'chriskempson/base16-vim'
 "Plug 'arzg/vim-colors-xcode'
 
-Plug 'glepnir/spaceline.vim'
+Plug 'glepnir/galaxyline.nvim'
+"Plug 'glepnir/spaceline.vim'
 Plug 'https://github.com/ryanoasis/vim-devicons'
 Plug 'https://github.com/adelarsq/vim-devicons-emoji'
 "Plug 'ryanoasis/vim-webdevicons'
@@ -104,12 +105,13 @@ Plug 'scrooloose/nerdtree'
 "Plug 'philip-karlsson/bolt.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/denite.nvim'
-Plug 'rking/ag.vim'
 Plug 'Shougo/neomru.vim'
-Plug 'tpope/vim-vinegar'
+"Plug 'rking/ag.vim'
+Plug 'mileszs/ack.vim'
+"Plug 'tpope/vim-vinegar'
 " }}}
 " Syntax checker {{{
-Plug 'neomake/neomake'
+"Plug 'neomake/neomake'
 "Plug 'w0rp/ale'
 " }}}
 " Configuring tabulation and codestyle {{{
@@ -260,10 +262,10 @@ let g:airline#extensions#ale#enabled = 1
 " Neomake {{{
 "let g:neomake_open_list = 2
 "autocmd! BufWritePost * Neomake
-call neomake#configure#automake('nrwi', 500)
-let g:neomake_eslint_maker = neomake#makers#ft#javascript#eslint()
-let g:neomake_eslint_maker.exe = 'npx'
-let g:neomake_eslint_maker.args = ['eslint'] + g:neomake_eslint_maker.args
+"call neomake#configure#automake('nrwi', 500)
+"let g:neomake_eslint_maker = neomake#makers#ft#javascript#eslint()
+"let g:neomake_eslint_maker.exe = 'npx'
+"let g:neomake_eslint_maker.args = ['eslint'] + g:neomake_eslint_maker.args
 " }}}
 "
 
@@ -282,6 +284,8 @@ call denite#custom#source('grep', 'args', ['', '', '!'])
 call denite#custom#kind('file', 'default_action', 'open')
 autocmd FileType denite nnoremap <silent><buffer><expr> <CR>
 \ denite#do_map('do_action')
+
+let g:ackprg = 'ag --vimgrep'
 " }}}
 augroup suffixes
   autocmd!
