@@ -95,9 +95,6 @@ Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
 Plug 'nvim-telescope/telescope-vimspector.nvim'
 
 " }}}
-" Syntax checker {{{
-
-" }}}
 " Configuring tabulation and codestyle {{{
 Plug 'tpope/vim-repeat' " repeating .
 Plug 'Raimondi/delimitMate'
@@ -201,14 +198,6 @@ let g:gist_post_private = 1
 " }}}
 " Syntax linter {{{
 " Ale {{{
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'haskell': []
-\}
-let g:ale_sign_error = '✖'
-let g:ale_sign_warning = '►'
-let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
-let g:airline#extensions#ale#enabled = 1
 " }}}
 " Syntastic {{{
 "set statusline+=%#warningmsg#
