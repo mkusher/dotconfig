@@ -86,9 +86,11 @@ Plug 'morhetz/gruvbox'
 "Plug 'mhartington/oceanic-next'
 "Plug 'chriskempson/base16-vim'
 "Plug 'arzg/vim-colors-xcode'
+Plug 'shaunsingh/nord.nvim'
 
-Plug 'glepnir/galaxyline.nvim'
+"Plug 'glepnir/galaxyline.nvim'
 "Plug 'glepnir/spaceline.vim'
+"Plug 'adelarsq/neoline.vim'
 Plug 'https://github.com/ryanoasis/vim-devicons'
 Plug 'https://github.com/adelarsq/vim-devicons-emoji'
 "Plug 'ryanoasis/vim-webdevicons'
@@ -108,6 +110,7 @@ Plug 'Shougo/denite.nvim'
 Plug 'Shougo/neomru.vim'
 "Plug 'rking/ag.vim'
 Plug 'mileszs/ack.vim'
+Plug 'pechorin/any-jump.vim'
 "Plug 'tpope/vim-vinegar'
 " }}}
 " Syntax checker {{{
@@ -436,6 +439,7 @@ let g:spaceline_seperate_style = 'curve'
 set background=dark
 set termguicolors
 colors gruvbox
+"colorscheme nord
 "let ayucolor="mirage" " for mirage version of theme
 "colorscheme ayu
 "colors xcodedark
@@ -552,6 +556,7 @@ cmap pjson %!python -m json.tool
 noremap <Leader>p :Denite -split=floating -start-filter file/rec buffer<CR>
 nnoremap <Leader>e :Denite -split=floating file_mru<CR>
 nnoremap <Leader>d :e %:h<CR>
+nnoremap <leader>j :AnyJump<CR>
 " }}}
 " Goodbye arrows ;( {{{
 noremap   <Up>     <NOP>
