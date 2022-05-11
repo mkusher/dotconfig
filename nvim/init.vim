@@ -110,7 +110,7 @@ Plug 'Shougo/denite.nvim'
 Plug 'Shougo/neomru.vim'
 "Plug 'rking/ag.vim'
 Plug 'mileszs/ack.vim'
-Plug 'pechorin/any-jump.vim'
+Plug 'liuchengxu/vista.vim'
 "Plug 'tpope/vim-vinegar'
 " }}}
 " Syntax checker {{{
@@ -133,6 +133,7 @@ Plug 'SirVer/ultisnips'
 " }}}
 " Git {{{
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 "Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
 "Plug 'rhysd/committia.vim'
@@ -193,7 +194,7 @@ let g:vdebug_options = {"port":9000} " Value from xdebug.ini: xdebug.remote_port
 " }}}
 " }}}
 " Python plugins {{{
-Plug 'davidhalter/jedi-vim'
+"Plug 'davidhalter/jedi-vim'
 " }}}
 " Rust {{{
 Plug 'rust-lang/rust.vim'
