@@ -75,6 +75,7 @@ Plug 'Konfekt/FastFold'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'vim-scripts/groovy.vim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+"Plug 'github/copilot.vim'
 
 "Plug 'ledger/vim-ledger' " Accounts & money
 "Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
@@ -214,18 +215,24 @@ call plug#end()
 
 " Autocompletion COC.nvim {{{
 " use <tab> for trigger completion and navigate next complete item
-function! s:check_back_space() abort
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
   let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-
 nmap <silent> <Leader>t :call CocAction("doHover")<CR>
-nmap <silent> <Leader>i :CocFix<CR>
+nmap <silent> <Leader>i :CocCommand tsserver.executeAutofix<CR>
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -275,10 +282,10 @@ let g:airline#extensions#ale#enabled = 1
 
 augroup fmt
   autocmd!
-  autocmd BufWritePre *.ts Neoformat
-  autocmd BufWritePre *.tsx Neoformat
-  autocmd BufWritePre *.js Neoformat
-  autocmd BufWritePre *.jsx Neoformat
+  "autocmd BufWritePre *.ts Neoformat
+  "autocmd BufWritePre *.tsx Neoformat
+  "autocmd BufWritePre *.js Neoformat
+  "autocmd BufWritePre *.jsx Neoformat
 augroup END
 " }}}
 " Project Navigation {{{
@@ -492,7 +499,8 @@ end
 " }}}
 " Syntax check and format {{{
 nmap <Leader>m :Neomake<CR>
-nmap <Leader>f :Neoformat<CR>
+nmap <Leader>f <Plug>(coc-format-selected)
+xmap <Leader>f <Plug>(coc-format-selected)
 " }}}
 " {{{ Autcompletion
 " C-Space is needed only when without YCM
