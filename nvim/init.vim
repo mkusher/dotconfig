@@ -65,7 +65,6 @@ Plug 'neovim/node-host', { 'do': 'npm install' }
 Plug 'nvim-lua/plenary.nvim'
 " }}}
 
-Plug 'powerman/vim-plugin-AnsiEsc'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'Konfekt/FastFold'
 Plug 'christoomey/vim-tmux-navigator'
@@ -78,9 +77,9 @@ Plug 'puremourning/vimspector'
 "" Configuring theme
 Plug 'ayu-theme/ayu-vim'
 
-Plug 'glepnir/galaxyline.nvim'
 Plug 'https://github.com/ryanoasis/vim-devicons'
 Plug 'https://github.com/adelarsq/vim-devicons-emoji'
+Plug 'vim-airline/vim-airline'
 " }}}
 " Autocompletion {{{
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -110,7 +109,6 @@ Plug 'SirVer/ultisnips'
 " }}}
 " Git {{{
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
 Plug 'lambdalisue/gina.vim'
 
@@ -150,7 +148,6 @@ Plug 'veloce/vim-behat'
 " Python plugins {{{
 " }}}
 " Rust {{{
-Plug 'rust-lang/rust.vim'
 " }}}
 " Haskell {{{
 Plug 'eagletmt/neco-ghc' " Great autocomplete plugin
@@ -167,6 +164,7 @@ call plug#end()
 
 " Autocompletion COC.nvim {{{
 " use <tab> for trigger completion and navigate next complete item
+
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1):
       \ CheckBackspace() ? "\<Tab>" :
