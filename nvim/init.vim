@@ -60,70 +60,47 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Hosts {{{
 Plug 'neovim/node-host', { 'do': 'npm install' }
-"call remote#host#Register('node', '*.js', function('host#Require'))
 " }}}
 " Plugin Utils {{{
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-Plug 'xolox/vim-misc'
+Plug 'nvim-lua/plenary.nvim'
 " }}}
 
 Plug 'powerman/vim-plugin-AnsiEsc'
 Plug 'editorconfig/editorconfig-vim'
-"Plug 'johngrib/vim-game-code-break'
-Plug 'duff/vim-bufonly'
 Plug 'Konfekt/FastFold'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'vim-scripts/groovy.vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 "Plug 'github/copilot.vim'
 
-"Plug 'ledger/vim-ledger' " Accounts & money
-"Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-"Plug 'autozimu/LanguageClient-neovim', {'do': 'bash install.sh', 'branch': 'next'}
+Plug 'puremourning/vimspector'
+
 " Colors and icons {{{
 "" Configuring theme
-"Plug 'ayu-theme/ayu-vim'
 Plug 'morhetz/gruvbox'
-"Plug 'mhartington/oceanic-next'
-"Plug 'chriskempson/base16-vim'
-"Plug 'arzg/vim-colors-xcode'
-Plug 'shaunsingh/nord.nvim'
-
-"Plug 'glepnir/galaxyline.nvim'
-"Plug 'glepnir/spaceline.vim'
-"Plug 'adelarsq/neoline.vim'
 Plug 'https://github.com/ryanoasis/vim-devicons'
 Plug 'https://github.com/adelarsq/vim-devicons-emoji'
-"Plug 'ryanoasis/vim-webdevicons'
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
 " }}}
 " Autocompletion {{{
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'ervandew/supertab'
 " }}}
 " Project navigation {{{
-"Plug 'mhinz/vim-startify'
 Plug 'scrooloose/nerdtree'
-"Plug 'philip-karlsson/bolt.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/denite.nvim'
 Plug 'Shougo/neomru.vim'
-"Plug 'rking/ag.vim'
 Plug 'mileszs/ack.vim'
-Plug 'liuchengxu/vista.vim'
-"Plug 'tpope/vim-vinegar'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
+Plug 'nvim-telescope/telescope-vimspector.nvim'
+
 " }}}
 " Syntax checker {{{
-"Plug 'neomake/neomake'
-"Plug 'w0rp/ale'
+
 " }}}
 " Configuring tabulation and codestyle {{{
 Plug 'tpope/vim-repeat' " repeating .
 Plug 'Raimondi/delimitMate'
 Plug 'Yggdroot/indentLine'
 Plug 'sbdchd/neoformat'
-Plug 'Shougo/echodoc.vim'
 
 " Working with code
 Plug 'tpope/vim-surround'       " It's all about surrounding(quotes, brackets and etc)
@@ -135,44 +112,30 @@ Plug 'SirVer/ultisnips'
 " Git {{{
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
-"Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
-"Plug 'rhysd/committia.vim'
 Plug 'lambdalisue/gina.vim'
 
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim' " Github's gist
-Plug 'APZelos/blamer.nvim'
 " }}}
 " Tex {{{
-"Plug 'lervag/vimtex'
 " }}}
 " HTML5/CSS3/LESS {{{
 Plug 'othree/html5-syntax.vim',   { 'for': ['html']   }
 Plug 'Valloric/MatchTagAlways',   { 'for': ['html']   }
 Plug 'wavded/vim-stylus'
 Plug 'tpope/vim-markdown',   { 'for': ['markdown']   }
-Plug 'suan/vim-instant-markdown'
 Plug 'tpope/vim-haml'
 Plug 'hhsnopek/vim-sugarss'
-Plug 'mattn/emmet-vim'
-" }}}
-" {{{
 " }}}
 " javascript {{{
-"Plug 'othree/yajs.vim'
-"Plug 'othree/es.next.syntax.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'flowtype/vim-flow'
 Plug 'evanleck/vim-svelte', {'branch': 'main'}
-"Plug 'marijnh/tern_for_vim', { 'for': 'javascript' }
 " }}}
 " TypeScript {{{
-"Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
-"Plug 'Quramy/tsuquyomi'
 Plug 'ianks/vim-tsx'
-"Plug 'mhartington/nvim-typescript', {'do': 'bash install.sh'}
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'yardnsm/vim-import-cost', { 'do': 'npm install' }
 " }}}
@@ -183,19 +146,9 @@ Plug 'reasonml-editor/vim-reason-plus'
 Plug 'ruanyl/coverage.vim'
 " }}}
 " Gherkin {{{
-"Plug 'tpope/vim-cucumber'
 Plug 'veloce/vim-behat'
 " }}}
-" php {{{
-"Plug 'padawan-php/padawan.vim'
-Plug 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
-" Debugger {{{
-Plug 'joonty/vdebug'
-let g:vdebug_options = {"port":9000} " Value from xdebug.ini: xdebug.remote_port
-" }}}
-" }}}
 " Python plugins {{{
-"Plug 'davidhalter/jedi-vim'
 " }}}
 " Rust {{{
 Plug 'rust-lang/rust.vim'
@@ -297,6 +250,8 @@ autocmd FileType denite nnoremap <silent><buffer><expr> <CR>
 \ denite#do_map('do_action')
 
 let g:ackprg = 'ag --vimgrep'
+let g:vimspector_base_dir='/Users/mkusher/.config/nvim/plugged/vimspector'
+
 " }}}
 augroup suffixes
   autocmd!
@@ -468,7 +423,7 @@ endif
 " }}}
 " }}}
 " Shortcuts {{{
-
+let g:vimspector_enable_mappings = 'HUMAN'
 " {{{ Snippets
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
@@ -566,6 +521,10 @@ noremap <Leader>p :Denite -split=floating -start-filter file/rec buffer<CR>
 nnoremap <Leader>e :Denite -split=floating file_mru<CR>
 nnoremap <Leader>d :e %:h<CR>
 nnoremap <leader>j :AnyJump<CR>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 " }}}
 " Goodbye arrows ;( {{{
 noremap   <Up>     <NOP>

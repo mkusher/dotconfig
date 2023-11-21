@@ -37,7 +37,7 @@ $INPUT_SIGN "
 
 peek() { tmux split-window -p 33 $EDITOR $@ || exit; }
 
-export PATH="$HOME/.local/bin:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:/usr/local/sbin:$PATH"
+export PATH="$HOME/.local/bin:/usr/local/sbin:$PATH"
 
 export PATH="/opt/homebrew/opt/openssl@1.0/bin:$PATH"
 export PATH="/opt/homebrew/opt/openssl@1.0/bin:$PATH"
@@ -52,3 +52,7 @@ export API_HOST_TEST="http://localhost:3030"
 autoload -U +X compinit && compinit
 
 . $HOME/.asdf/asdf.sh
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/mkusher/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
