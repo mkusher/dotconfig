@@ -407,7 +407,17 @@ endif
 " }}}
 " }}}
 " Shortcuts {{{
+" Vimspector {{{
 let g:vimspector_enable_mappings = 'HUMAN'
+nmap <Leader>db <cmd>call vimspector#ToggleBreakpoint()<CR>
+nmap <Leader>dc <cmd>call vimspector#Continue()<CR>
+nmap <Leader>drc <cmd>call vimspector#RunToCursor()<CR>
+nmap <Leader>dso <cmd>call vimspector#StepOver()<CR>
+nmap <Leader>dsi <cmd>call vimspector#StepInto()<CR>
+nmap <Leader>dsu <cmd>call vimspector#StepOut()<CR>
+nmap <Leader>dq <cmd>VimspectorReset<CR>
+
+" }}}
 " {{{ Snippets
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
@@ -437,7 +447,6 @@ if has('nvim')
 end
 " }}}
 " Syntax check and format {{{
-nmap <Leader>m :Neomake<CR>
 nmap <Leader>f <Plug>(coc-format-selected)
 xmap <Leader>f <Plug>(coc-format-selected)
 " }}}
