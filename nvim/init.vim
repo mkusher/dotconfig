@@ -239,7 +239,7 @@ autocmd FileType denite nnoremap <silent><buffer><expr> <CR>
 \ denite#do_map('do_action')
 
 let g:ackprg = 'ag --vimgrep'
-let g:vimspector_base_dir='/Users/mkusher/.config/nvim/plugged/vimspector'
+let g:vimspector_base_dir='/home/mkusher/.config/nvim/plugged/vimspector'
 
 " }}}
 augroup suffixes
@@ -501,7 +501,7 @@ cmap pjson %!python -m json.tool
 " }}}
 " }}}
 " Project navigation {{{
-noremap <Leader>p :Denite -split=floating -start-filter file/rec buffer<CR>
+noremap <Leader>p <cmd>Telescope find_files<cr>
 nnoremap <Leader>e :Denite -split=floating file_mru<CR>
 nnoremap <Leader>d :e %:h<CR>
 nnoremap <leader>j :AnyJump<CR>

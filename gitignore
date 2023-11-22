@@ -10,3 +10,4 @@ coc/
 htop/
 configstore/
 plug.vim.old
+.vimspector.json

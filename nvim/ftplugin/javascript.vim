@@ -8,5 +8,3 @@ set smartindent
 nmap <buffer> <Leader>ss :call specs#go_to_spec()<CR>
 let g:neoformat_enabled_javascript = ['prettier']
 let g:neomake_javascript_enabled_makers = ['eslint']
-
-nmap <F5> :! npm run build<CR>
