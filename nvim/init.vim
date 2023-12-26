@@ -78,11 +78,19 @@ Plug 'puremourning/vimspector'
 Plug 'ayu-theme/ayu-vim'
 
 Plug 'https://github.com/ryanoasis/vim-devicons'
+Plug 'nvim-tree/nvim-web-devicons'
 Plug 'https://github.com/adelarsq/vim-devicons-emoji'
 Plug 'vim-airline/vim-airline'
 " }}}
 " Autocompletion {{{
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'onsails/lspkind.nvim'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
 " }}}
 " Project navigation {{{
 Plug 'scrooloose/nerdtree'
@@ -135,6 +143,7 @@ Plug 'HerringtonDarkholme/yats.vim'
 Plug 'ianks/vim-tsx'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'yardnsm/vim-import-cost', { 'do': 'npm install' }
+Plug 'pmizio/typescript-tools.nvim'
 " }}}
 " Ocaml\ReasonML {{{
 Plug 'reasonml-editor/vim-reason-plus'
@@ -162,65 +171,130 @@ Plug 'udalov/kotlin-vim'
 call plug#end()
 " }}}
 
-" Autocompletion COC.nvim {{{
-" use <tab> for trigger completion and navigate next complete item
+" Nvim LSP {{{
+lua << EOF
+  require("typescript-tools").setup {}
+  vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    callback = function(ev)
+      -- Enable completion triggered by <c-x><c-o>
+      vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1):
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+      -- Buffer local mappings.
+      -- See `:help vim.lsp.*` for documentation on any of the below functions
+      local opts = { buffer = ev.buf }
+      vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+      vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+      vim.keymap.set('n', '<Leader>t', vim.lsp.buf.type_definition, opts)
+      vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, opts)
+      vim.keymap.set({ 'n', 'v' }, '<Leader>ca', vim.lsp.buf.code_action, opts)
+      vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+      vim.keymap.set('n', '<Leader>f', function()
+        vim.lsp.buf.format { async = true }
+      end, opts)
+    end,
+  })
 
-" Make <CR> to accept selected completion item or notify coc.nvim to format
-" <C-g>u breaks current undo, please make your own choice.
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  local has_words_before = function()
+      unpack = unpack or table.unpack
+      local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+      return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  end
 
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+  local lspkind = require('lspkind')
+  local cmp = require'cmp'
+  cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+        vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      end,
+    },
+    window = {
+      -- completion = cmp.config.window.bordered(),
+      -- documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      ['<Tab>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            if #cmp.get_entries() == 1 then
+              cmp.confirm({ select = true })
+            else
+              cmp.select_next_item()
+            end
+          --[[ Replace with your snippet engine (see above sections on this page)
+          elseif snippy.can_expand_or_advance() then
+            snippy.expand_or_advance() ]]
+          elseif has_words_before() then
+            cmp.complete()
+            if #cmp.get_entries() == 1 then
+              cmp.confirm({ select = true })
+            end
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+    }),
+    formatting = {
+      format = lspkind.cmp_format({
+        mode = 'symbol_text', -- show only symbol annotations
+        maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+        ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
 
-nmap <silent> <Leader>t :call CocAction("doHover")<CR>
-nmap <silent> <Leader>i :CocCommand tsserver.executeAutofix<CR>
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap <leader>rn <Plug>(coc-rename)
+        -- The function below will be called before any actual modifications from lspkind
+        -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+        before = function (entry, vim_item)
+          return vim_item
+        end
+      })
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'ultisnips' }, -- For ultisnips users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
 
-autocmd CursorHold * silent call CocActionAsync('highlight')
+  -- Set configuration for specific filetype.
+  cmp.setup.filetype('gitcommit', {
+    sources = cmp.config.sources({
+      { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+EOF
 " }}}
-" GIT {{{
-let g:gist_post_private = 1
-" }}}
-" Syntax linter {{{
-" Ale {{{
-" }}}
-" Syntastic {{{
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"let g:syntastic_auto_jump               = 0
-"let g:syntastic_error_symbol            = '✖'
-"let g:syntastic_warning_symbol          = '►'
-"let g:syntastic_style_error_symbol      = '~'
-"let g:syntastic_style_warning_symbol    = '⚠'
-
-"let g:syntastic_check_on_open = 0
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_always_populate_loc_list = 0
-"let g:syntastic_auto_loc_list = 0
-" }}}
-" Neomake {{{
-"let g:neomake_open_list = 2
-"autocmd! BufWritePost * Neomake
-"call neomake#configure#automake('nrwi', 500)
-"let g:neomake_eslint_maker = neomake#makers#ft#javascript#eslint()
-"let g:neomake_eslint_maker.exe = 'npx'
-"let g:neomake_eslint_maker.args = ['eslint'] + g:neomake_eslint_maker.args
-" }}}
-"
 
 augroup fmt
   autocmd!
@@ -416,7 +490,6 @@ nmap <Leader>dso <cmd>call vimspector#StepOver()<CR>
 nmap <Leader>dsi <cmd>call vimspector#StepInto()<CR>
 nmap <Leader>dsu <cmd>call vimspector#StepOut()<CR>
 nmap <Leader>dq <cmd>VimspectorReset<CR>
-
 " }}}
 " {{{ Snippets
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -445,10 +518,6 @@ endif
 if has('nvim')
   set timeout ttimeoutlen=1
 end
-" }}}
-" Syntax check and format {{{
-nmap <Leader>f <Plug>(coc-format-selected)
-xmap <Leader>f <Plug>(coc-format-selected)
 " }}}
 " {{{ Autcompletion
 " C-Space is needed only when without YCM
@@ -510,10 +579,10 @@ cmap pjson %!python -m json.tool
 " }}}
 " }}}
 " Project navigation {{{
-noremap <Leader>p <cmd>Telescope find_files<cr>
-nnoremap <Leader>e :Denite -split=floating file_mru<CR>
+noremap <Leader>p <cmd>Telescope find_files<CR>
+nnoremap <Leader>e <cmd>Telescope oldfiles<CR>
 nnoremap <Leader>d :e %:h<CR>
-nnoremap <leader>j :AnyJump<CR>
+nnoremap <leader>ff <cmd>Telescope<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
