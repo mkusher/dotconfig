@@ -6,3 +6,4 @@ codemods
 .cache
 *.key
 *.pem
+.phpactor.json

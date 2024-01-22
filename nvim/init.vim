@@ -63,26 +63,28 @@ Plug 'neovim/node-host', { 'do': 'npm install' }
 " }}}
 " Plugin Utils {{{
 Plug 'nvim-lua/plenary.nvim'
+Plug 'MunifTanjim/nui.nvim'
 " }}}
 
 Plug 'powerman/vim-plugin-AnsiEsc'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'Konfekt/FastFold'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'vim-scripts/groovy.vim'
 "Plug 'github/copilot.vim'
 
 Plug 'puremourning/vimspector'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'andythigpen/nvim-coverage'
 
 " Colors and icons {{{
 "" Configuring theme
 Plug 'morhetz/gruvbox'
-Plug 'https://github.com/ryanoasis/vim-devicons'
-Plug 'nvim-tree/nvim-web-devicons'
-Plug 'https://github.com/adelarsq/vim-devicons-emoji'
+"Plug 'https://github.com/ryanoasis/vim-devicons'
+"Plug 'nvim-tree/nvim-web-devicons'
+"Plug 'https://github.com/adelarsq/vim-devicons-emoji'
 " }}}
 " Autocompletion {{{
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'onsails/lspkind.nvim'
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -92,23 +94,15 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 " }}}
 " Project navigation {{{
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'Shougo/denite.nvim'
-Plug 'Shougo/neomru.vim'
 Plug 'mileszs/ack.vim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.5' }
 Plug 'nvim-telescope/telescope-vimspector.nvim'
-
-" }}}
-" Syntax checker {{{
-
+Plug 'nvim-telescope/telescope-file-browser.nvim'
 " }}}
 " Configuring tabulation and codestyle {{{
 Plug 'tpope/vim-repeat' " repeating .
 Plug 'Raimondi/delimitMate'
 Plug 'Yggdroot/indentLine'
-Plug 'sbdchd/neoformat'
 
 " Working with code
 Plug 'tpope/vim-surround'       " It's all about surrounding(quotes, brackets and etc)
@@ -126,58 +120,29 @@ Plug 'lambdalisue/gina.vim'
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim' " Github's gist
 " }}}
-" Tex {{{
-" }}}
-" HTML5/CSS3/LESS {{{
-Plug 'othree/html5-syntax.vim',   { 'for': ['html']   }
-Plug 'Valloric/MatchTagAlways',   { 'for': ['html']   }
-Plug 'wavded/vim-stylus'
-Plug 'tpope/vim-markdown',   { 'for': ['markdown']   }
-Plug 'tpope/vim-haml'
-Plug 'hhsnopek/vim-sugarss'
-" }}}
-" javascript {{{
-Plug 'pangloss/vim-javascript'
-Plug 'flowtype/vim-flow'
-Plug 'evanleck/vim-svelte', {'branch': 'main'}
-" }}}
 " TypeScript {{{
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'ianks/vim-tsx'
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-Plug 'yardnsm/vim-import-cost', { 'do': 'npm install' }
 Plug 'pmizio/typescript-tools.nvim'
 " }}}
 " Ocaml\ReasonML {{{
-Plug 'reasonml-editor/vim-reason-plus'
-" }}}
-" Coverage {{{
-Plug 'ruanyl/coverage.vim'
 " }}}
 " Gherkin {{{
-Plug 'veloce/vim-behat'
 " }}}
 " Python plugins {{{
 " }}}
 " Rust {{{
-Plug 'rust-lang/rust.vim'
 " }}}
 " Haskell {{{
-Plug 'eagletmt/neco-ghc' " Great autocomplete plugin
-Plug 'eagletmt/ghcmod-vim' " Types, locations and other cool stuff
-Plug 'neovimhaskell/haskell-vim'
 " }}}
 " Yaml {{{
-Plug 'stephpy/vim-yaml'
 " }}}
 
-Plug 'udalov/kotlin-vim'
 call plug#end()
 " }}}
 
 " Nvim LSP {{{
 lua << EOF
   require("typescript-tools").setup {}
+  require("lspconfig").intelephense.setup {}
   vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
     callback = function(ev)
@@ -191,8 +156,8 @@ lua << EOF
       vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
       vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-      vim.keymap.set('n', '<Leader>t', vim.lsp.buf.type_definition, opts)
+      vim.keymap.set('n', '<Leader>t', vim.lsp.buf.signature_help, opts)
+      vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
       vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, opts)
       vim.keymap.set({ 'n', 'v' }, '<Leader>ca', vim.lsp.buf.code_action, opts)
       vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
@@ -212,10 +177,7 @@ lua << EOF
   local cmp = require'cmp'
   cmp.setup({
     snippet = {
-      -- REQUIRED - you must specify a snippet engine
       expand = function(args)
-        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
         vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
       end,
     },
@@ -252,6 +214,7 @@ lua << EOF
     formatting = {
       format = lspkind.cmp_format({
         mode = 'symbol_text', -- show only symbol annotations
+        preset = 'default',
         maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
         ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
 
@@ -259,7 +222,7 @@ lua << EOF
         -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
         before = function (entry, vim_item)
           return vim_item
-        end
+        end,
       })
     },
     sources = cmp.config.sources({
@@ -300,91 +263,25 @@ lua << EOF
 EOF
 " }}}
 
-" Autocompletion COC.nvim {{{
-" use <tab> for trigger completion and navigate next complete item
-"inoremap <silent><expr> <TAB>
-      "\ coc#pum#visible() ? coc#pum#next(1):
-      "\ CheckBackspace() ? "\<Tab>" :
-      "\ coc#refresh()
-"inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
-"" Make <CR> to accept selected completion item or notify coc.nvim to format
-"" <C-g>u breaks current undo, please make your own choice.
-"inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              "\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-"function! CheckBackspace() abort
-  "let col = col('.') - 1
-  "return !col || getline('.')[col - 1]  =~# '\s'
-"endfunction
-
-"nmap <silent> <Leader>t :call CocAction("doHover")<CR>
-"nmap <silent> <Leader>i :CocCommand tsserver.executeAutofix<CR>
-"nmap <silent> gd <Plug>(coc-definition)
-"nmap <silent> gy <Plug>(coc-type-definition)
-"nmap <silent> gi <Plug>(coc-implementation)
-"nmap <silent> gr <Plug>(coc-references)
-"nmap <leader>rn <Plug>(coc-rename)
-
-"autocmd CursorHold * silent call CocActionAsync('highlight')
-" }}}
 " GIT {{{
 let g:gist_post_private = 1
 " }}}
-" Syntax linter {{{
-" Ale {{{
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'haskell': []
-\}
-let g:ale_sign_error = '✖'
-let g:ale_sign_warning = '►'
-let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
-let g:airline#extensions#ale#enabled = 1
-" }}}
-" Syntastic {{{
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"let g:syntastic_auto_jump               = 0
-"let g:syntastic_error_symbol            = '✖'
-"let g:syntastic_warning_symbol          = '►'
-"let g:syntastic_style_error_symbol      = '~'
-"let g:syntastic_style_warning_symbol    = '⚠'
-
-"let g:syntastic_check_on_open = 0
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_always_populate_loc_list = 0
-"let g:syntastic_auto_loc_list = 0
-" }}}
-" Neomake {{{
-"let g:neomake_open_list = 2
-"autocmd! BufWritePost * Neomake
-"call neomake#configure#automake('nrwi', 500)
-"let g:neomake_eslint_maker = neomake#makers#ft#javascript#eslint()
-"let g:neomake_eslint_maker.exe = 'npx'
-"let g:neomake_eslint_maker.args = ['eslint'] + g:neomake_eslint_maker.args
-" }}}
-"
-
-augroup fmt
-  autocmd!
-  "autocmd BufWritePre *.ts Neoformat
-  "autocmd BufWritePre *.tsx Neoformat
-  "autocmd BufWritePre *.js Neoformat
-  "autocmd BufWritePre *.jsx Neoformat
-augroup END
-" }}}
 " Project Navigation {{{
-call denite#custom#var('file/rec', 'command',
-	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-call denite#custom#source('grep', 'args', ['', '', '!'])
-call denite#custom#kind('file', 'default_action', 'open')
-autocmd FileType denite nnoremap <silent><buffer><expr> <CR>
-\ denite#do_map('do_action')
 
 let g:ackprg = 'ag --vimgrep'
 let g:vimspector_base_dir='/Users/mkusher/.config/nvim/plugged/vimspector'
+
+lua << EOF
+  require("telescope").setup {
+    extensions = {
+      file_browser = {
+        theme = "ivy",
+        hijack_netrw = true
+      }
+    }
+  }
+  require("telescope").load_extension "file_browser"
+EOF
 
 " }}}
 augroup suffixes
@@ -500,37 +397,10 @@ set fillchars=|
 
 set mouse=r
 let g:hybrid_use_Xresources = 1
-let g:webdevicons_enable_nerdtree = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
 
 let g:spaceline_seperate_style = 'curve'
-" Airline
-"let g:airline_theme='gruvbox'
-"let g:airline_powerline_fonts = 1
-"let g:airline_mode_map = {
-"            \ '__' : '-',
-"            \ 'n'  : 'N',
-"            \ 'i'  : 'I',
-"            \ 'R'  : 'R',
-"            \ 'c'  : 'C',
-"            \ 'v'  : 'V',
-"            \ 'V'  : 'V',
-"            \ '' : 'V',
-"            \ 's'  : 'S',
-"            \ 'S'  : 'S',
-"            \ '' : 'S',
-"            \ }
-"let g:airline#extensions#tabline#enabled = 1
-"let g:airline#extensions#tabline#show_buffers = 0
-"let g:airline#extensions#tabline#show_buffers = 0
-"let g:airline#extensions#tabline#fnamemod = '%:t'
-"let g:airline_section_error = '%{ALEGetStatusLine()}'
-"let g:airline_section_z = airline#section#create(
-            "\ []
-            "\)
-"" set the CN (column number) symbol:
-"let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
 "colors OceanicNext
 "colors base16-default-dark
 set background=dark
@@ -581,23 +451,9 @@ else
 endif
 " }}}
 " ALT {{{
-if !has('gui_running') && !has('nvim')
-  "" fixing Alt key to work in konsole
-  let c='a'
-  while c <= 'z'
-    exec "set <A-".c.">=\e".c
-    exec "imap \e".c." <A-".c.">"
-    let c = nr2char(1+char2nr(c))
-  endw
-
-  set timeout ttimeoutlen=0
-endif
 if has('nvim')
   set timeout ttimeoutlen=1
 end
-" }}}
-" Syntax check and format {{{
-nmap <Leader>m :Neomake<CR>
 " }}}
 " {{{ Autcompletion
 " C-Space is needed only when without YCM
@@ -662,6 +518,7 @@ cmap pjson %!python -m json.tool
 noremap <Leader>p <cmd>Telescope find_files<CR>
 nnoremap <Leader>e <cmd>Telescope oldfiles<CR>
 nnoremap <Leader>d :e %:h<CR>
+nnoremap <Leader>dr <cmd>Telescope file_browser<CR>
 nnoremap <leader>ff <cmd>Telescope<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
