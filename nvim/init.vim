@@ -71,6 +71,8 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'vim-scripts/groovy.vim'
 "Plug 'github/copilot.vim'
 
+Plug 'zbirenbaum/copilot.lua'
+
 Plug 'puremourning/vimspector'
 
 " Colors and icons {{{
@@ -91,6 +93,8 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
+Plug 'ray-x/lsp_signature.nvim'
+Plug 'zbirenbaum/copilot-cmp'
 " }}}
 " Project navigation {{{
 Plug 'scrooloose/nerdtree'
@@ -174,6 +178,12 @@ call plug#end()
 " Nvim LSP {{{
 lua << EOF
   require("typescript-tools").setup {}
+  require("copilot").setup({
+    suggestion = { enabled = false },
+    panel = { enabled = false },
+  })
+  require("copilot_cmp").setup()
+  require "lsp_signature".setup {}
   vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
     callback = function(ev)
@@ -188,7 +198,9 @@ lua << EOF
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
       vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
       vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-      vim.keymap.set('n', '<Leader>t', vim.lsp.buf.type_definition, opts)
+      vim.keymap.set({ 'n' }, '<Leader>t', function()       require('lsp_signature').toggle_float_win()
+      end, { silent = true, noremap = true, desc = 'toggle signature' })
+      vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
       vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, opts)
       vim.keymap.set({ 'n', 'v' }, '<Leader>ca', vim.lsp.buf.code_action, opts)
       vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
@@ -246,20 +258,43 @@ lua << EOF
         end, { "i", "s" }),
     }),
     formatting = {
-      format = lspkind.cmp_format({
-        mode = 'symbol_text', -- show only symbol annotations
-        maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-        ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-
-        -- The function below will be called before any actual modifications from lspkind
-        -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-        before = function (entry, vim_item)
-          return vim_item
-        end
-      })
+        format = lspkind.cmp_format({
+            mode = 'symbol_text', -- show only symbol annotations
+            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+            show_labelDetails = true,
+            symbol_map = {
+              Text = "󰉿",
+              Method = "󰆧",
+              Function = "󰊕",
+              Constructor = "",
+              Field = "󰜢",
+              Variable = "󰀫",
+              Class = "󰠱",
+              Interface = "",
+              Module = "",
+              Property = "󰜢",
+              Unit = "󰑭",
+              Value = "󰎠",
+              Enum = "",
+              Keyword = "󰌋",
+              Snippet = "",
+              Color = "󰏘",
+              File = "󰈙",
+              Reference = "󰈇",
+              Folder = "󰉋",
+              EnumMember = "",
+              Constant = "󰏿",
+              Struct = "󰙅",
+              Event = "",
+              Operator = "󰆕",
+              Copilot = ''
+            }
+        })
     },
     sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
+      { name = "copilot", group_index = 2 },
+      { name = 'nvim_lsp', group_index = 2 },
       { name = 'ultisnips' }, -- For ultisnips users.
     }, {
       { name = 'buffer' },
@@ -293,6 +328,7 @@ lua << EOF
     })
   })
 
+  lspkind.init()
 EOF
 " }}}
 
@@ -421,7 +457,7 @@ set autoindent		" always set autoindenting on
 set smarttab
 set smartindent
 let g:indentLine_enabled    = 1
-let g:indentLine_char       = '>'
+let g:indentLine_char       = '󰥭'
 syntax enable
 set fillchars=|
 " }}}
@@ -574,9 +610,6 @@ nnoremap <Leader>q :q<CR>
 " Root save {{{
 cmap w!! w !sudo tee % >/dev/null
 " }}}
-" Pretty json {{{
-cmap pjson %!python -m json.tool
-" }}}
 " }}}
 " Project navigation {{{
 noremap <Leader>p <cmd>Telescope find_files<CR>
@@ -599,6 +632,9 @@ imap      <up>     <NOP>
 imap      <down>   <NOP>
 inoremap  <Left>   <NOP>
 inoremap  <Right>  <NOP>
+" }}}
+" {{{ Code Actions
+nnoremap <Leader>i <cmd>TSToolsAddMissingImports<CR>
 " }}}
 " }}}
 " vim:foldmethod=marker:foldlevel=0
