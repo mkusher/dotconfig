@@ -1,8 +1,6 @@
 " Defaults {{{
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
-"set nocompatible
-"set encoding=cp1251
 set autoread
 set hidden
 set fileencodings=utf-8,cp1251,koi8-r,cp866
@@ -43,14 +41,6 @@ augroup vimrcEx
 
 augroup END
 
-
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-if !exists(":DiffOrig")
-    command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-                \ | wincmd p | diffthis
-endif
 " }}}
 " Plugins {{{
 " Loading plugin manager
@@ -74,18 +64,21 @@ Plug 'vim-scripts/groovy.vim'
 Plug 'zbirenbaum/copilot.lua'
 
 Plug 'puremourning/vimspector'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'andythigpen/nvim-coverage'
+
+Plug 'MunifTanjim/nui.nvim'
+Plug 'folke/trouble.nvim'
+Plug 'jackMort/ChatGPT.nvim'
 
 " Colors and icons {{{
 "" Configuring theme
 Plug 'ayu-theme/ayu-vim'
 
-Plug 'https://github.com/ryanoasis/vim-devicons'
-Plug 'nvim-tree/nvim-web-devicons'
-Plug 'https://github.com/adelarsq/vim-devicons-emoji'
 Plug 'vim-airline/vim-airline'
 " }}}
 " Autocompletion {{{
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'onsails/lspkind.nvim'
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -97,13 +90,12 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'zbirenbaum/copilot-cmp'
 " }}}
 " Project navigation {{{
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/denite.nvim'
 Plug 'Shougo/neomru.vim'
 Plug 'mileszs/ack.vim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
 Plug 'nvim-telescope/telescope-vimspector.nvim'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
 
 " }}}
 " Configuring tabulation and codestyle {{{
@@ -183,6 +175,32 @@ lua << EOF
     panel = { enabled = false },
   })
   require("copilot_cmp").setup()
+
+  require("lspconfig").intelephense.setup {}
+  require("lspconfig").yamlls.setup {
+      settings = {
+          yaml = {
+              schemas = {
+                  ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
+                  ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
+                  ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
+                  ["http://json.schemastore.org/prettierrc"] = ".prettierrc.{yml,yaml}",
+                  ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+                  ["http://json.schemastore.org/ansible-playbook"] = "*play*.{yml,yaml}",
+                  ["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
+                  ["https://json.schemastore.org/dependabot-v2"] = ".github/dependabot.{yml,yaml}",
+                  ["https://json.schemastore.org/gitlab-ci"] = "*gitlab-ci*.{yml,yaml}",
+                  ["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"] = "*api*.{yml,yaml}",
+                  ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "*docker-compose*.{yml,yaml}",
+                  ["https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json"] = "*flow*.{yml,yaml}",
+                  ["https://json.schemastore.org/package.json"] = "package.json",
+                  ["https://getcomposer.org/schema.json"] = "composer.json",
+                  ["https://json.schemastore.org/helmfile.json"] = "helmfile.{yml,yaml,json}",
+              }
+          }
+      }
+  }
+
   require "lsp_signature".setup {}
   vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -263,33 +281,6 @@ lua << EOF
             maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
             ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
             show_labelDetails = true,
-            symbol_map = {
-              Text = "󰉿",
-              Method = "󰆧",
-              Function = "󰊕",
-              Constructor = "",
-              Field = "󰜢",
-              Variable = "󰀫",
-              Class = "󰠱",
-              Interface = "",
-              Module = "",
-              Property = "󰜢",
-              Unit = "󰑭",
-              Value = "󰎠",
-              Enum = "",
-              Keyword = "󰌋",
-              Snippet = "",
-              Color = "󰏘",
-              File = "󰈙",
-              Reference = "󰈇",
-              Folder = "󰉋",
-              EnumMember = "",
-              Constant = "󰏿",
-              Struct = "󰙅",
-              Event = "",
-              Operator = "󰆕",
-              Copilot = ''
-            }
         })
     },
     sources = cmp.config.sources({
@@ -332,14 +323,20 @@ lua << EOF
 EOF
 " }}}
 
-augroup fmt
-  autocmd!
-  "autocmd BufWritePre *.ts Neoformat
-  "autocmd BufWritePre *.tsx Neoformat
-  "autocmd BufWritePre *.js Neoformat
-  "autocmd BufWritePre *.jsx Neoformat
-augroup END
+" {{{ ChatGPT
+
+lua << EOF
+    vim.api.nvim_create_user_command("ChatGPTInit",
+        function()
+            require("chatgpt").setup({
+                api_key_cmd = "op read op://private/OpenAI/api_key --no-newline"
+            })
+        end,
+        {}
+    )
+EOF
 " }}}
+
 " Project Navigation {{{
 call denite#custom#var('file/rec', 'command',
 	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
@@ -351,18 +348,19 @@ autocmd FileType denite nnoremap <silent><buffer><expr> <CR>
 let g:ackprg = 'ag --vimgrep'
 let g:vimspector_base_dir='/home/mkusher/.config/nvim/plugged/vimspector'
 
+lua << EOF
+  require("telescope").setup {
+    extensions = {
+      file_browser = {
+        theme = "ivy",
+        hijack_netrw = true
+      }
+    }
+  }
+  require("telescope").load_extension "file_browser"
+EOF
+
 " }}}
-augroup suffixes
-  autocmd!
-
-  let associations = [
-              \["javascript", ".js,.jsx,.flow"]
-              \]
-
-  for ft in associations
-      execute "autocmd FileType " . ft[0] . " setlocal suffixesadd=" . ft[1]
-  endfor
-augroup END
 " JS {{{
 autocmd BufNewFile,BufReadPost *.es6 set filetype=javascript
 autocmd BufNewFile,BufReadPost .babelrc set filetype=json
@@ -370,22 +368,6 @@ autocmd BufNewFile,BufReadPost .eslintrc set filetype=json
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufReadPost *.jade set filetype=haml
 autocmd BufNewFile,BufReadPost Jenkinsfile set filetype=groovy
-
-let g:svelte_preprocessors = ['typescript']
-let g:coverage_json_report_path = "coverage/coverage-final.json"
-let g:coverage_show_covered = 1
-let g:coverage_auto_start = 0
-let g:html_indent_inctags        = "html,body,head,tbody"
-let g:html_indent_script1        = "inc"
-let g:html_indent_style1         = "inc"
-let g:user_emmet_settings = {
-            \ 'typescript' : {
-            \     'extends' : 'jsx',
-            \ },
-            \ 'typescript.tsx' : {
-            \     'extends' : 'jsx',
-            \ },
-            \}
 " }}}
 " Python {{{
 " }}}
@@ -402,10 +384,6 @@ let g:haskell_enable_typeroles = 1 " to enable highlighting of type roles
 " Rust {{{
 "let g:racer_cmd = "/home/mkusher/.vim/plugged/racer/target/release/racer"
 let $RUST_SRC_PATH="/home/mkusher/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
-" }}}
-" Tex {{{
-let g:tex_fast="r"
-let g:tex_no_error=1
 " }}}
 
 " UI {{{
@@ -615,6 +593,7 @@ cmap w!! w !sudo tee % >/dev/null
 noremap <Leader>p <cmd>Telescope find_files<CR>
 nnoremap <Leader>e <cmd>Telescope oldfiles<CR>
 nnoremap <Leader>d :e %:h<CR>
+nnoremap <Leader>dr <cmd>Telescope file_browser<CR>
 nnoremap <leader>ff <cmd>Telescope<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
