@@ -77,6 +77,10 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'andythigpen/nvim-coverage'
 
+Plug 'MunifTanjim/nui.nvim'
+Plug 'folke/trouble.nvim'
+Plug 'jackMort/ChatGPT.nvim'
+
 " Colors and icons {{{
 "" Configuring theme
 Plug 'morhetz/gruvbox'
@@ -116,9 +120,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
 Plug 'lambdalisue/gina.vim'
-
-Plug 'mattn/webapi-vim'
-Plug 'mattn/gist-vim' " Github's gist
+Plug 'NeogitOrg/neogit'
 " }}}
 " TypeScript {{{
 Plug 'pmizio/typescript-tools.nvim'
@@ -141,8 +143,33 @@ call plug#end()
 
 " Nvim LSP {{{
 lua << EOF
+  local neogit = require('neogit')
+  neogit.setup {}
   require("typescript-tools").setup {}
   require("lspconfig").intelephense.setup {}
+  require("lspconfig").yamlls.setup {
+      settings = {
+          yaml = {
+              schemas = {
+                  ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
+                  ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
+                  ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
+                  ["http://json.schemastore.org/prettierrc"] = ".prettierrc.{yml,yaml}",
+                  ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+                  ["http://json.schemastore.org/ansible-playbook"] = "*play*.{yml,yaml}",
+                  ["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
+                  ["https://json.schemastore.org/dependabot-v2"] = ".github/dependabot.{yml,yaml}",
+                  ["https://json.schemastore.org/gitlab-ci"] = "*gitlab-ci*.{yml,yaml}",
+                  ["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"] = "*api*.{yml,yaml}",
+                  ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "*docker-compose*.{yml,yaml}",
+                  ["https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json"] = "*flow*.{yml,yaml}",
+                  ["https://json.schemastore.org/package.json"] = "package.json",
+                  ["https://getcomposer.org/schema.json"] = "composer.json",
+                  ["https://json.schemastore.org/helmfile.json"] = "helmfile.{yml,yaml,json}",
+              }
+          }
+      }
+  }
   vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
     callback = function(ev)
@@ -260,6 +287,19 @@ lua << EOF
     })
   })
 
+EOF
+" }}}
+
+" {{{ ChatGPT
+lua << EOF
+    vim.api.nvim_create_user_command("ChatGPTInit",
+        function()
+            require("chatgpt").setup({
+                api_key_cmd = "op read op://private/OpenAI/api_key --no-newline"
+            })
+        end,
+        {}
+    )
 EOF
 " }}}
 
