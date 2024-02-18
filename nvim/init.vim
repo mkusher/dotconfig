@@ -59,7 +59,6 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'Konfekt/FastFold'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'vim-scripts/groovy.vim'
-"Plug 'github/copilot.vim'
 
 Plug 'zbirenbaum/copilot.lua'
 
@@ -74,9 +73,7 @@ Plug 'jackMort/ChatGPT.nvim'
 
 " Colors and icons {{{
 "" Configuring theme
-Plug 'ayu-theme/ayu-vim'
-
-Plug 'vim-airline/vim-airline'
+Plug 'savq/melange-nvim'
 " }}}
 " Autocompletion {{{
 Plug 'neovim/nvim-lspconfig'
@@ -90,8 +87,6 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'zbirenbaum/copilot-cmp'
 " }}}
 " Project navigation {{{
-Plug 'Shougo/denite.nvim'
-Plug 'Shougo/neomru.vim'
 Plug 'mileszs/ack.vim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
 Plug 'nvim-telescope/telescope-vimspector.nvim'
@@ -102,7 +97,6 @@ Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'tpope/vim-repeat' " repeating .
 Plug 'Raimondi/delimitMate'
 Plug 'Yggdroot/indentLine'
-Plug 'sbdchd/neoformat'
 
 " Working with code
 Plug 'tpope/vim-surround'       " It's all about surrounding(quotes, brackets and etc)
@@ -115,55 +109,12 @@ Plug 'SirVer/ultisnips'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'lambdalisue/gina.vim'
-
-Plug 'mattn/webapi-vim'
-Plug 'mattn/gist-vim' " Github's gist
-" }}}
-" Tex {{{
-" }}}
-" HTML5/CSS3/LESS {{{
-Plug 'othree/html5-syntax.vim',   { 'for': ['html']   }
-Plug 'Valloric/MatchTagAlways',   { 'for': ['html']   }
-Plug 'wavded/vim-stylus'
-Plug 'tpope/vim-markdown',   { 'for': ['markdown']   }
-Plug 'tpope/vim-haml'
-Plug 'hhsnopek/vim-sugarss'
-" }}}
-" javascript {{{
-Plug 'pangloss/vim-javascript'
-Plug 'flowtype/vim-flow'
-Plug 'evanleck/vim-svelte', {'branch': 'main'}
 " }}}
 " TypeScript {{{
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'ianks/vim-tsx'
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'yardnsm/vim-import-cost', { 'do': 'npm install' }
 Plug 'pmizio/typescript-tools.nvim'
 " }}}
-" Ocaml\ReasonML {{{
-Plug 'reasonml-editor/vim-reason-plus'
-" }}}
-" Coverage {{{
-Plug 'ruanyl/coverage.vim'
-" }}}
-" Gherkin {{{
-Plug 'veloce/vim-behat'
-" }}}
-" Python plugins {{{
-" }}}
-" Rust {{{
-" }}}
-" Haskell {{{
-Plug 'eagletmt/neco-ghc' " Great autocomplete plugin
-Plug 'eagletmt/ghcmod-vim' " Types, locations and other cool stuff
-Plug 'neovimhaskell/haskell-vim'
-" }}}
-" Yaml {{{
-Plug 'stephpy/vim-yaml'
-" }}}
 
-Plug 'udalov/kotlin-vim'
 call plug#end()
 " }}}
 
@@ -338,12 +289,6 @@ EOF
 " }}}
 
 " Project Navigation {{{
-call denite#custom#var('file/rec', 'command',
-	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-call denite#custom#source('grep', 'args', ['', '', '!'])
-call denite#custom#kind('file', 'default_action', 'open')
-autocmd FileType denite nnoremap <silent><buffer><expr> <CR>
-\ denite#do_map('do_action')
 
 let g:ackprg = 'ag --vimgrep'
 let g:vimspector_base_dir='/home/mkusher/.config/nvim/plugged/vimspector'
@@ -442,56 +387,11 @@ set fillchars=|
 " GUI {{{
 
 set mouse=r
-let g:hybrid_use_Xresources = 1
-let g:webdevicons_enable_nerdtree = 1
-let g:WebDevIconsUnicodeDecorateFolderNodes = 0
-let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
-
-let g:spaceline_seperate_style = 'curve'
-" Airline
-"let g:airline_theme='gruvbox'
-"let g:airline_powerline_fonts = 1
-"let g:airline_mode_map = {
-"            \ '__' : '-',
-"            \ 'n'  : 'N',
-"            \ 'i'  : 'I',
-"            \ 'R'  : 'R',
-"            \ 'c'  : 'C',
-"            \ 'v'  : 'V',
-"            \ 'V'  : 'V',
-"            \ '' : 'V',
-"            \ 's'  : 'S',
-"            \ 'S'  : 'S',
-"            \ '' : 'S',
-"            \ }
-"let g:airline#extensions#tabline#enabled = 1
-"let g:airline#extensions#tabline#show_buffers = 0
-"let g:airline#extensions#tabline#show_buffers = 0
-"let g:airline#extensions#tabline#fnamemod = '%:t'
-"let g:airline_section_error = '%{ALEGetStatusLine()}'
-"let g:airline_section_z = airline#section#create(
-            "\ []
-            "\)
-"" set the CN (column number) symbol:
-"let g:airline_section_z = airline#section#create(["\uE0A1" . '%{line(".")}' . "\uE0A3" . '%{col(".")}'])
-"colors OceanicNext
-"colors base16-default-dark
 set background=dark
 set termguicolors
 
-let ayucolor="dark" " for mirage version of theme
-colorscheme ayu
+colorscheme melange
 
-if has("gui_running")
-    set guifont=Literation\ Mono\ Powerline\ 18
-
-    set guioptions-=T  " no toolbar
-    set guioptions-=m  " no menu
-    set guioptions-=r  " no right scroll
-    set guioptions-=L  " no left scroll
-    winsize 140 45
-    "winpos 10 35
-endif
 " }}}
 " }}}
 " Shortcuts {{{
