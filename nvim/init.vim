@@ -70,7 +70,6 @@ Plug 'powerman/vim-plugin-AnsiEsc'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'Konfekt/FastFold'
 Plug 'christoomey/vim-tmux-navigator'
-"Plug 'github/copilot.vim'
 
 Plug 'puremourning/vimspector'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -81,12 +80,10 @@ Plug 'MunifTanjim/nui.nvim'
 Plug 'folke/trouble.nvim'
 Plug 'jackMort/ChatGPT.nvim'
 
+
 " Colors and icons {{{
 "" Configuring theme
-Plug 'morhetz/gruvbox'
-"Plug 'https://github.com/ryanoasis/vim-devicons'
-"Plug 'nvim-tree/nvim-web-devicons'
-"Plug 'https://github.com/adelarsq/vim-devicons-emoji'
+Plug 'ellisonleao/gruvbox.nvim'
 " }}}
 " Autocompletion {{{
 Plug 'neovim/nvim-lspconfig'
@@ -120,22 +117,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
 Plug 'lambdalisue/gina.vim'
-Plug 'NeogitOrg/neogit'
 " }}}
 " TypeScript {{{
 Plug 'pmizio/typescript-tools.nvim'
-" }}}
-" Ocaml\ReasonML {{{
-" }}}
-" Gherkin {{{
-" }}}
-" Python plugins {{{
-" }}}
-" Rust {{{
-" }}}
-" Haskell {{{
-" }}}
-" Yaml {{{
 " }}}
 
 call plug#end()
@@ -143,9 +127,13 @@ call plug#end()
 
 " Nvim LSP {{{
 lua << EOF
-  local neogit = require('neogit')
-  neogit.setup {}
-  require("typescript-tools").setup {}
+  require("typescript-tools").setup {
+      settings = {
+          tsserver_plugins = {
+              "@styled/typescript-styled-plugin"
+          }
+      }
+  }
   require("lspconfig").intelephense.setup {}
   require("lspconfig").yamlls.setup {
       settings = {
@@ -166,6 +154,7 @@ lua << EOF
                   ["https://json.schemastore.org/package.json"] = "package.json",
                   ["https://getcomposer.org/schema.json"] = "composer.json",
                   ["https://json.schemastore.org/helmfile.json"] = "helmfile.{yml,yaml,json}",
+                  ["https://json.schemastore.org/tsconfig.json"] = "tsconfig.json",
               }
           }
       }
@@ -342,42 +331,6 @@ autocmd BufNewFile,BufReadPost .eslintrc set filetype=json
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufReadPost *.jade set filetype=haml
 autocmd BufNewFile,BufReadPost Jenkinsfile set filetype=groovy
-
-let g:svelte_preprocessors = ['typescript']
-let g:coverage_json_report_path = "coverage/coverage-final.json"
-let g:coverage_show_covered = 1
-let g:coverage_auto_start = 0
-let g:html_indent_inctags        = "html,body,head,tbody"
-let g:html_indent_script1        = "inc"
-let g:html_indent_style1         = "inc"
-let g:user_emmet_settings = {
-            \ 'typescript' : {
-            \     'extends' : 'jsx',
-            \ },
-            \ 'typescript.tsx' : {
-            \     'extends' : 'jsx',
-            \ },
-            \}
-" }}}
-" Python {{{
-" }}}
-" Haskel {{{
-
-autocmd BufNewFile,BufReadPost xmobarrc set filetype=haskell
-let g:necoghc_enable_detailed_browse = 1 " detailed description
-let g:haskell_enable_quantification = 1 " to enable highlighting of forall
-let g:haskell_enable_recursivedo = 1 " to enable highlighting of mdo and rec
-let g:haskell_enable_arrowsyntax = 1 " to enable highlighting of proc
-let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of pattern
-let g:haskell_enable_typeroles = 1 " to enable highlighting of type roles
-" }}}
-" Rust {{{
-"let g:racer_cmd = "/home/mkusher/.vim/plugged/racer/target/release/racer"
-let $RUST_SRC_PATH="/home/mkusher/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
-" }}}
-" Tex {{{
-let g:tex_fast="r"
-let g:tex_no_error=1
 " }}}
 
 " UI {{{
@@ -418,10 +371,6 @@ augroup PreviewOnBottom
     autocmd InsertLeave * set splitbelow!
 augroup END
 
-let delimitMate_expand_space = 1
-let delimitMate_expand_cr = 1
-" Default tabulation options
-" Should be override in ft-configs
 set tabstop=4
 set shiftwidth=4
 set expandtab
@@ -436,34 +385,10 @@ set fillchars=|
 " GUI {{{
 
 set mouse=r
-let g:hybrid_use_Xresources = 1
-let g:WebDevIconsUnicodeDecorateFolderNodes = 0
-let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
-
-let g:spaceline_seperate_style = 'curve'
-"colors OceanicNext
-"colors base16-default-dark
 set background=dark
 set termguicolors
 colors gruvbox
-"colorscheme nord
-"let ayucolor="mirage" " for mirage version of theme
-"colorscheme ayu
-"colors xcodedark
 
-"highlight LineNr guibg=#3c3836
-"highlight LineNr guifg=#a89984
-
-if has("gui_running")
-    set guifont=Literation\ Mono\ Powerline\ 18
-
-    set guioptions-=T  " no toolbar
-    set guioptions-=m  " no menu
-    set guioptions-=r  " no right scroll
-    set guioptions-=L  " no left scroll
-    winsize 140 45
-    "winpos 10 35
-endif
 " }}}
 " }}}
 " Shortcuts {{{
@@ -484,25 +409,12 @@ let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 " }}}
 " Clipboard {{{
-if has('nvim')
-  set clipboard+=unnamedplus
-else
-  set clipboard=unnamedplus
-endif
+set clipboard+=unnamedplus
 " }}}
 " ALT {{{
-if has('nvim')
-  set timeout ttimeoutlen=1
-end
+set timeout ttimeoutlen=1
 " }}}
 " {{{ Autcompletion
-" C-Space is needed only when without YCM
-inoremap <C-Space> <C-x><C-o>
-inoremap <C-@> <C-x><C-o>
-"inoremap <Tab> <C-n>
-imap <buffer> <Nul> <C-Space>
-smap <buffer> <Nul> <C-Space>
-" }}}
 " Relative number toggle {{{
 function! NumberToggle()
   if(&relativenumber == 1)
@@ -527,13 +439,6 @@ noremap <Leader>gs :Gina status<CR>
 noremap <Leader>gc :Gina commit<CR>
 " }}}
 " Buffers {{{
-" Neovim hack
-"nmap <BS> :<c-u>TmuxNavigateLeft<CR>
-" Now Using tmux navigation
-"nnoremap <C-h> <C-W>h
-"nnoremap <C-l> <C-W>l
-"nnoremap <C-k> <C-W>k
-"nnoremap <C-j> <C-W>j
 " Tabs {{{
 nmap <Leader>. :tabnext<CR>
 nmap <Leader>, :tabprevious<CR>
@@ -549,9 +454,6 @@ nnoremap <Leader>q :q<CR>
 " }}}
 " Root save {{{
 cmap w!! w !sudo tee % >/dev/null
-" }}}
-" Pretty json {{{
-cmap pjson %!python -m json.tool
 " }}}
 " }}}
 " Project navigation {{{
