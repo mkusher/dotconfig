@@ -11,3 +11,4 @@ htop/
 configstore/
 plug.vim.old
 .vimspector.json
+.phpactor.json

@@ -1,8 +1,8 @@
 -- Defaults {{{
+vim.opt.autoread=true
+vim.opt.hidden=true
+vim.opt.fileencodings={"utf-8","cp1251","koi8-r","cp866"}
 vim.cmd([[
-set autoread
-set hidden
-set fileencodings=utf-8,cp1251,koi8-r,cp866
 set wildignore+=node_modules/*
 set wildignore+=bower_components/*
 set wildignore+=vendor/*
@@ -56,9 +56,11 @@ Plug('nvim-lua/plenary.nvim')
 Plug('editorconfig/editorconfig-vim')
 Plug('Konfekt/FastFold')
 Plug('christoomey/vim-tmux-navigator')
-Plug('vim-scripts/groovy.vim')
 
 Plug('zbirenbaum/copilot.lua')
+Plug('MunifTanjim/nui.nvim')
+
+Plug('powerman/vim-plugin-AnsiEsc')
 
 Plug('puremourning/vimspector')
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
@@ -72,6 +74,8 @@ Plug('jackMort/ChatGPT.nvim')
 -- Colors and icons {{{
 -- Configuring theme
 Plug('savq/melange-nvim')
+
+-- Plug('ellisonleao/gruvbox.nvim')
 -- }}}
 -- Autocompletion {{{
 Plug('neovim/nvim-lspconfig')
@@ -86,10 +90,9 @@ Plug('ray-x/lsp_signature.nvim')
 -- }}}
 -- Project navigation {{{
 Plug('mileszs/ack.vim')
-Plug('nvim-telescope/telescope.nvim', { ['tag'] = '0.1.4' })
+Plug('nvim-telescope/telescope.nvim', { ['tag'] = '0.1.6' })
 Plug('nvim-telescope/telescope-vimspector.nvim')
 Plug('nvim-telescope/telescope-file-browser.nvim')
-
 -- }}}
 -- Configuring tabulation and codestyle {{{
 Plug('tpope/vim-repeat')
@@ -105,6 +108,7 @@ Plug('SirVer/ultisnips')
 -- }}}
 -- Git {{{
 Plug('tpope/vim-fugitive')
+Plug('tpope/vim-rhubarb')
 Plug('airblade/vim-gitgutter')
 Plug('lambdalisue/gina.vim')
 -- }}}
@@ -122,64 +126,11 @@ require("copilot").setup({
   suggestion = { enabled = false },
   panel = { enabled = false },
 })
---require("copilot_cmp").setup()
-
-require("lspconfig").intelephense.setup {}
-require("lspconfig").yamlls.setup {
-    settings = {
-        yaml = {
-            schemas = {
-                ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
-                ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
-                ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
-                ["http://json.schemastore.org/prettierrc"] = ".prettierrc.{yml,yaml}",
-                ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
-                ["http://json.schemastore.org/ansible-playbook"] = "*play*.{yml,yaml}",
-                ["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
-                ["https://json.schemastore.org/dependabot-v2"] = ".github/dependabot.{yml,yaml}",
-                ["https://json.schemastore.org/gitlab-ci"] = "*gitlab-ci*.{yml,yaml}",
-                ["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"] = "*api*.{yml,yaml}",
-                ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "*docker-compose*.{yml,yaml}",
-                ["https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json"] = "*flow*.{yml,yaml}",
-                ["https://json.schemastore.org/package.json"] = "package.json",
-                ["https://getcomposer.org/schema.json"] = "composer.json",
-                ["https://json.schemastore.org/helmfile.json"] = "helmfile.{yml,yaml,json}",
-            }
-        }
-    }
-}
-
-require "lsp_signature".setup {}
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-  callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
-    -- Buffer local mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local opts = { buffer = ev.buf }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', '<Leader>k', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set({ 'n' }, '<Leader>t', function()       require('lsp_signature').toggle_float_win()
-    end, { silent = true, noremap = true, desc = 'toggle signature' })
-    vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set({ 'n', 'v' }, '<Leader>ca', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<Leader>f', function()
-      vim.lsp.buf.format { async = true }
-    end, opts)
-  end,
-})
 
 local has_words_before = function()
-    unpack = unpack or table.unpack
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  unpack = unpack or table.unpack
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
 local lspkind = require('lspkind')
@@ -188,8 +139,6 @@ cmp.setup({
   snippet = {
     -- REQUIRED - you must specify a snippet engine
     expand = function(args)
-      -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-      -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
       vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
     end,
   },
@@ -270,7 +219,7 @@ cmp.setup.cmdline(':', {
 lspkind.init()
 -- }}}
 
--- Treesitter {
+-- Treesitter {{{
 
 require('nvim-treesitter.configs').setup {
   highlight = {
@@ -473,7 +422,7 @@ arguments: ((template_string) @css
 end
 
 styledHighlight()
--- }
+-- }}}
 
 -- {{{ ChatGPT
 vim.api.nvim_create_user_command("ChatGPTInit",
@@ -537,6 +486,7 @@ vim.opt.foldmethod="syntax"
 vim.opt.nu=true
 vim.opt.rnu=true
 vim.opt.nuw=4
+
 vim.cmd([[
 autocmd InsertEnter * set nornu
 autocmd InsertLeave * set rnu
@@ -689,6 +639,32 @@ inoremap  <Right>  <NOP>
 -- }}}
 -- {{{ Code Actions
 vim.cmd("nnoremap <Leader>i <cmd>TSToolsAddMissingImports<CR>")
+-- }}}
+
+-- Nvim LSP {{{
+vim.api.nvim_create_autocmd('LspAttach', {
+group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+callback = function(ev)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+  -- Buffer local mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  local opts = { buffer = ev.buf }
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+  vim.keymap.set('n', '<Leader>t', vim.lsp.buf.hover, opts)
+  vim.keymap.set('n', '<Leader>s', vim.lsp.buf.signature_help, opts)
+  vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
+  vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, opts)
+  vim.keymap.set({ 'n', 'v' }, '<Leader>ca', vim.lsp.buf.code_action, opts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+  vim.keymap.set('n', '<Leader>f', function()
+    vim.lsp.buf.format { async = true }
+  end, opts)
+end,
+})
 -- }}}
 -- }}}
 -- vim:foldmethod=marker:foldlevel=0
