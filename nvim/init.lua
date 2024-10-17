@@ -12,6 +12,7 @@ set wildignore+=*.map
 let mapleader=","
 let g:maplocalleader=","
 nmap <Space> ,
+vmap <Space> ,
 
 " Enable file type detection.
 " Use the default filetype settings, so that mail gets 'tw' set to 72,
@@ -61,6 +62,7 @@ Plug('neovim/node-host', { ['do'] = 'npm install' })
 -- Plugin Utils {{{
 Plug('nvim-lua/plenary.nvim')
 Plug('MunifTanjim/nui.nvim')
+Plug('grapp-dev/nui-components.nvim')
 -- }}}
 
 Plug('powerman/vim-plugin-AnsiEsc')
@@ -73,14 +75,22 @@ Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 
 Plug('andythigpen/nvim-coverage')
 
+Plug('stevearc/dressing.nvim')
 Plug('MunifTanjim/nui.nvim')
 Plug('folke/trouble.nvim')
-Plug('jackMort/ChatGPT.nvim')
 
+Plug('echasnovski/mini.nvim')
+Plug('MeanderingProgrammer/render-markdown.nvim')
+
+-- GPT/LLMs {{{
+Plug('jackMort/ChatGPT.nvim')
+Plug('yetone/avante.nvim')
+-- }}}
 
 -- Colors and icons {{{
 --" Configuring theme
 Plug('ellisonleao/gruvbox.nvim')
+Plug('nvim-tree/nvim-web-devicons')
 -- }}}
 -- Autocompletion {{{
 Plug('neovim/nvim-lspconfig')
@@ -96,6 +106,7 @@ Plug('mileszs/ack.vim')
 Plug('nvim-telescope/telescope.nvim', {['tag'] = '0.1.5' })
 Plug('nvim-telescope/telescope-vimspector.nvim')
 Plug('nvim-telescope/telescope-file-browser.nvim')
+Plug('stevearc/oil.nvim')
 -- }}}
 -- Configuring tabulation and codestyle {{{
 Plug('tpope/vim-repeat')
@@ -155,6 +166,7 @@ require("lspconfig").yamlls.setup {
       }
   }
 }
+require("lspconfig").protols.setup {}
 
 local has_words_before = function()
   unpack = unpack or table.unpack
@@ -165,61 +177,61 @@ end
 local lspkind = require('lspkind')
 local cmp = require'cmp'
 cmp.setup({
-snippet = {
-  expand = function(args)
-    vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-  end,
-},
-window = {
-  -- completion = cmp.config.window.bordered(),
-  -- documentation = cmp.config.window.bordered(),
-},
-mapping = cmp.mapping.preset.insert({
-  ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-  ['<C-f>'] = cmp.mapping.scroll_docs(4),
-  ['<C-Space>'] = cmp.mapping.complete(),
-  ['<C-e>'] = cmp.mapping.abort(),
-  ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-  ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        if #cmp.get_entries() == 1 then
-          cmp.confirm({ select = true })
-        else
-          cmp.select_next_item()
-        end
-      --[[ Replace with your snippet engine (see above sections on this page)
-      elseif snippy.can_expand_or_advance() then
-        snippy.expand_or_advance() ]]
-      elseif has_words_before() then
-        cmp.complete()
-        if #cmp.get_entries() == 1 then
-          cmp.confirm({ select = true })
-        end
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
-}),
-formatting = {
-  format = lspkind.cmp_format({
-    mode = 'symbol_text', -- show only symbol annotations
-    preset = 'default',
-    maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-    ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+    snippet = {
+      expand = function(args)
+        vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      end,
+    },
+    window = {
+      -- completion = cmp.config.window.bordered(),
+      -- documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      ['<Tab>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            if #cmp.get_entries() == 1 then
+              cmp.confirm({ select = true })
+            else
+              cmp.select_next_item()
+            end
+          --[[ Replace with your snippet engine (see above sections on this page)
+          elseif snippy.can_expand_or_advance() then
+            snippy.expand_or_advance() ]]
+          elseif has_words_before() then
+            cmp.complete()
+            if #cmp.get_entries() == 1 then
+              cmp.confirm({ select = true })
+            end
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+    }),
+    formatting = {
+      format = lspkind.cmp_format({
+        mode = 'symbol_text', -- show only symbol annotations
+        preset = 'default',
+        maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+        ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
 
-    -- The function below will be called before any actual modifications from lspkind
-    -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-    before = function (entry, vim_item)
-      return vim_item
-    end,
-  })
-},
-sources = cmp.config.sources({
-  { name = 'nvim_lsp' },
-  { name = 'ultisnips' }, -- For ultisnips users.
-}, {
-  { name = 'buffer' },
-})
+        -- The function below will be called before any actual modifications from lspkind
+        -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+        before = function (entry, vim_item)
+          return vim_item
+        end,
+      })
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'ultisnips' }, -- For ultisnips users.
+    }, {
+      { name = 'buffer' },
+    })
 })
 
 -- Set configuration for specific filetype.
@@ -253,9 +265,27 @@ sources = cmp.config.sources({
 -- {{{ ChatGPT
 vim.api.nvim_create_user_command("ChatGPTInit",
     function()
-        require("chatgpt").setup({
-            api_key_cmd = "op read op://private/OpenAI/api_key --no-newline"
-        })
+        local job = vim.fn.jobstart(
+            "op read op://private/OpenAI/api_key --no-newline",
+            {
+                on_stdout = function(jobid, data, event)
+                    local key = table.concat(data, "")
+                    if key == nil or key == '' then
+                        return
+                    end
+                    vim.env.OPENAI_API_KEY = key
+                    require("avante").setup({
+                      provider = "openai", -- "claude" or "openai" or "azure" or "deepseek" or "groq"
+                      openai = {
+                        endpoint = "https://api.openai.com",
+                        model = "gpt-4o",
+                        temperature = 0,
+                        max_tokens = 4096,
+                      },
+                    })
+                end
+            }
+        )
     end,
     {}
 )
@@ -270,12 +300,11 @@ require("telescope").setup {
 extensions = {
   file_browser = {
     theme = "ivy",
-    hijack_netrw = true
   }
 }
 }
 require("telescope").load_extension "file_browser"
-
+require("oil").setup()
 -- }}}
 
 -- UI {{{
