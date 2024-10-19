@@ -41,3 +41,11 @@ peek() { tmux split-window -p 33 $EDITOR $@ || exit; }
 export PATH="$HOME/.local/bin:/usr/local/sbin:$PATH"
 
 autoload -U +X compinit && compinit
+
+# pnpm
+export PNPM_HOME="/home/mkusher/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
