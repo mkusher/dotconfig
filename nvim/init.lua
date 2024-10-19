@@ -121,6 +121,8 @@ vim.call('plug#end')
 -- }}}
 
 -- Nvim LSP {{{
+require'lspconfig'.astro.setup{}
+require'lspconfig'.hls.setup{}
 require("typescript-tools").setup {}
 require("copilot").setup({
   suggestion = { enabled = false },
