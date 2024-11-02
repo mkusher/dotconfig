@@ -17,6 +17,7 @@ alias pr='hub pull-request'
 alias cdt='cd ~/Projects/workarea/tdh'
 alias gpcb='gp --set-upstream origin $(current_branch)'
 alias gpf='gp --force-with-lease'
+alias dpwd='docker run --rm -it -v $(pwd):$(pwd) -w $(pwd)'
 
 ## Main prompt
 build_prompt() {
@@ -39,8 +40,6 @@ peek() { tmux split-window -p 33 $EDITOR $@ || exit; }
 
 export PATH="$HOME/.local/bin:/usr/local/sbin:$PATH"
 
-export PATH="/opt/homebrew/opt/openssl@1.0/bin:$PATH"
-export PATH="/opt/homebrew/opt/openssl@1.0/bin:$PATH"
-export PATH="/usr/local/opt/openssl@1.0/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh

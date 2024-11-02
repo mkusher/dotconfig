@@ -91,6 +91,7 @@ Plug('yetone/avante.nvim')
 --" Configuring theme
 Plug('ellisonleao/gruvbox.nvim')
 Plug('nvim-tree/nvim-web-devicons')
+Plug('TaDaa/vimade')
 -- }}}
 -- Autocompletion {{{
 Plug('neovim/nvim-lspconfig')
