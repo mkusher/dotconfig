@@ -75,6 +75,7 @@ Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 
 Plug('andythigpen/nvim-coverage')
 
+Plug('folke/snacks.nvim')
 Plug('stevearc/dressing.nvim')
 Plug('MunifTanjim/nui.nvim')
 Plug('folke/trouble.nvim')
@@ -420,7 +421,7 @@ tmap jk <C-\><C-n>
 " }}}
 " Git actions {{{
 noremap <Leader>gs :Gina status<CR>
-noremap <Leader>gc :Gina commit<CR>
+noremap <Leader>gc :Git commit<CR>
 " }}}
 " Buffers {{{
 " Tabs {{{
@@ -447,7 +448,7 @@ nnoremap <Leader>d :e %:h<CR>
 nnoremap <Leader>dr <cmd>Telescope file_browser<CR>
 nnoremap <leader>ff <cmd>Telescope<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>lg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 " }}}
