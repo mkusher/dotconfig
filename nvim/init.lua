@@ -48,7 +48,7 @@ local Plug = vim.fn['plug#']
 vim.cmd('call plug#begin("~/.config/nvim/plugged")')
 
 -- Hosts {{{
-Plug('neovim/node-host', { ['do'] = 'npm install' })
+--Plug('neovim/node-host', { ['do'] = 'npm install' })
 -- }}}
 -- Plugin Utils {{{
 Plug('nvim-lua/plenary.nvim')
@@ -59,16 +59,12 @@ Plug('editorconfig/editorconfig-vim')
 Plug('Konfekt/FastFold')
 Plug('christoomey/vim-tmux-navigator')
 
-Plug('zbirenbaum/copilot.lua')
 Plug('MunifTanjim/nui.nvim')
 
 Plug('powerman/vim-plugin-AnsiEsc')
-
-Plug('puremourning/vimspector')
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 
-Plug('andythigpen/nvim-coverage')
-
+Plug('folke/snacks.nvim')
 Plug('stevearc/dressing.nvim')
 Plug('MunifTanjim/nui.nvim')
 Plug('folke/trouble.nvim')
@@ -79,7 +75,13 @@ Plug('folke/trouble.nvim')
 Plug('savq/melange-nvim')
 
 Plug('echasnovski/mini.nvim')
-Plug('MeanderingProgrammer/render-markdown.nvim')
+
+-- GPT/LLMs {{{
+Plug('zbirenbaum/copilot.lua')
+Plug('jackMort/ChatGPT.nvim')
+Plug('olimorris/codecompanion.nvim')
+Plug('yetone/avante.nvim', {['branch'] = 'main', ['do'] = 'make'})
+-- }}}
 
 -- Colors and icons {{{
 --" Configuring theme
@@ -96,13 +98,11 @@ Plug('hrsh7th/cmp-buffer')
 Plug('hrsh7th/cmp-path')
 Plug('hrsh7th/cmp-cmdline')
 Plug('hrsh7th/nvim-cmp')
-Plug('ray-x/lsp_signature.nvim')
---Plug('zbirenbaum/copilot-cmp')
+Plug('zbirenbaum/copilot-cmp')
 -- }}}
 -- Project navigation {{{
 Plug('mileszs/ack.vim')
-Plug('nvim-telescope/telescope.nvim', { ['tag'] = '0.1.6' })
-Plug('nvim-telescope/telescope-vimspector.nvim')
+Plug('nvim-telescope/telescope.nvim', {['tag'] = '0.1.5' })
 Plug('nvim-telescope/telescope-file-browser.nvim')
 Plug('stevearc/oil.nvim')
 -- }}}
@@ -116,7 +116,7 @@ Plug('tpope/vim-surround')
 Plug('scrooloose/nerdcommenter')
 -- }}}
 -- Snippets {{{
-Plug('SirVer/ultisnips')
+--Plug('SirVer/ultisnips')
 -- }}}
 -- Git {{{
 Plug('tpope/vim-fugitive')
@@ -127,10 +127,6 @@ Plug('lambdalisue/gina.vim')
 -- TypeScript {{{
 Plug('yardnsm/vim-import-cost', { ['do'] = 'npm install' })
 Plug('pmizio/typescript-tools.nvim')
--- }}}
--- GPT/LLMs {{{
-Plug('jackMort/ChatGPT.nvim')
-Plug('yetone/avante.nvim', { ['branch'] = 'main', ['do'] = 'make' })
 -- }}}
 
 vim.call('plug#end')
@@ -188,7 +184,7 @@ local cmp = require'cmp'
 cmp.setup({
     snippet = {
       expand = function(args)
-        vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+        vim.snippet.expand(args.body)
       end,
     },
     window = {
@@ -201,21 +197,19 @@ cmp.setup({
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-e>'] = cmp.mapping.abort(),
       ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      ['<S-Tab>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
       ['<Tab>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
-            if #cmp.get_entries() == 1 then
-              cmp.confirm({ select = true })
-            else
-              cmp.select_next_item()
-            end
+            cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
           --[[ Replace with your snippet engine (see above sections on this page)
           elseif snippy.can_expand_or_advance() then
             snippy.expand_or_advance() ]]
-          elseif has_words_before() then
-            cmp.complete()
-            if #cmp.get_entries() == 1 then
-              cmp.confirm({ select = true })
-            end
           else
             fallback()
           end
@@ -228,6 +222,10 @@ cmp.setup({
         maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
         ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
 
+        symbol_map = {
+          Copilot = "",
+        },
+
         -- The function below will be called before any actual modifications from lspkind
         -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
         before = function (entry, vim_item)
@@ -236,8 +234,8 @@ cmp.setup({
       })
     },
     sources = cmp.config.sources({
+      { name = 'copilot' },
       { name = 'nvim_lsp' },
-      { name = 'ultisnips' }, -- For ultisnips users.
     }, {
       { name = 'buffer' },
     })
@@ -269,9 +267,6 @@ cmp.setup.cmdline(':', {
     { name = 'cmdline' }
   })
 })
-
-lspkind.init()
--- }}}
 
 -- Treesitter {{{
 
@@ -478,16 +473,40 @@ end
 styledHighlight()
 -- }}}
 
--- {{{ ChatGPT
-
-require("avante").setup({
-  provider = "ollama",
-  ollama = {
-    endpoint = "http://127.0.0.1:11434",
-    model = "falcon3",
-  }
+-- {{{ GPT/LLMs
+require("copilot").setup({
+  suggestion = { enabled = false },
+  panel = { enabled = false },
 })
+require("copilot_cmp").setup()
 
+vim.api.nvim_create_user_command("ChatGPTInit",
+    function()
+        local job = vim.fn.jobstart(
+            "op read op://private/OpenAI/api_key --no-newline",
+            {
+                on_stdout = function(jobid, data, event)
+                    local key = table.concat(data, "")
+                    if key == nil or key == '' then
+                        return
+                    end
+                    vim.env.OPENAI_API_KEY = key
+                end
+            }
+        )
+    end,
+    {}
+)
+require("avante").setup({
+    provider = "copilot", -- "claude" or "openai" or "azure" or "deepseek" or "groq"
+    openai = {
+        endpoint = "https://api.openai.com",
+        model = "gpt-4o",
+        temperature = 0,
+        max_tokens = 4096,
+    },
+})
+require("codecompanion").setup()
 -- }}}
 
 -- Project Navigation {{{
@@ -637,12 +656,10 @@ tmap jk <C-\><C-n>
 -- Git actions {{{
 vim.cmd([[
 noremap <Leader>gs :Gina status<CR>
-noremap <Leader>gc :Gina commit<CR>
-]])
--- }}}
--- Buffers {{{
--- Tabs {{{
-vim.cmd([[
+noremap <Leader>gc :Git commit<CR>
+" }}}
+" Buffers {{{
+" Tabs {{{
 nmap <Leader>. :tabnext<CR>
 nmap <Leader>, :tabprevious<CR>
 ]])
