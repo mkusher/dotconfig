@@ -17,6 +17,7 @@ alias pr='hub pull-request'
 alias cdt='cd ~/Projects/workarea/tdh'
 alias gpcb='gp --set-upstream origin $(current_branch)'
 alias gpf='gp --force-with-lease'
+alias dpwd='docker run --rm -it -v $(pwd):$(pwd) -w $(pwd)'
 
 ## Main prompt
 build_prompt() {
@@ -38,7 +39,7 @@ $INPUT_SIGN "
 
 peek() { tmux split-window -p 33 $EDITOR $@ || exit; }
 
-export PATH="$HOME/.local/bin:/usr/local/sbin:$PATH"
+export PATH="$HOME/.local/bin:/usr/local/sbin:$HOME/.cargo/bin:$PATH"
 
 autoload -U +X compinit && compinit
 

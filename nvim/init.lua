@@ -72,6 +72,7 @@ Plug('andythigpen/nvim-coverage')
 Plug('stevearc/dressing.nvim')
 Plug('MunifTanjim/nui.nvim')
 Plug('folke/trouble.nvim')
+-- }}}
 
 -- Colors and icons {{{
 -- Configuring theme
@@ -80,15 +81,12 @@ Plug('savq/melange-nvim')
 Plug('echasnovski/mini.nvim')
 Plug('MeanderingProgrammer/render-markdown.nvim')
 
--- GPT/LLMs {{{
-Plug('jackMort/ChatGPT.nvim')
-Plug('yetone/avante.nvim')
--- }}}
-
 -- Colors and icons {{{
 --" Configuring theme
 Plug('ellisonleao/gruvbox.nvim')
 Plug('nvim-tree/nvim-web-devicons')
+Plug('TaDaa/vimade')
+-- }}}
 -- }}}
 -- Autocompletion {{{
 Plug('neovim/nvim-lspconfig')
@@ -129,6 +127,10 @@ Plug('lambdalisue/gina.vim')
 -- TypeScript {{{
 Plug('yardnsm/vim-import-cost', { ['do'] = 'npm install' })
 Plug('pmizio/typescript-tools.nvim')
+-- }}}
+-- GPT/LLMs {{{
+Plug('jackMort/ChatGPT.nvim')
+Plug('yetone/avante.nvim', { ['branch'] = 'main', ['do'] = 'make' })
 -- }}}
 
 vim.call('plug#end')
@@ -477,32 +479,15 @@ styledHighlight()
 -- }}}
 
 -- {{{ ChatGPT
-vim.api.nvim_create_user_command("ChatGPTInit",
-    function()
-        local job = vim.fn.jobstart(
-            "op read op://private/OpenAI/api_key --no-newline",
-            {
-                on_stdout = function(jobid, data, event)
-                    local key = table.concat(data, "")
-                    if key == nil or key == '' then
-                        return
-                    end
-                    vim.env.OPENAI_API_KEY = key
-                    require("avante").setup({
-                      provider = "openai", -- "claude" or "openai" or "azure" or "deepseek" or "groq"
-                      openai = {
-                        endpoint = "https://api.openai.com",
-                        model = "gpt-4o",
-                        temperature = 0,
-                        max_tokens = 4096,
-                      },
-                    })
-                end
-            }
-        )
-    end,
-    {}
-)
+
+require("avante").setup({
+  provider = "ollama",
+  ollama = {
+    endpoint = "http://127.0.0.1:11434",
+    model = "falcon3",
+  }
+})
+
 -- }}}
 
 -- Project Navigation {{{
@@ -687,7 +672,7 @@ nnoremap <Leader>d :e %:h<CR>
 nnoremap <Leader>dr <cmd>Telescope file_browser<CR>
 nnoremap <leader>ff <cmd>Telescope<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>lg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 ]])
