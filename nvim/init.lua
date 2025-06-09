@@ -95,11 +95,6 @@ Plug('neovim/nvim-lspconfig')
 Plug('rafamadriz/friendly-snippets')
 Plug('Saghen/blink.cmp', {['tag'] = 'v1.3.1'})
 Plug('Saghen/blink.compat')
---Plug('hrsh7th/cmp-nvim-lsp')
---Plug('hrsh7th/cmp-buffer')
---Plug('hrsh7th/cmp-path')
---Plug('hrsh7th/cmp-cmdline')
---Plug('hrsh7th/nvim-cmp')
 Plug('zbirenbaum/copilot-cmp')
 -- }}}
 -- Project navigation {{{
@@ -216,6 +211,18 @@ require('blink.cmp').setup({
             }
         }
     },
+    cmdline = {
+      completion = {
+          menu = {
+              auto_show = true
+          },
+          list = {
+              selection = {
+                  preselect = false
+              }
+          }
+      },
+    },
     completion = {
         list = {
             selection = {
@@ -231,254 +238,19 @@ require('blink.cmp').setup({
     }
 })
 
--- }}}
 
--- Treesitter {{{
-
-require('nvim-treesitter.configs').setup {
-  highlight = {
-    enable = true,
-  }
-}
-
-function styledHighlight()
-  local M = {}
-
-  local tbl = {}
-
-  function tbl.contains(_tbl, value)
-    for _, current in pairs(_tbl) do
-      if current == value then
-        return true
-      end
-    end
-
-    return false
-  end
-
-  function M.directives()
-    local function is_one_line(range)
-      return range[1] == range[3]
-    end
-
-    local function is_range_empty_or_invalid(range)
-      if range[3] < range[1] or (is_one_line(range) and range[4] <= range[2]) then
-        return true
-      end
-
-      return false
-    end
-
-    local function make_subranges_between_children_like(node, predicate)
-      local content = { { node:range() } }
-
-      for child in node:iter_children() do
-        if predicate(child) then
-          local child_range = { child:range() }
-          local last_content_range = content[#content]
-          local first_part = {
-            last_content_range[1],
-            last_content_range[2],
-            child_range[1],
-            child_range[2],
-          }
-          local second_part = {
-            child_range[3],
-            child_range[4],
-            last_content_range[3],
-            last_content_range[4],
-          }
-          if is_range_empty_or_invalid(first_part) then
-            if not is_range_empty_or_invalid(second_part) then
-              content[#content] = second_part
-            end
-          elseif is_range_empty_or_invalid(second_part) then
-            content[#content] = first_part
-          else
-            content[#content] = first_part
-            content[#content + 1] = second_part
-          end
-        end
-      end
-
-      return content
-    end
-
-    local directives = vim.treesitter.query.list_directives()
-    if not tbl.contains(directives, "inject_without_named_children!") then
-      vim.treesitter.query.add_directive(
-        "inject_without_named_children!",
-        function(
-          match,
-          _, --[[ pattern ]]
-          _, --[[ bufnr ]]
-          predicate,
-          metadata
-        )
-          local node = match[predicate[2]]
-          metadata.content = make_subranges_between_children_like(
-            node,
-            function(child)
-              return child:named()
-            end
-          )
-        end
-      )
-    end
-
-    if not tbl.contains(directives, "inject_without_children!") then
-      vim.treesitter.query.add_directive("inject_without_children!", function(
-        match,
-        _, --[[ pattern ]]
-        _, --[[ bufnr ]]
-        predicate,
-        metadata
-      )
-        local node = match[predicate[2]]
-        metadata.content = make_subranges_between_children_like(node, function(_)
-          return true
-        end)
-      end)
-    end
-  end
-
-M.ecma_injections = [[
-(comment) @jsdoc
-(comment) @comment
-(regex_pattern) @regex
-
-; =============================================================================
-; languages
-
-; {lang}`<{lang}>`
-(call_expression
-function: ((identifier) @language)
-arguments: ((template_string) @content
-  (#offset! @content 0 1 0 -1)
-  (#inject_without_children! @content)))
-
-; gql`<graphql>`
-(call_expression
-function: ((identifier) @_name
-  (#eq? @_name "gql"))
-arguments: ((template_string) @graphql
-  (#offset! @graphql 0 1 0 -1)
-  (#inject_without_children! @graphql)))
-
-; hbs`<glimmer>`
-(call_expression
-function: ((identifier) @_name
-  (#eq? @_name "hbs"))
-arguments: ((template_string) @glimmer
-  (#offset! @glimmer 0 1 0 -1)
-  (#inject_without_children! @glimmer)))
-
-; =============================================================================
-; styled-components
-
-; styled.div`<css>`
-(call_expression
-function: (member_expression
-  object: (identifier) @_name
-    (#eq? @_name "styled"))
-arguments: ((template_string) @css
-  (#offset! @css 0 1 0 -1)
-  (#inject_without_children! @css)))
-
-; styled(Component)`<css>`
-(call_expression
-function: (call_expression
-  function: (identifier) @_name
-    (#eq? @_name "styled"))
-arguments: ((template_string) @css
-  (#offset! @css 0 1 0 -1)
-  (#inject_without_children! @css)))
-
-; styled.div.attrs({ prop: "foo" })`<css>`
-(call_expression
-function: (call_expression
-  function: (member_expression
-    object: (member_expression
-      object: (identifier) @_name
-        (#eq? @_name "styled"))))
-arguments: ((template_string) @css
-  (#offset! @css 0 1 0 -1)
-  (#inject_without_children! @css)))
-
-; styled(Component).attrs({ prop: "foo" })`<css>`
-(call_expression
-function: (call_expression
-  function: (member_expression
-    object: (call_expression
-      function: (identifier) @_name
-        (#eq? @_name "styled"))))
-arguments: ((template_string) @css
-  (#offset! @css 0 1 0 -1)
-  (#inject_without_children! @css)))
-
-; createGlobalStyle`<css>`
-(call_expression
-function: (identifier) @_name
-  (#eq? @_name "createGlobalStyle")
-arguments: ((template_string) @css
-  (#offset! @css 0 1 0 -1)
-  (#inject_without_children! @css)))
-]]
-
-  function M.queries()
-    vim.treesitter.query.set("javascript", "injections", M.ecma_injections)
-    vim.treesitter.query.set("typescript", "injections", M.ecma_injections)
-    vim.treesitter.query.set("tsx", "injections", M.ecma_injections)
-  end
-
-  M.directives()
-  M.queries()
-end
-
-styledHighlight()
 -- }}}
 
 -- {{{ GPT/LLMs
 
-require("copilot").setup({
-  suggestion = { enabled = false },
-  panel = { enabled = false },
-})
-
-require("copilot_cmp").setup({
-  formatters = {
-    insert_text = require("copilot_cmp.format").format_insert_text,
-    label = require("copilot_cmp.format").format_label,
-  },
-  method = "getCompletionsCycling",
-  max_lines = 10,
-  max_num_results = 5,
-  debounce_ms = 50,
-})
-
-function LoadOpenAIKey()
-    local job = vim.fn.jobstart(
-        "op read op://private/OpenAI/api_key --no-newline",
-        {
-            on_stdout = function(jobid, data, event)
-                local key = table.concat(data, "")
-                if key == nil or key == '' then
-                    return
-                end
-                vim.env.OPENAI_API_KEY = key
-            end
-        }
-    )
-end
-
 require("avante").setup({
     provider = "copilot", -- "claude" or "openai" or "azure" or "deepseek" or "groq"
-    openai = {
-        endpoint = "https://api.openai.com",
-        model = "gpt-4o",
-        temperature = 0,
-        max_tokens = 4096,
-    },
+    providers = {
+        openai = {
+            endpoint = "https://api.openai.com",
+            model = "gpt-4o"
+        },
+    }
 })
 require("codecompanion").setup()
 -- }}}
