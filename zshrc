@@ -18,6 +18,7 @@ alias cdt='cd ~/Projects/tdh'
 alias gpcb='gp --set-upstream origin $(current_branch)'
 alias gpf='gp --force-with-lease'
 alias dpwd='docker run --rm -it -v $(pwd):$(pwd) -w $(pwd)'
+alias codex='OPENAI_API_KEY=$(op read op://private/OpenAI/api_key --no-newline) ~/.asdf/shims/codex'
 
 ## Main prompt
 build_prompt() {

@@ -270,12 +270,16 @@ vim.api.nvim_create_user_command("ChatGPTInit",
 )
 require("avante").setup({
     provider = "copilot", -- "claude" or "openai" or "azure" or "deepseek" or "groq"
-    openai = {
-        endpoint = "https://api.openai.com",
-        model = "gpt-4o",
-        temperature = 0,
-        max_tokens = 4096,
-    },
+    providers = {
+        openai = {
+            endpoint = "https://api.openai.com",
+            model = "gpt-4o",
+            extra_request_body = {
+                temperature = 0,
+            },
+            max_tokens = 4096,
+        },
+    }
 })
 require("codecompanion").setup()
 -- }}}
