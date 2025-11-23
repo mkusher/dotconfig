@@ -59,15 +59,22 @@ Plug('editorconfig/editorconfig-vim')
 Plug('Konfekt/FastFold')
 Plug('christoomey/vim-tmux-navigator')
 
-Plug('MunifTanjim/nui.nvim')
 
 Plug('powerman/vim-plugin-AnsiEsc')
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 
 Plug('folke/snacks.nvim')
 Plug('stevearc/dressing.nvim')
-Plug('MunifTanjim/nui.nvim')
 Plug('folke/trouble.nvim')
+-- }}}
+
+
+-- GPT/LLMs {{{
+Plug('zbirenbaum/copilot.lua')
+Plug('jackMort/ChatGPT.nvim')
+Plug('olimorris/codecompanion.nvim')
+Plug('yetone/avante.nvim', {['branch'] = 'main', ['do'] = 'make'})
+Plug('folke/sidekick.nvim')
 -- }}}
 
 -- Colors and icons {{{
@@ -75,20 +82,9 @@ Plug('folke/trouble.nvim')
 Plug('savq/melange-nvim')
 
 Plug('echasnovski/mini.nvim')
-
--- GPT/LLMs {{{
-Plug('zbirenbaum/copilot.lua')
-Plug('jackMort/ChatGPT.nvim')
-Plug('olimorris/codecompanion.nvim')
-Plug('yetone/avante.nvim', {['branch'] = 'main', ['do'] = 'make'})
--- }}}
-
--- Colors and icons {{{
---" Configuring theme
 Plug('ellisonleao/gruvbox.nvim')
 Plug('nvim-tree/nvim-web-devicons')
 Plug('TaDaa/vimade')
--- }}}
 -- }}}
 -- Autocompletion {{{
 Plug('neovim/nvim-lspconfig')
@@ -243,15 +239,8 @@ require('blink.cmp').setup({
 
 -- {{{ GPT/LLMs
 
-require("avante").setup({
-    provider = "copilot", -- "claude" or "openai" or "azure" or "deepseek" or "groq"
-    providers = {
-        openai = {
-            endpoint = "https://api.openai.com",
-            model = "gpt-4o"
-        },
-    }
-})
+require("sidekick").setup()
+
 require("codecompanion").setup()
 -- }}}
 
@@ -361,11 +350,6 @@ nmap <Leader>dsu <cmd>call vimspector#StepOut()<CR>
 nmap <Leader>dq <cmd>VimspectorReset<CR>
 ]])
 -- }}}
--- {{{ Snippets
-vim.g.UltiSnipsExpandTrigger="<c-j>"
-vim.g.UltiSnipsJumpForwardTrigger="<c-j>"
-vim.g.UltiSnipsJumpBackwardTrigger="<c-k>"
--- }}}
 -- Clipboard {{{
 vim.cmd([[
   set clipboard+=unnamedplus
@@ -433,7 +417,6 @@ noremap <Leader>p <cmd>Telescope find_files<CR>
 nnoremap <Leader>e <cmd>Telescope oldfiles<CR>
 nnoremap <Leader>d :e %:h<CR>
 nnoremap <Leader>dr <cmd>Telescope file_browser<CR>
-nnoremap <leader>ff <cmd>Telescope<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>lg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>

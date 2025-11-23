@@ -39,7 +39,7 @@ $INPUT_SIGN "
 
 peek() { tmux split-window -p 33 $EDITOR $@ || exit; }
 
-export PATH="$HOME/.local/bin:/usr/local/sbin:$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:/usr/local/sbin:$HOME/.cargo/bin:$PATH"
 
 autoload -U +X compinit && compinit
 
@@ -50,3 +50,8 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/mkusher/.lmstudio/bin"
+# End of LM Studio CLI section
+
