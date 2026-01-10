@@ -61,7 +61,7 @@ Plug('christoomey/vim-tmux-navigator')
 
 
 Plug('powerman/vim-plugin-AnsiEsc')
-Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
+Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate', ['branch'] = 'master'})
 
 Plug('folke/snacks.nvim')
 Plug('stevearc/dressing.nvim')
@@ -73,7 +73,6 @@ Plug('folke/trouble.nvim')
 Plug('zbirenbaum/copilot.lua')
 Plug('jackMort/ChatGPT.nvim')
 Plug('olimorris/codecompanion.nvim')
-Plug('yetone/avante.nvim', {['branch'] = 'main', ['do'] = 'make'})
 Plug('folke/sidekick.nvim')
 -- }}}
 
