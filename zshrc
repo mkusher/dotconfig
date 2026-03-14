@@ -18,7 +18,10 @@ alias cdt='cd ~/Projects/tdh'
 alias gpcb='gp --set-upstream origin $(current_branch)'
 alias gpf='gp --force-with-lease'
 alias dpwd='docker run --rm -it -v $(pwd):$(pwd) -w $(pwd)'
-alias codex='OPENAI_API_KEY=$(op read op://private/OpenAI/api_key --no-newline) ~/.asdf/shims/codex'
+#alias codex='OPENAI_API_KEY=$(op read op://private/OpenAI/api_key --no-newline) ~/.asdf/shims/codex'
+alias ai-agent-container='docker run --rm -it -v $(pwd):$(pwd) -v $HOME/.claude:$HOME/.claude -v $HOME/.config:$HOME/.config -v $HOME/.local:$HOME/.local -v $HOME/.agent:$HOME/.agent -w $(pwd) ai-agent'
+alias claude='ai-agent-container claude'
+alias opencode='ai-agent-container opencode'
 
 ## Main prompt
 build_prompt() {
@@ -44,3 +47,6 @@ export PATH="$HOME/.local/bin:/usr/local/sbin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
+
+# Added by Antigravity
+export PATH="/Users/akashnikau/.antigravity/antigravity/bin:$PATH"

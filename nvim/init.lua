@@ -79,11 +79,18 @@ Plug('folke/trouble.nvim')
 
 Plug('echasnovski/mini.nvim')
 
+-- Tests {{{
+Plug('antoinemadec/FixCursorHold.nvim')
+Plug('nvim-neotest/nvim-nio')
+Plug('nvim-neotest/neotest', {['commit'] = '52fca6717ef972113ddd6ca223e30ad0abb2800c'})
+Plug('nvim-neotest/neotest-jest')
+-- }}}
+
 -- GPT/LLMs {{{
 Plug('zbirenbaum/copilot.lua')
 Plug('jackMort/ChatGPT.nvim')
 Plug('olimorris/codecompanion.nvim')
-Plug('yetone/avante.nvim', {['branch'] = 'main', ['do'] = 'make'})
+--Plug('yetone/avante.nvim', {['branch'] = 'main', ['do'] = 'make'})
 -- }}}
 
 -- Colors and icons {{{
@@ -93,7 +100,7 @@ Plug('nvim-tree/nvim-web-devicons')
 Plug('TaDaa/vimade')
 -- }}}
 -- Autocompletion {{{
-Plug('neovim/nvim-lspconfig')
+--Plug('neovim/nvim-lspconfig')
 Plug('rafamadriz/friendly-snippets')
 Plug('Saghen/blink.cmp', {['tag'] = 'v1.3.1'})
 Plug('Saghen/blink.compat')
@@ -101,9 +108,9 @@ Plug('zbirenbaum/copilot-cmp')
 -- }}}
 -- Project navigation {{{
 Plug('mileszs/ack.vim')
-Plug('nvim-telescope/telescope.nvim', {['tag'] = '0.1.5' })
+Plug('nvim-telescope/telescope.nvim', {['tag'] = 'v0.2.1' })
 --Plug('nvim-telescope/telescope-vimspector.nvim')
-Plug('nvim-telescope/telescope-file-browser.nvim')
+--Plug('nvim-telescope/telescope-file-browser.nvim')
 Plug('stevearc/oil.nvim')
 -- }}}
 -- Configuring tabulation and codestyle {{{
@@ -131,6 +138,45 @@ Plug('pmizio/typescript-tools.nvim')
 vim.call("plug#end")
 -- }}}
 
+-- Tests {{{
+
+function checkfile(file)
+  return vim.fn.filereadable(file) == 1
+end
+
+function getpackagedir(file)
+  dir = string.match(file, "(.-/[^/]+/)src")
+
+  if checkfile(dir) then
+    return dir
+  end
+
+  return vim.fn.getcwd()
+end
+require("neotest").setup({
+    adapters = {
+        require("neotest-jest")({
+            jest_test_discovery = false,
+            jestConfigFile = function(file)
+                configs = { "jest.config.ts", "jest.config.js", "jest.config.json" }
+                packageDir = getpackagedir(file)
+                for k,f in pairs(configs) do
+                    file = packageDir .. "/" .. f
+                    if checkfile(file) then
+                        return file
+                    end
+                end
+
+                return packageDir .. "/jest.config.ts"
+            --end,
+            --cwd = function(file)
+                --return getpackagedir(file)
+            end
+        })
+    }
+})
+-- }}}
+
 -- Nvim LSP {{{
 require("typescript-tools").setup {
   settings = {
@@ -139,33 +185,33 @@ require("typescript-tools").setup {
       }
   }
 }
-require("lspconfig").intelephense.setup {}
-require("lspconfig").yamlls.setup {
-  settings = {
-      yaml = {
-          schemas = {
-              ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
-              ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
-              ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
-              ["http://json.schemastore.org/prettierrc"] = ".prettierrc.{yml,yaml}",
-              ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
-              ["http://json.schemastore.org/ansible-playbook"] = "*play*.{yml,yaml}",
-              ["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
-              ["https://json.schemastore.org/dependabot-v2"] = ".github/dependabot.{yml,yaml}",
-              ["https://json.schemastore.org/gitlab-ci"] = "*gitlab-ci*.{yml,yaml}",
-              ["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"] = "*api*.{yml,yaml}",
-              ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "*docker-compose*.{yml,yaml}",
-              ["https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json"] = "*flow*.{yml,yaml}",
-              ["https://json.schemastore.org/package.json"] = "package.json",
-              ["https://getcomposer.org/schema.json"] = "composer.json",
-              ["https://json.schemastore.org/helmfile.json"] = "helmfile.{yml,yaml,json}",
-              ["https://json.schemastore.org/tsconfig.json"] = "tsconfig.json",
-          }
-      }
-  }
-}
-require("lspconfig").protols.setup {}
-require("lspconfig").pyright.setup {}
+--require("lspconfig").intelephense.setup {}
+--require("lspconfig").yamlls.setup {
+  --settings = {
+      --yaml = {
+          --schemas = {
+              --["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
+              --["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
+              --["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
+              --["http://json.schemastore.org/prettierrc"] = ".prettierrc.{yml,yaml}",
+              --["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+              --["http://json.schemastore.org/ansible-playbook"] = "*play*.{yml,yaml}",
+              --["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
+              --["https://json.schemastore.org/dependabot-v2"] = ".github/dependabot.{yml,yaml}",
+              --["https://json.schemastore.org/gitlab-ci"] = "*gitlab-ci*.{yml,yaml}",
+              --["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"] = "*api*.{yml,yaml}",
+              --["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "*docker-compose*.{yml,yaml}",
+              --["https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json"] = "*flow*.{yml,yaml}",
+              --["https://json.schemastore.org/package.json"] = "package.json",
+              --["https://getcomposer.org/schema.json"] = "composer.json",
+              --["https://json.schemastore.org/helmfile.json"] = "helmfile.{yml,yaml,json}",
+              --["https://json.schemastore.org/tsconfig.json"] = "tsconfig.json",
+          --}
+      --}
+  --}
+--}
+--require("lspconfig").protols.setup {}
+--require("lspconfig").pyright.setup {}
 
 require("copilot").setup({
   suggestion = { enabled = false },
@@ -251,36 +297,19 @@ require('blink.cmp').setup({
 -- }}}
 
 -- {{{ GPT/LLMs
-vim.api.nvim_create_user_command("ChatGPTInit",
-    function()
-        local job = vim.fn.jobstart(
-            "op read op://private/OpenAI/api_key --no-newline",
-            {
-                on_stdout = function(jobid, data, event)
-                    local key = table.concat(data, "")
-                    if key == nil or key == '' then
-                        return
-                    end
-                    vim.env.OPENAI_API_KEY = key
-                end
-            }
-        )
-    end,
-    {}
-)
-require("avante").setup({
-    provider = "copilot", -- "claude" or "openai" or "azure" or "deepseek" or "groq"
-    providers = {
-        openai = {
-            endpoint = "https://api.openai.com",
-            model = "gpt-4o",
-            extra_request_body = {
-                temperature = 0,
-            },
-            max_tokens = 4096,
-        },
-    }
-})
+--require("avante").setup({
+    --provider = "copilot", -- "claude" or "openai" or "azure" or "deepseek" or "groq"
+    --providers = {
+        --openai = {
+            --endpoint = "https://api.openai.com",
+            --model = "gpt-4o",
+            --extra_request_body = {
+                --temperature = 0,
+            --},
+            --max_tokens = 4096,
+        --},
+    --}
+--})
 require("codecompanion").setup()
 -- }}}
 
@@ -296,7 +325,7 @@ extensions = {
   }
 }
 }
-require("telescope").load_extension "file_browser"
+--require("telescope").load_extension "file_browser"
 require("oil").setup()
 -- }}}
 
@@ -351,12 +380,11 @@ syntax enable
 set fillchars=|
 ]])
 
-require'nvim-treesitter.configs'.setup {
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false
-  }
-}
+--require'nvim-treesitter.configs'.setup {
+  --highlight = {
+    --enable = true
+  --}
+--}
 -- }}}
 -- GUI {{{
 
